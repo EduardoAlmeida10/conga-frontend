@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary-50: #f5f6fa;
+  --color-primary-100: #0097e6;
+  --color-primary-200: #0075b4;
+  --color-primary-300: #005482;
+
+  --font-sans: "DM Sans", sans-serif;
+}
+
+body {
+  @apply font-sans;
+}
