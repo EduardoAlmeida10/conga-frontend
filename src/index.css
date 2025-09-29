@@ -11,4 +11,5 @@
 
 body {
   @apply font-sans;
+  @apply bg-[#F8F9FA]
 }
