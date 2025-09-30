@@ -24,7 +24,7 @@ const Login = () => {
             type="text"
             name="username"
             placeholder="nome"
-            className="bg-white p-2 rounded border border-gray-300"
+            className="bg-white p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-100"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -32,12 +32,12 @@ const Login = () => {
             type="password"
             name="password"
             placeholder="senha"
-            className="bg-white p-2 rounded border border-gray-300"
+            className="bg-white p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-100"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <Button>
-            <p>Login</p>
+            <p>Entrar</p>
           </Button>
         </form>
       </div>
