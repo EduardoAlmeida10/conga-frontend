@@ -1,44 +1,63 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
+import { useAuthentication } from "../../hooks/useAuth";
+
+const roleToDashboardPath: { [key: string]: string } = {
+  ADMIN: "/dashboard-admin",
+  COLLABORATOR: "/dashboard-colaborador",
+};
 
 const Login = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const { login, loading, error } = useAuthentication();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
+  e.preventDefault();
+
+  const role = await login(name, password);
+  console.log("Role retornada:", role);
+
+  if (!role) return; // login falhou
+
+  const path = roleToDashboardPath[role];
+  if (!path) {
+    console.error("Role sem rota definida:", role);
+    return;
+  }
+
+  navigate(path);
+};
+
 
   return (
     <div className="flex h-screen justify-center items-center">
       <div className="flex flex-col items-center justify-center w-1/2">
         <p className="text-center text-gray-300 mb-8">Logo - ConGa</p>
-        <h2 className="text-center font-bold text-2xl mb-8">
-          Entre na sua conta
-        </h2>
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col justify-center gap-4 w-3/5"
-        >
+        <h2 className="text-center font-bold text-2xl mb-8">Entre na sua conta</h2>
+        <form onSubmit={handleSubmit} className="flex flex-col justify-center gap-4 w-3/5">
           <input
             type="text"
             name="username"
             placeholder="nome"
-            className="bg-white p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-100"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            className="bg-white p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-100"
           />
           <input
             type="password"
             name="password"
             placeholder="senha"
-            className="bg-white p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-100"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="bg-white p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-100"
           />
-          <Button>
-            <p>Entrar</p>
+          <Button type="submit" disabled={loading}>
+            {loading ? "Entrando..." : "Entrar"}
           </Button>
+          {error && <p className="text-red-500">{error}</p>}
         </form>
       </div>
       <div className="flex flex-col justify-center items-center w-1/2 px-20 mb-10">
