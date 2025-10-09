@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../../components/Button";
 import { useAuthentication } from "../../hooks/useAuth";
+
+import Button from "../../components/Button";
+import InputField from "../../components/InputField";
 
 const roleToDashboardPath: { [key: string]: string } = {
   ADMIN: "/dashboard-admin",
@@ -11,48 +13,66 @@ const roleToDashboardPath: { [key: string]: string } = {
 const Login = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const { login, loading, error } = useAuthentication();
+  const { login, loading, error} = useAuthentication();
+  const [fieldErrors, setFieldErrors] = useState<{ name?: string; password?: string }>({});
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const role = await login(name, password);
-  console.log("Role retornada:", role);
+    const errors: { name?: string; password?: string } = {};
 
-  if (!role) return; // login falhou
+    if (!name.trim()) {
+      errors.name = "O campo nome é obrigatório";
+    }
+    if (!password.trim()) {
+      errors.password = "O campo senha é obrigatório";
+    }
 
-  const path = roleToDashboardPath[role];
-  if (!path) {
-    console.error("Role sem rota definida:", role);
-    return;
-  }
+    setFieldErrors(errors);
 
-  navigate(path);
-};
+    if (Object.keys(errors).length > 0) return;
 
+    const role = await login(name, password);
+    console.log("Role retornada:", role);
+
+    if (!role) return; // login falhou
+
+    const path = roleToDashboardPath[role];
+    if (!path) {
+      console.error("Role sem rota definida:", role);
+      return;
+    }
+
+    navigate(path);
+  };
 
   return (
     <div className="flex h-screen justify-center items-center">
       <div className="flex flex-col items-center justify-center w-1/2">
         <p className="text-center text-gray-300 mb-8">Logo - ConGa</p>
-        <h2 className="text-center font-bold text-2xl mb-8">Entre na sua conta</h2>
-        <form onSubmit={handleSubmit} className="flex flex-col justify-center gap-4 w-3/5">
-          <input
+        <h2 className="text-center font-bold text-2xl mb-8">
+          Entre na sua conta
+        </h2>
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col justify-center gap-4 w-3/5"
+        >
+          <InputField
+            label="nome"
             type="text"
             name="username"
-            placeholder="nome"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="bg-white p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-100"
+            error={fieldErrors.name}
           />
-          <input
+          <InputField
+            label="senha"
             type="password"
             name="password"
-            placeholder="senha"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="bg-white p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-100"
+            error={fieldErrors.password}
           />
           <Button type="submit" disabled={loading}>
             {loading ? "Entrando..." : "Entrar"}
