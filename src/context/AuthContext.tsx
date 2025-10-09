@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, type ReactNode } from "react";
+import React, { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
 interface User {
   id: string;
@@ -11,7 +11,7 @@ interface AuthContextType {
   token: string | null;
   setUser: (user: User | null) => void;
   setToken: (token: string | null) => void;
-  logout?: () => void;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,8 +20,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
+  useEffect(() => {
+    const storedToken = localStorage.getItem("access_token");
+    if (storedToken) {
+      setToken(storedToken);
+      try {
+        const payload = JSON.parse(atob(storedToken.split(".")[1]));
+        setUser({
+          id: payload.sub,
+          username: payload.username,
+          role: payload.role,
+        });
+      } catch (err) {
+        console.error("Erro ao decodificar token:", err);
+        localStorage.removeItem("access_token");
+      }
+    }
+  }, []);
+
+   const logout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem("access_token");
+  };
+
+
   return (
-    <AuthContext.Provider value={{ user, token, setUser, setToken }}>
+    <AuthContext.Provider value={{ user, token, setUser, setToken, logout }}>
       {children}
     </AuthContext.Provider>
   );
