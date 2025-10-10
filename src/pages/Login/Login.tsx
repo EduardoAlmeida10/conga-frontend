@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthentication } from "../../hooks/useAuth";
 
@@ -16,6 +16,20 @@ const Login = () => {
   const { login, loading, error} = useAuthentication();
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; password?: string }>({});
   const navigate = useNavigate();
+
+  useEffect(() => {
+  const storedToken = localStorage.getItem("access_token");
+  if (storedToken) {
+    try {
+      const payload = JSON.parse(atob(storedToken.split(".")[1]));
+      const path = roleToDashboardPath[payload.role];
+      if (path) navigate(path);
+    } catch (err) {
+      console.error("Token inválido:", err);
+      localStorage.removeItem("access_token");
+    }
+  }
+}, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,7 +50,7 @@ const Login = () => {
     const role = await login(name, password);
     console.log("Role retornada:", role);
 
-    if (!role) return; // login falhou
+    if (!role) return; 
 
     const path = roleToDashboardPath[role];
     if (!path) {
