@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { loginRequest } from "../api/authApi";
+import { AxiosError } from "axios";
 
 export const useAuthentication = () => {
   const { setUser, setToken } = useAuth();
@@ -31,8 +32,15 @@ export const useAuthentication = () => {
 
       return payload.role;
     } catch (err: unknown) {
-      if (err && typeof err === "object" && "response" in err && err.response && typeof err.response === "object" && "data" in err.response && err.response.data && typeof err.response.data === "object" && "message" in err.response.data) {
-        setError((err.response as { data: { message?: string } }).data?.message || "Erro ao fazer login");
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 401) {
+          setError("Nome de usuário ou senha incorretos");
+        } else if (err.response?.data && typeof err.response.data === "object") {
+          const data = err.response.data as { message?: string };
+          setError(data.message || "Erro ao fazer login");
+        } else {
+          setError("Erro ao fazer login");
+        }
       } else {
         setError("Erro ao fazer login");
       }
