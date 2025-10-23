@@ -27,7 +27,7 @@ const Button = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`flex justify-center items-center rounded cursor-pointer h-12 focus:outline-none ${variants[variant]}`}
+      className={`flex justify-center items-center rounded cursor-pointer h-12 px-3 gap-2 focus:outline-none ${variants[variant]}`}
     >
       {children}
     </button>
