@@ -5,6 +5,10 @@ import { useAuthentication } from "../../hooks/useAuth";
 import Button from "../../components/Button";
 import InputField from "../../components/InputField";
 
+import iconLogo from "../../assets/iconLogo.svg"
+import logoConga from "../../assets/logoConga.svg"
+import imgLogin from "../../assets/imgLogin.svg"
+
 const roleToDashboardPath: { [key: string]: string } = {
   ADMIN: "/dashboard-admin",
   COLLABORATOR: "/dashboard-colaborador",
@@ -64,7 +68,7 @@ const Login = () => {
   return (
     <div className="flex h-screen justify-center items-center">
       <div className="flex flex-col items-center justify-center w-1/2">
-        <p className="text-center text-gray-300 mb-8">Logo - ConGa</p>
+        <img src={logoConga} alt="logo" className="mb-4"/>
         <h2 className="text-center font-bold text-2xl mb-8">
           Entre na sua conta
         </h2>
@@ -73,7 +77,7 @@ const Login = () => {
           className="flex flex-col justify-center gap-4 w-3/5"
         >
           <InputField
-            label="nome"
+            label="username"
             type="text"
             name="username"
             value={name}
@@ -98,11 +102,15 @@ const Login = () => {
         <div className="bg-primary-100 h-[624px] rounded-t-2xl">
           <div className="h-4/5 flex items-end">
             <div className="bg-gray-200 h-9/10 w-8/10 border-t-[16px] border-r-[16px] border-white rounded-tr-2xl flex justify-center items-center font-bold text-3xl">
-              IMAGEM
+              <img src={imgLogin} alt="imagem" />
             </div>
           </div>
-          <div className="flex flex-col justify-center bg-white px-15 h-1/4">
-            <h3 className="text-primary-100 mb-3">Logo - ConGa</h3>
+          <div className="flex flex-col justify-center bg-white px-12 h-1/4">
+          <div className="flex mb-2 items-center gap-5">
+            <img src={iconLogo} alt="icon logo" className="h-12"/>
+            <span className="text-2xl font-bold text-gray-800">ConGa</span>
+          </div>
+            
             <p>
               Controle seu rebanho e aumente sua produtividade com o ConGa, a
               plataforma simples, intuitiva e confiável para a pecuária
