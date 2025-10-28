@@ -6,6 +6,7 @@ interface ButtonProps {
   variant?: "primary" | "secondary" | "outline";
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
+  styles?: string;
 }
 
 const variants = {
@@ -21,13 +22,14 @@ const Button = ({
   variant = "primary",
   disabled = false,
   type = "button",
+  styles,
 }: ButtonProps) => {
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`flex justify-center items-center rounded cursor-pointer h-12 px-3 gap-2 focus:outline-none ${variants[variant]}`}
+      className={`flex justify-center items-center rounded cursor-pointer h-12 px-3 gap-2 focus:outline-none ${variants[variant]} ${styles}`}
     >
       {children}
     </button>

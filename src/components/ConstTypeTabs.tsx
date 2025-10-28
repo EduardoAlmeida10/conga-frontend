@@ -16,14 +16,14 @@ export default function CostTypeTabs({ onSelect }: CostTypeTabsProps) {
 
   return (
     <div className="w-full">
-      <p>Selecione o tipo de custo</p>
-      <div className="flex justify-between bg-white rounded-xl p-4">
+      <p className="mb-1">Selecione o tipo de custo</p>
+      <div className="flex justify-between bg-white rounded-xl px-10 py-4">
         {costTypes.map((type) => (
           <button
             key={type}
             onClick={() => handleSelect(type)}
             className={`relative pb-2 text-sm font-medium transition-colors
-              ${activeTab === type ? "text-sky-500" : "text-gray-600 hover:text-sky-400"}
+              ${activeTab === type ? "text-sky-500" : "text-gray-600 hover:text-sky-400 cursor-pointer"}
             `}
           >
             {type}

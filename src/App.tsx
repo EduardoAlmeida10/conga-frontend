@@ -4,6 +4,8 @@ import AdminDashboard from "./pages/Dashboards/AdminDashboard";
 import CollaboratorDashboard from "./pages/Dashboards/ColaboradorDashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import ToastContainer from "./components/ToastNotification/ToastConteiner";
+import DashboardLayout from "./components/DashboardLayout";
+import Expenses from "./pages/Expenses/Expenses";
 
 function App() {
   return (
@@ -12,23 +14,33 @@ function App() {
       <HashRouter>
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route element={<DashboardLayout />}>
           <Route
-            path="/dashboard-admin"
-            element={
-              <PrivateRoute allowedRoles={["ADMIN"]}>
-                <AdminDashboard />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/dashboard-colaborador"
-            element={
-              <PrivateRoute allowedRoles={["COLLABORATOR"]}>
-                <CollaboratorDashboard />
-              </PrivateRoute>
-            }
-          />
-        </Routes>
+              path="/dashboard-admin"
+              element={
+                <PrivateRoute allowedRoles={["ADMIN"]}>
+                  <AdminDashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/despesas"
+              element={
+                <PrivateRoute allowedRoles={["ADMIN"]}>
+                  <Expenses />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/dashboard-colaborador"
+              element={
+                <PrivateRoute allowedRoles={["COLLABORATOR"]}>
+                  <CollaboratorDashboard />
+                </PrivateRoute>
+              }
+            />
+          </Route>
+      </Routes>
       </HashRouter>
     </>
   );

@@ -1,4 +1,4 @@
-export default function CardExpensesPagination() {
+export default function CardExpensesFooter() {
   return(
     <div className="">
     </div>
