@@ -6,7 +6,7 @@ export default function CardExpensesSearch() {
   const [search, setSearch] = useState("");
 
   return (
-    <div className="flex justify-between items-center w-full mt-4">
+    <div className="flex justify-between items-center w-full">
       <div className="relative w-[300px]">
         <input
           type="text"

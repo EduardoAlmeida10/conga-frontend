@@ -1,8 +1,9 @@
+// CardExpensesTable.tsx
 import iconDelete from "../../assets/iconDelete.svg"
 import iconEdit from "../../assets/iconEdit.svg"
 
 interface CardExpensesTableProps {
-  data: any[];
+  data: Record<string, any>[];
 }
 
 export default function CardExpensesTable({ data }: CardExpensesTableProps) {
