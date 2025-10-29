@@ -9,6 +9,7 @@ export interface AuthResponse {
 export interface UserProfile {
   id: string;
   username: string;
+  name: string;
   role: string;
 }
 

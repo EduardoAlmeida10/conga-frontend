@@ -24,11 +24,12 @@ export const useAuthentication = () => {
       const payload = JSON.parse(atob(access_token.split(".")[1])) as {
         sub: string;
         username: string;
+        name: string;
         role: string;
       };
        console.log("Payload decodificado:", payload);
 
-      setUser({ id: payload.sub, username: payload.username, role: payload.role });
+      setUser({ id: payload.sub, username: payload.username,name: payload.name, role: payload.role });
 
       return payload.role;
     } catch (err: unknown) {

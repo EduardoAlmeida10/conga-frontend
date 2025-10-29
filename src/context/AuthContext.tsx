@@ -9,6 +9,7 @@ import {
 interface User {
   id: string;
   username: string;
+  name: string;
   role: string;
 }
 
@@ -36,6 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser({
           id: payload.sub,
           username: payload.username,
+          name: payload.name,
           role: payload.role,
         });
       } catch {
