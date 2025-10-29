@@ -4,11 +4,16 @@ import Button from "../Button";
 import iconExit from "../../assets/iconExit.svg";
 
 interface ExpenseCardProps {
+  titleOverlay: string;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function OverlayCard({ isOpen, onClose }: ExpenseCardProps) {
+export default function OverlayCard({
+  titleOverlay,
+  isOpen,
+  onClose,
+}: ExpenseCardProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
@@ -32,7 +37,7 @@ export default function OverlayCard({ isOpen, onClose }: ExpenseCardProps) {
           onClick={onClose}
           className="cursor-pointer"
         />
-        <h2 className="text-lx1 font-bold">Nova Despesa</h2>
+        <h2 className="text-lx1 font-bold">{titleOverlay}</h2>
         <div></div>
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
