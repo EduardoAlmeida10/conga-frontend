@@ -7,7 +7,7 @@ import iconAdd from "../../assets/iconAdd.svg";
 import { useState } from "react";
 import { useExpenseModal } from "../../hooks/useExpenseModal";
 import { ExpenseContent } from "./ExpenseContent";
-import { useExpenseData } from "../../hooks/useExpenseData";
+import { useExpenseData, type BaseExpense } from "../../hooks/useExpenseData";
 import { useExpenseColumns } from "../../hooks/expenseColumnDefinitions";
 
 export default function Expenses() {
@@ -38,48 +38,28 @@ export default function Expenses() {
     handleCloseModal();
   };
 
-  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
-
-  const dataByType: Record<string, any[]> = {
-    Pessoal: [
-      {
-        descricao: "Salário",
-        tipo: "salario fixo",
-        valor: 30000,
-        data: "2025-10-01",
-      },
-      {
-        descricao: "Salário",
-        tipo: "salario fixo",
-        valor: 30000,
-        data: "2025-10-01",
-      },
-      {
-        descricao: "Salário",
-        tipo: "salario fixo",
-        valor: 30000,
-        data: "2025-10-01",
-      },
-    ],
-    Utilidades: [
-      { titulo: "Energia", valor: 250, data: "2025-10-05" },
-      { titulo: "Internet", valor: 150, data: "2025-10-10" },
-    ],
-    Insumos: [{ titulo: "Materiais", valor: 500, data: "2025-10-12" }],
-    Operacionais: [
-      { titulo: "Aluguel", valor: 1200, data: "2025-10-01" },
-      { titulo: "Transporte", valor: 600, data: "2025-10-06" },
-    ],
-    Análise: [{ titulo: "Consultoria", valor: 900, data: "2025-10-15" }],
-  };
-
-  const data = dataByType[selectedType] || [];
-
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentData = data.slice(startIndex, startIndex + itemsPerPage);
+  
   const handleTypeChange = (type: string) => {
     setSelectedType(type);
     setCurrentPage(1);
+  };
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentData = expenses?.slice(startIndex, startIndex + itemsPerPage) || [];
+
+  const handleDeleteWithPagination = async (expense: BaseExpense) => {
+    const isLastItemOnPage = currentData.length === 1;
+    const isNotFirstPage = currentPage > 1;
+
+    try {
+      await deleteExpense(expense);
+      if (isLastItemOnPage && isNotFirstPage) {
+        setCurrentPage(currentPage - 1);
+      }
+
+    } catch (err) {
+      console.error("Wrapper handleDeleteWithPagination falhou:", err);
+    }
   };
 
   return (
@@ -94,7 +74,7 @@ export default function Expenses() {
 
       <OverlayBackdrop isOpen={isOverlayOpen} onClose={handleCloseModal}>
         <OverlayCard
-          titleOverlay="Nova Despesa"
+          titleOverlay={selectedType}
           onClose={handleCloseModal} 
           onSuccess={handleSaveSuccess}
           expenseToEdit={expenseToEdit}
@@ -108,14 +88,14 @@ export default function Expenses() {
         <ExpenseContent
           isLoading={isLoading}
           error={error}
-          costs={expenses}
+          costs={currentData}
           columns={columns}
           onEdit={handleOpenEditModal}
-          onDelete={deleteExpense}
+          onDelete={handleDeleteWithPagination}
         />
         
        <CardExpenses.Footer
-          totalItems={data.length}
+          totalItems={expenses?.length || 0}
           itemsPerPage={itemsPerPage}
           currentPage={currentPage}
           onPageChange={setCurrentPage}
