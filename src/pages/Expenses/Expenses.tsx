@@ -12,6 +12,8 @@ import { useExpenseColumns } from "../../hooks/expenseColumnDefinitions";
 
 export default function Expenses() {
   const [selectedType, setSelectedType] = useState("Pessoal");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
 
   const {
     isOverlayOpen,
@@ -36,10 +38,54 @@ export default function Expenses() {
     handleCloseModal();
   };
 
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+
+  const dataByType: Record<string, any[]> = {
+    Pessoal: [
+      {
+        descricao: "Salário",
+        tipo: "salario fixo",
+        valor: 30000,
+        data: "2025-10-01",
+      },
+      {
+        descricao: "Salário",
+        tipo: "salario fixo",
+        valor: 30000,
+        data: "2025-10-01",
+      },
+      {
+        descricao: "Salário",
+        tipo: "salario fixo",
+        valor: 30000,
+        data: "2025-10-01",
+      },
+    ],
+    Utilidades: [
+      { titulo: "Energia", valor: 250, data: "2025-10-05" },
+      { titulo: "Internet", valor: 150, data: "2025-10-10" },
+    ],
+    Insumos: [{ titulo: "Materiais", valor: 500, data: "2025-10-12" }],
+    Operacionais: [
+      { titulo: "Aluguel", valor: 1200, data: "2025-10-01" },
+      { titulo: "Transporte", valor: 600, data: "2025-10-06" },
+    ],
+    Análise: [{ titulo: "Consultoria", valor: 900, data: "2025-10-15" }],
+  };
+
+  const data = dataByType[selectedType] || [];
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentData = data.slice(startIndex, startIndex + itemsPerPage);
+  const handleTypeChange = (type: string) => {
+    setSelectedType(type);
+    setCurrentPage(1);
+  };
+
   return (
     <div className="w-max">
-      <div className="mb-10 mt-10">
-        <CostTypeTabs onSelect={setSelectedType} />
+      <div className="mb-5 mt-10">
+        <CostTypeTabs onSelect={handleTypeChange} />
       </div>
       <Button styles="mb-3" onClick={handleOpenCreateModal}>
         <img src={iconAdd} alt="" />
@@ -48,6 +94,7 @@ export default function Expenses() {
 
       <OverlayBackdrop isOpen={isOverlayOpen} onClose={handleCloseModal}>
         <OverlayCard
+          titleOverlay="Nova Despesa"
           onClose={handleCloseModal} 
           onSuccess={handleSaveSuccess}
           expenseToEdit={expenseToEdit}
@@ -67,7 +114,12 @@ export default function Expenses() {
           onDelete={deleteExpense}
         />
         
-        <CardExpenses.Footer />
+       <CardExpenses.Footer
+          totalItems={data.length}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+        />
       </CardExpenses.Root>
     </div>
   );

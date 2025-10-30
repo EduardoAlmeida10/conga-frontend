@@ -1,3 +1,4 @@
+// CardExpensesTable.tsx
 import iconDelete from "../../assets/iconDelete.svg"
 import iconEdit from "../../assets/iconEdit.svg"
 import type { BaseExpense } from "../../hooks/useExpenseData";

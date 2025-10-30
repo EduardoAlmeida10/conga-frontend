@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { loginRequest } from "../api/authApi";
 import { AxiosError } from "axios";
+import { useState } from "react";
+import { loginRequest } from "../api/authApi";
+import { useAuth } from "../context/AuthContext";
 
 export const useAuthentication = () => {
   const { setUser, setToken } = useAuth();
@@ -21,14 +21,21 @@ export const useAuthentication = () => {
       localStorage.setItem("access_token", access_token);
 
       // Decodifica JWT para pegar dados do usuário
-      const payload = JSON.parse(atob(access_token.split(".")[1])) as {
+      const base64Url = access_token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+
+      const payload = JSON.parse(jsonPayload) as {
         sub: string;
         username: string;
+        name: string;
         role: string;
       };
-       console.log("Payload decodificado:", payload);
+      console.log("Payload decodificado:", payload);
 
-      setUser({ id: payload.sub, username: payload.username, role: payload.role });
+      setUser({ id: payload.sub, username: payload.username,name: payload.name, role: payload.role });
 
       return payload.role;
     } catch (err: unknown) {

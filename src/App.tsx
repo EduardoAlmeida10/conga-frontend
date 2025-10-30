@@ -6,6 +6,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import ToastContainer from "./components/ToastNotification/ToastConteiner";
 import DashboardLayout from "./components/DashboardLayout";
 import Expenses from "./pages/Expenses/Expenses";
+import Users from "./pages/Users/Users";
 
 function App() {
   return (
@@ -28,6 +29,14 @@ function App() {
               element={
                 <PrivateRoute allowedRoles={["ADMIN"]}>
                   <Expenses />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/usuarios"
+              element={
+                <PrivateRoute allowedRoles={["ADMIN"]}>
+                  <Users />
                 </PrivateRoute>
               }
             />

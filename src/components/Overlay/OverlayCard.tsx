@@ -7,6 +7,7 @@ import { useExpenseSubmit } from "../../hooks/useExpenseSubmit";
 import { PersonnelFormFields } from "./PersonnelFormFields";
 
 interface ExpenseCardProps {
+  titleOverlay: string;
   onClose: () => void;
   onSuccess: () => void;
   expenseToEdit?: BaseExpense | null;
@@ -126,7 +127,7 @@ export default function OverlayCard({
           className="cursor-pointer"
         />
         <h2 className="text-xl font-bold">
-          {isEditMode ? "Editar Despesa" : "Nova Despesa"}
+          {isEditMode ? "Editar Despesa {titleOverlay}" : "Nova Despesa {titleOverlay}"}
         </h2>
         <div></div>
       </div>

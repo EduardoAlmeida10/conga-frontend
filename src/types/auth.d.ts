@@ -1,6 +1,7 @@
 export interface UserPayload {
   sub: number;
   username: string;
+  name: string
   role: "admin" | "colaborador";
 }
 
