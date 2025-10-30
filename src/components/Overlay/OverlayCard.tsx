@@ -7,7 +7,7 @@ import { useExpenseSubmit } from "../../hooks/useExpenseSubmit";
 import { PersonnelFormFields } from "./PersonnelFormFields";
 
 interface ExpenseCardProps {
-  titleOverlay: string;
+  titleOverlay?: string;
   onClose: () => void;
   onSuccess: () => void;
   expenseToEdit?: BaseExpense | null;
@@ -31,12 +31,8 @@ export default function OverlayCard({
   onSuccess,
   expenseToEdit,
   expenseType,
+  titleOverlay
 }: ExpenseCardProps) {
-  // const [type, setType] = useState<CostType>(CostType.SALARIOS_FIXOS); // Valor padrão
-  // const [date, setDate] = useState("");
-  // const [value, setValue] = useState("");
-  // const [description, setDescription] = useState("");
-
   const { createExpense, updateExpense } = useExpenseSubmit(expenseType);
 
   const [formData, setFormData] = useState<any>(getInitialState(expenseType));
@@ -127,7 +123,7 @@ export default function OverlayCard({
           className="cursor-pointer"
         />
         <h2 className="text-xl font-bold">
-          {isEditMode ? "Editar Despesa {titleOverlay}" : "Nova Despesa {titleOverlay}"}
+          {`${isEditMode ? "Editar Despesa" : "Nova Despesa"} ${titleOverlay || ''}`}
         </h2>
         <div></div>
       </div>
