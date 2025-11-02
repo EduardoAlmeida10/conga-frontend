@@ -6,6 +6,7 @@ import type { BaseExpense } from "../../hooks/useExpenseData";
 import { useExpenseSubmit } from "../../hooks/useExpenseSubmit";
 import { PersonnelFormFields } from "./PersonnelFormFields";
 import { OperationalFormFields } from "./OperationalFormFields";
+import { UtilityFormFields } from "./UtilityFormFields";
 
 interface ExpenseCardProps {
   titleOverlay?: string;
@@ -30,6 +31,14 @@ const getInitialState = (type: string) => {
       date: "",
       value: "",
       description: "",
+    };
+  }
+  if (type === "Utilitario") {
+    return {
+      type: "Energia",
+      date: "",
+      value: "",
+      observations: "",
     };
   }
   return { date: "", value: "", description: "" };
@@ -128,6 +137,17 @@ export default function OverlayCard({
         </>
       );
     }
+    if (expenseType === "Utilitario") {
+      return (
+        <>
+          <UtilityFormFields
+            formData={formData}
+            handleFormChange={handleFormChange}
+          />
+        </>
+      );
+    }
+
     return commonFields;
   };
 
