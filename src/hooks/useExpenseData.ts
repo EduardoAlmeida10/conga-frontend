@@ -2,7 +2,9 @@ import { useCallback, useMemo } from "react";
 import { deletePersonnelCost } from "../api/personnel-costApi";
 import { usePersonnelCosts } from "./usePersonnelCosts";
 import { deleteOperationalCost } from "../api/operational-costApi";
+import { deleteUtilityCost } from "../api/utility-costApi";
 import { useOperationalCosts } from "./useOperationalCosts";
+import { useUtilityCosts } from "./useUtilityCosts";
 
 
 export interface BaseExpense {
@@ -16,6 +18,7 @@ export interface BaseExpense {
 const deleteFunctionsMap = {
   Pessoal: deletePersonnelCost,
   Operacionais: deleteOperationalCost,
+  Utilitario: deleteUtilityCost,
 };
 
 const useEmptyData = () => ({
@@ -31,6 +34,7 @@ export function useExpenseData(type: keyof typeof deleteFunctionsMap) {
   const emptyFilters = useMemo(() => ({}), []);
 
   const personnelData = usePersonnelCosts(type === "Pessoal" ? filters : emptyFilters);
+  const utilityData = useUtilityCosts(type === "Utilitario" ? filters : emptyFilters);
   const operationalData = useOperationalCosts(type === "Operacionais" ? filters : emptyFilters);
 
   const emptyData = useEmptyData();
@@ -39,12 +43,14 @@ export function useExpenseData(type: keyof typeof deleteFunctionsMap) {
     switch (type) {
       case "Pessoal":
         return personnelData;
+      case "Utilitario":
+        return utilityData;
       case "Operacionais":
         return operationalData;
       default:
         return emptyData;
     }
-  }, [type, personnelData, operationalData, emptyData]);
+  }, [type, personnelData, utilityData, operationalData, emptyData]);
 
   const deleteFunction = useMemo(() => {
     return deleteFunctionsMap[type];
@@ -80,4 +86,3 @@ export function useExpenseData(type: keyof typeof deleteFunctionsMap) {
     deleteExpense: handleDeleteExpense,
   };
 }
-
