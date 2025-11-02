@@ -4,7 +4,7 @@ interface CostTypeTabsProps {
   onSelect: (type: string) => void;
 }
 
-const costTypes = ["Pessoal", "Utilidades", "Insumos", "Operacionais", "Análise"];
+const costTypes = ["Pessoal", "Utilidades", "Insumos", "Operacionais"];
 
 export default function CostTypeTabs({ onSelect }: CostTypeTabsProps) {
   const [activeTab, setActiveTab] = useState(costTypes[0]);
@@ -16,7 +16,7 @@ export default function CostTypeTabs({ onSelect }: CostTypeTabsProps) {
 
   return (
     <div className="w-full">
-      <p className="mb-1">Selecione o tipo de custo</p>
+      <p className="mb-1">Selecione o tipo de despesa</p>
       <div className="flex justify-between bg-white rounded-xl px-10 py-4">
         {costTypes.map((type) => (
           <button
