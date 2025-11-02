@@ -5,6 +5,7 @@ import iconExit from "../../assets/iconExit.svg";
 import type { BaseExpense } from "../../hooks/useExpenseData";
 import { useExpenseSubmit } from "../../hooks/useExpenseSubmit";
 import { PersonnelFormFields } from "./PersonnelFormFields";
+import { OperationalFormFields } from "./OperationalFormFields";
 
 interface ExpenseCardProps {
   titleOverlay?: string;
@@ -18,6 +19,14 @@ const getInitialState = (type: string) => {
   if (type === "Pessoal") {
     return {
       type: "Salários Fixos",
+      date: "",
+      value: "",
+      description: "",
+    };
+  }
+  if (type === "Operacionais") {
+    return {
+      type: "Higiene",
       date: "",
       value: "",
       description: "",
@@ -54,7 +63,7 @@ export default function OverlayCard({
   }, [expenseToEdit, isEditMode, expenseType]);
 
   const handleFormChange = (field: string, value: any) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData((prev: any) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -62,7 +71,7 @@ export default function OverlayCard({
     setIsSubmitting(true);
     setSubmitError(null);
 
-    const dto = { ...formData }; 
+    const dto = { ...formData };
 
     try {
       if (isEditMode && expenseToEdit) {
@@ -109,8 +118,17 @@ export default function OverlayCard({
         </>
       );
     }
-
-    return commonFields; 
+    if (expenseType === "Operacionais") {
+      return (
+        <>
+          <OperationalFormFields
+            formData={formData}
+            handleFormChange={handleFormChange}
+          />
+        </>
+      );
+    }
+    return commonFields;
   };
 
   return (
