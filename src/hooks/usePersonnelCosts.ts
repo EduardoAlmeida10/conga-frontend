@@ -25,8 +25,9 @@ export function usePersonnelCosts(filters: PersonnelCostFilterDto) {
   };
 
   useEffect(() => {
+    if (!filters) return;
     fetchData(filters);
-  }, [filters]); 
+  }, [filters]);
 
   return { data, isLoading, error, refetch: () => fetchData(filters) };
 }

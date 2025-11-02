@@ -21,15 +21,10 @@ export default function Expenses() {
     handleOpenCreateModal,
     handleOpenEditModal,
     handleCloseModal,
-  } = useExpenseModal(); 
+  } = useExpenseModal();
 
-  const {
-    expenses,
-    isLoading,
-    error,
-    refetchExpenses,
-    deleteExpense,
-  } = useExpenseData(selectedType);
+  const { expenses, isLoading, error, refetchExpenses, deleteExpense } =
+    useExpenseData(selectedType);
 
   const columns = useExpenseColumns(selectedType);
 
@@ -38,14 +33,14 @@ export default function Expenses() {
     handleCloseModal();
   };
 
-  
   const handleTypeChange = (type: string) => {
     setSelectedType(type);
     setCurrentPage(1);
   };
 
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentData = expenses?.slice(startIndex, startIndex + itemsPerPage) || [];
+  const currentData =
+    expenses?.slice(startIndex, startIndex + itemsPerPage) || [];
 
   const handleDeleteWithPagination = async (expense: BaseExpense) => {
     const isLastItemOnPage = currentData.length === 1;
@@ -56,7 +51,6 @@ export default function Expenses() {
       if (isLastItemOnPage && isNotFirstPage) {
         setCurrentPage(currentPage - 1);
       }
-
     } catch (err) {
       console.error("Wrapper handleDeleteWithPagination falhou:", err);
     }
@@ -75,7 +69,7 @@ export default function Expenses() {
       <OverlayBackdrop isOpen={isOverlayOpen} onClose={handleCloseModal}>
         <OverlayCard
           titleOverlay={selectedType}
-          onClose={handleCloseModal} 
+          onClose={handleCloseModal}
           onSuccess={handleSaveSuccess}
           expenseToEdit={expenseToEdit}
           expenseType={selectedType}
@@ -93,8 +87,8 @@ export default function Expenses() {
           onEdit={handleOpenEditModal}
           onDelete={handleDeleteWithPagination}
         />
-        
-       <CardExpenses.Footer
+
+        <CardExpenses.Footer
           totalItems={expenses?.length || 0}
           itemsPerPage={itemsPerPage}
           currentPage={currentPage}
