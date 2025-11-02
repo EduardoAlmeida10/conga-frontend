@@ -2,16 +2,15 @@ import { useCallback, useMemo } from "react";
 import { deletePersonnelCost } from "../api/personnel-costApi";
 import { usePersonnelCosts } from "./usePersonnelCosts";
 import { deleteOperationalCost } from "../api/operational-costApi";
-import { deleteUtilityCost } from "../api/utility-costApi";
 import { useOperationalCosts } from "./useOperationalCosts";
+import { deleteUtilityCost } from "../api/utility-costApi";
 import { useUtilityCosts } from "./useUtilityCosts";
-
+import { deleteSupplieCost } from "../api/supllie-costApi";
+import { useSupplieCosts } from "./useSupplieCosts";
 
 export interface BaseExpense {
   id: string;
-  // description: string;
   date: string;
-  // value: string | number;
   [key: string]: any;
 }
 
@@ -19,6 +18,7 @@ const deleteFunctionsMap = {
   Pessoal: deletePersonnelCost,
   Operacionais: deleteOperationalCost,
   Utilitario: deleteUtilityCost,
+  Insumos: deleteSupplieCost,
 };
 
 const useEmptyData = () => ({
@@ -35,6 +35,7 @@ export function useExpenseData(type: keyof typeof deleteFunctionsMap) {
 
   const personnelData = usePersonnelCosts(type === "Pessoal" ? filters : emptyFilters);
   const utilityData = useUtilityCosts(type === "Utilitario" ? filters : emptyFilters);
+  const supplieData = useSupplieCosts(type === "Insumos" ? filters : emptyFilters);
   const operationalData = useOperationalCosts(type === "Operacionais" ? filters : emptyFilters);
 
   const emptyData = useEmptyData();
@@ -45,12 +46,14 @@ export function useExpenseData(type: keyof typeof deleteFunctionsMap) {
         return personnelData;
       case "Utilitario":
         return utilityData;
+      case "Insumos":
+        return supplieData;
       case "Operacionais":
         return operationalData;
       default:
         return emptyData;
     }
-  }, [type, personnelData, utilityData, operationalData, emptyData]);
+  }, [type, personnelData, utilityData, supplieData, operationalData, emptyData]);
 
   const deleteFunction = useMemo(() => {
     return deleteFunctionsMap[type];
