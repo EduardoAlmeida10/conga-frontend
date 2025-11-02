@@ -4,7 +4,7 @@ interface CostTypeTabsProps {
   onSelect: (type: string) => void;
 }
 
-const costTypes = ["Pessoal", "Utilidades", "Insumos", "Operacionais"];
+const costTypes = ["Pessoal", "Utilitario", "Insumos", "Operacionais"];
 
 export default function CostTypeTabs({ onSelect }: CostTypeTabsProps) {
   const [activeTab, setActiveTab] = useState(costTypes[0]);
