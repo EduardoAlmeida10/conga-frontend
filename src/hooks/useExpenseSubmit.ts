@@ -12,6 +12,14 @@ import {
   registerPersonnelCost,
   updatePersonnelCost,
 } from "../api/personnel-costApi";
+import {
+  deleteUtilityCost,
+  findAllUtilityCosts,
+  findUtilityCostById,
+  registerUtilityCost,
+  updateUtilityCost,
+} from "../api/utility-costApi";
+
 
 const apiFunctionsMap = {
   Pessoal: {
@@ -27,6 +35,13 @@ const apiFunctionsMap = {
     delete: deleteOperationalCost,
     get: findOperationalCostById,
     getAll: findAllOperationalCosts,
+  },
+  Utilitario: {
+    create: registerUtilityCost,
+    update: updateUtilityCost,
+    delete: deleteUtilityCost,
+    get: findUtilityCostById,
+    getAll: findAllUtilityCosts,
   },
 };
 
