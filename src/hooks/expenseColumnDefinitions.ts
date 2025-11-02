@@ -38,10 +38,28 @@ const utilityColumns = [
   { key: "observations", header: "Observações" },
 ];
 
+const supplieColumns = [
+  { key: "name", header: "Nome do insumo" },
+  { key: "quantity", header: "Quantidade" },
+  {
+    key: "unitPrice",
+    header: "Preço Unitário",
+    render: (item: { unitPrice: string | number; }) => formatCurrency(item.unitPrice),
+  },
+  {
+    key: "totalCost",
+    header: "Despesa Total",
+    render: (item: { totalCost: string | number; }) => formatCurrency(item.totalCost),
+  },
+
+  ...commonColumns,
+];
+
 const columnMap = {
   Pessoal: personnelColumns,
   Operacionais: operationalColumns,
   Utilitario: utilityColumns,
+  Insumos: supplieColumns,
 };
 
 export function useExpenseColumns(type: string) {
