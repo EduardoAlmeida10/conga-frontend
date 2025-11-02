@@ -7,6 +7,7 @@ import { useExpenseSubmit } from "../../hooks/useExpenseSubmit";
 import { PersonnelFormFields } from "./PersonnelFormFields";
 import { OperationalFormFields } from "./OperationalFormFields";
 import { UtilityFormFields } from "./UtilityFormFields";
+import { SupplieFormFields } from "./SupplieFormFields";
 
 interface ExpenseCardProps {
   titleOverlay?: string;
@@ -39,6 +40,14 @@ const getInitialState = (type: string) => {
       date: "",
       value: "",
       observations: "",
+    };
+  }
+  if (type === "Insumos") {
+    return {
+      name: "",
+      date: "",
+      quantity: "",
+      unitPrice: "",
     };
   }
   return { date: "", value: "", description: "" };
@@ -141,6 +150,16 @@ export default function OverlayCard({
       return (
         <>
           <UtilityFormFields
+            formData={formData}
+            handleFormChange={handleFormChange}
+          />
+        </>
+      );
+    }
+    if (expenseType === "Insumos") {
+      return (
+        <>
+          <SupplieFormFields
             formData={formData}
             handleFormChange={handleFormChange}
           />
