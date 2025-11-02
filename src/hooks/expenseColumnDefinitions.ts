@@ -3,31 +3,37 @@ import { useMemo } from "react";
 const formatDate = (item: { date: string }) =>
   new Date(item.date).toLocaleDateString("pt-BR", { timeZone: "UTC" });
 
-const formatCurrency = (item: { value: string | number }) =>
-  parseFloat(item.value as string).toLocaleString("pt-BR", {
+const formatCurrency = (value: string | number) => {
+  const numericValue =
+    typeof value === "number" ? value : parseFloat(value.replace(",", "."));
+
+  if (isNaN(numericValue)) return "R$ 0,00";
+
+  return numericValue.toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
   });
+};
 
-const commonColumns = [
-  { key: "description", header: "Descrição" },
-  { key: "date", header: "Data", render: formatDate },
-  { key: "value", header: "Valor (R$)", render: formatCurrency },
-];
+const commonColumns = [{ key: "date", header: "Data", render: formatDate }];
 
 const personnelColumns = [
   ...commonColumns,
-  { key: "type", header: "Tipo" }, 
+  { key: "value", header: "Valor (R$)", render: (item: any) => formatCurrency(item.value) },
+  { key: "type", header: "Tipo" },
+  { key: "description", header: "Descrição" },
 ];
 
-const vehicleColumns = [
+const operationalColumns = [
   ...commonColumns,
-  { key: "vehiclePlate", header: "Placa" }, 
+  { key: "value", header: "Valor (R$)", render: (item: any) => formatCurrency(item.value) },
+  { key: "type", header: "Tipo" },
+  { key: "description", header: "Descrição" },
 ];
 
 const columnMap = {
   Pessoal: personnelColumns,
-  Veicular: vehicleColumns,
+  Operacionais: operationalColumns,
 };
 
 export function useExpenseColumns(type: string) {
