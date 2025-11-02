@@ -31,9 +31,17 @@ const operationalColumns = [
   { key: "description", header: "Descrição" },
 ];
 
+const utilityColumns = [
+  ...commonColumns,
+  { key: "value", header: "Valor (R$)", render: (item: any) => formatCurrency(item.value) },
+  { key: "type", header: "Tipo" },
+  { key: "observations", header: "Observações" },
+];
+
 const columnMap = {
   Pessoal: personnelColumns,
   Operacionais: operationalColumns,
+  Utilitario: utilityColumns,
 };
 
 export function useExpenseColumns(type: string) {
