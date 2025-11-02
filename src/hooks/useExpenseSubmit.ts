@@ -1,4 +1,11 @@
 import {
+  deleteOperationalCost,
+  findAllOperationalCosts,
+  findOperationalCostById,
+  registerOperationalCost,
+  updateOperationalCost,
+} from "../api/operational-costApi";
+import {
   deletePersonnelCost,
   findAllPersonnelCosts,
   findPersonnelCostById,
@@ -13,6 +20,13 @@ const apiFunctionsMap = {
     delete: deletePersonnelCost,
     get: findPersonnelCostById,
     getAll: findAllPersonnelCosts,
+  },
+  Operacionais: {
+    create: registerOperationalCost,
+    update: updateOperationalCost,
+    delete: deleteOperationalCost,
+    get: findOperationalCostById,
+    getAll: findAllOperationalCosts,
   },
 };
 
