@@ -171,7 +171,7 @@ export default function OverlayCard({
   };
 
   return (
-    <div className="bg-white rounded-2xl p-6 w-80 max-w-md shadow-lg">
+    <div className="bg-white rounded-2xl p-6 w-96 max-w-md shadow-lg">
       <div className="flex items-center mb-8 gap-14">
         <img
           src={iconExit}
@@ -179,7 +179,7 @@ export default function OverlayCard({
           onClick={onClose}
           className="cursor-pointer"
         />
-        <h2 className="text-xl font-bold">
+        <h2 className="text-xl font-bold text-center">
           {`${isEditMode ? "Editar Despesa" : "Nova Despesa"} ${titleOverlay || ''}`}
         </h2>
         <div></div>

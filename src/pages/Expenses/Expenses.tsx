@@ -57,7 +57,7 @@ export default function Expenses() {
   };
 
   return (
-    <div className="w-max">
+    <div className="w-[950px]">
       <div className="mb-5 mt-10">
         <CostTypeTabs onSelect={handleTypeChange} />
       </div>
