@@ -1,48 +1,47 @@
+// src/pages/Users/Users.tsx
 import { useState } from "react";
 import Button from "../../components/Button";
 import OverlayBackdrop from "../../components/Overlay/OverlayBackdrop";
-import OverlayCard from "../../components/Overlay/OverlayCard";
 import { CardExpenses } from "../../components/CardExpenses";
+import CardExpensesTable from "../../components/CardExpenses/CardExpensesTable";
 import iconAdd from "../../assets/iconAdd.svg";
+import { useUserData } from "../../hooks/users/useUserData";
+import OverlayCardUserForm from "../../components/Overlay/OverlayCardUserForm";
+import { useUserDelete } from "../../hooks/users/useUserDelete";
 
 export default function Users() {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const { removeUser, loading: deleting, success, error: errorDelete } = useUserDelete();
+  const {
+    data,
+    loading,
+    error,
+    page,
+    limit,
+    setPage,
+    refetch
+  } = useUserData();
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const users = data?.data || [];
 
-  const dataByType = [
-    {
-      nome: "Carlos Almeida",
-      funcao: "Desenvolvedor Frontend",
-      cpf: "123.456.789-00",
-      status: "Ativo",
-    },
-    {
-      nome: "Mariana Souza",
-      funcao: "Gerente de Projetos",
-      cpf: "987.654.321-11",
-      status: "Ativo",
-    },
-    {
-      nome: "Rafael Lima",
-      funcao: "Analista de QA",
-      cpf: "456.789.123-22",
-      status: "Inativo",
-    },
-    {
-      nome: "Rafael Lima",
-      funcao: "Analista de QA",
-      cpf: "456.789.123-22",
-      status: "Inativo",
-    },
+  const columns = [
+    { key: "name", header: "Nome" },
+    { key: "username", header: "Usuário" },
+    { key: "role", header: "Função" },
   ];
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentData = dataByType.slice(startIndex, startIndex + itemsPerPage);
+  const handleEdit = (user: any) => console.log("Editar:", user);
+  const handleDelete = async (user: any) => {
+    if (!confirm(`Tem certeza que deseja excluir o usuário ${user.name}?`)) return;
+    await removeUser(user.id);
+    refetch();
+  };
 
   return (
-    <div className="w-max">
+    <div className="w-[950px]">
+      {error && <p className="text-red-500">{error}</p>}
+      {deleting && <p className="text-gray-600">Excluindo usuário...</p>}
+      {success && <p className="text-green-600">Usuário excluído com sucesso!</p>}
       <Button styles="mb-3" onClick={() => setIsOverlayOpen(true)}>
         <img src={iconAdd} alt="" />
         Novo Trabalhador
@@ -52,24 +51,28 @@ export default function Users() {
         isOpen={isOverlayOpen}
         onClose={() => setIsOverlayOpen(false)}
       >
-        <OverlayCard
-          titleOverlay="Novo Trabalhador"
-          isOpen={isOverlayOpen}
-          onClose={() => setIsOverlayOpen(false)}
-        />
+        <OverlayCardUserForm />
       </OverlayBackdrop>
-
-      <CardExpenses.Root title="Trabalhadores">
-        <CardExpenses.Search />
-        <CardExpenses.Table data={currentData} />
-        <CardExpenses.Footer
-        text={`Total de Trabalhadores: ${dataByType.length}`}
-          totalItems={dataByType.length}
-          itemsPerPage={itemsPerPage}
-          currentPage={currentPage}
-          onPageChange={setCurrentPage}
-        />
-      </CardExpenses.Root>
+      {loading && <p className="text-gray-600">Carregando usuários...</p>}
+      {error && <p className="text-red-500">Erro: {error}</p>}
+      {!loading && !error && (
+        <CardExpenses.Root title="Trabalhadores">
+          <CardExpenses.Search />
+          <CardExpensesTable
+            data={users}
+            columns={columns}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+          <CardExpenses.Footer
+            text={`Total de Trabalhadores: ${users.length}`}
+            totalItems={users.length}
+            itemsPerPage={limit}
+            currentPage={page}
+            onPageChange={setPage}
+          />
+        </CardExpenses.Root>
+      )}
     </div>
   );
 }
