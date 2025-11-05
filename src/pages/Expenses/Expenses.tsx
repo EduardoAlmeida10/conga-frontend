@@ -1,14 +1,14 @@
+import { useState } from "react";
 import Button from "../../components/Button";
 import CostTypeTabs from "../../components/ConstTypeTabs";
-import OverlayCard from "../../components/Overlay/OverlayCard";
 import OverlayBackdrop from "../../components/Overlay/OverlayBackdrop";
+import ExpenseForm from "./ExpenseForm";
 import { CardExpenses } from "../../components/CardExpenses";
 import iconAdd from "../../assets/iconAdd.svg";
-import { useState } from "react";
 import { useExpenseModal } from "../../hooks/useExpenseModal";
-import { ExpenseContent } from "./ExpenseContent";
 import { useExpenseData, type BaseExpense } from "../../hooks/useExpenseData";
 import { useExpenseColumns } from "../../hooks/expenseColumnDefinitions";
+import { ExpenseContent } from "./ExpenseContent";
 
 export default function Expenses() {
   const [selectedType, setSelectedType] = useState("Pessoal");
@@ -52,7 +52,7 @@ export default function Expenses() {
         setCurrentPage(currentPage - 1);
       }
     } catch (err) {
-      console.error("Wrapper handleDeleteWithPagination falhou:", err);
+      console.error("Erro ao deletar:", err);
     }
   };
 
@@ -61,24 +61,24 @@ export default function Expenses() {
       <div className="mb-5 mt-10">
         <CostTypeTabs onSelect={handleTypeChange} />
       </div>
+
       <Button styles="mb-3" onClick={handleOpenCreateModal}>
         <img src={iconAdd} alt="" />
         Nova Despesa
       </Button>
 
       <OverlayBackdrop isOpen={isOverlayOpen} onClose={handleCloseModal}>
-        <OverlayCard
-          titleOverlay={selectedType}
+        <ExpenseForm
+          type={selectedType}
           onClose={handleCloseModal}
           onSuccess={handleSaveSuccess}
           expenseToEdit={expenseToEdit}
-          expenseType={selectedType}
+          titleOverlay={selectedType}
         />
       </OverlayBackdrop>
 
       <CardExpenses.Root title={`Custos com ${selectedType}`}>
         <CardExpenses.Search />
-
         <ExpenseContent
           isLoading={isLoading}
           error={error}
@@ -87,7 +87,6 @@ export default function Expenses() {
           onEdit={handleOpenEditModal}
           onDelete={handleDeleteWithPagination}
         />
-
         <CardExpenses.Footer
           totalItems={expenses?.length || 0}
           itemsPerPage={itemsPerPage}
