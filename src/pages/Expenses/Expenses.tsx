@@ -13,7 +13,7 @@ import { DataTablePagination } from "../../components/DataTable/DataTablePaginat
 import { DataTableTextFilter } from "../../components/DataTable/DataTableTextFilter";
 
 import OverlayBackdrop from "../../components/Overlay/OverlayBackdrop";
-import OverlayCard from "../../components/Overlay/OverlayCard";
+import ExpenseForm from "../../pages/Expenses/ExpenseForm";
 
 import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
 import { useExpenseData, type BaseExpense } from "../../hooks/useExpenseData";
@@ -88,12 +88,12 @@ export default function ExpensesTable() {
       </Button>
 
       <OverlayBackdrop isOpen={isOverlayOpen} onClose={handleCloseModal}>
-        <OverlayCard
-          titleOverlay={selectedType}
+        <ExpenseForm
+          type={selectedType}
           onClose={handleCloseModal}
           onSuccess={handleSaveSuccess}
           expenseToEdit={expenseToEdit}
-          expenseType={selectedType}
+          titleOverlay={selectedType}
         />
       </OverlayBackdrop>
 

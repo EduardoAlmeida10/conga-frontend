@@ -1,177 +1,23 @@
-import { useEffect, useState } from "react";
-import InputField from "../InputField";
-import Button from "../Button";
 import iconExit from "../../assets/iconExit.svg";
-import type { BaseExpense } from "../../hooks/useExpenseData";
-import { useExpenseSubmit } from "../../hooks/useExpenseSubmit";
-import { PersonnelFormFields } from "./PersonnelFormFields";
-import { OperationalFormFields } from "./OperationalFormFields";
-import { UtilityFormFields } from "./UtilityFormFields";
-import { SupplieFormFields } from "./SupplieFormFields";
+import Button from "../Button";
 
-interface ExpenseCardProps {
-  titleOverlay?: string;
+interface OverlayCardProps {
+  title: string;
+  isSubmitting?: boolean;
   onClose: () => void;
-  onSuccess: () => void;
-  expenseToEdit?: BaseExpense | null;
-  expenseType: string;
+  onSubmit: (e: React.FormEvent) => void;
+  children: React.ReactNode;
 }
 
-const getInitialState = (type: string) => {
-  if (type === "Pessoal") {
-    return {
-      type: "Salários Fixos",
-      date: "",
-      value: "",
-      description: "",
-    };
-  }
-  if (type === "Operacionais") {
-    return {
-      type: "Higiene",
-      date: "",
-      value: "",
-      description: "",
-    };
-  }
-  if (type === "Utilitario") {
-    return {
-      type: "Energia",
-      date: "",
-      value: "",
-      observations: "",
-    };
-  }
-  if (type === "Insumos") {
-    return {
-      name: "",
-      date: "",
-      quantity: "",
-      unitPrice: "",
-    };
-  }
-  return { date: "", value: "", description: "" };
-};
-
 export default function OverlayCard({
+  title,
+  isSubmitting,
   onClose,
-  onSuccess,
-  expenseToEdit,
-  expenseType,
-  titleOverlay
-}: ExpenseCardProps) {
-  const { createExpense, updateExpense } = useExpenseSubmit(expenseType);
-
-  const [formData, setFormData] = useState<any>(getInitialState(expenseType));
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
-
-  const isEditMode = Boolean(expenseToEdit);
-
-  useEffect(() => {
-    if (isEditMode && expenseToEdit) {
-      setFormData({
-        ...expenseToEdit,
-        date: new Date(expenseToEdit.date).toISOString().split("T")[0],
-      });
-    } else {
-      setFormData(getInitialState(expenseType));
-    }
-  }, [expenseToEdit, isEditMode, expenseType]);
-
-  const handleFormChange = (field: string, value: any) => {
-    setFormData((prev: any) => ({ ...prev, [field]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitError(null);
-
-    const dto = { ...formData };
-
-    try {
-      if (isEditMode && expenseToEdit) {
-        await updateExpense(String(expenseToEdit.id), dto);
-      } else {
-        await createExpense(dto);
-      }
-      onSuccess();
-      onClose();
-    } catch (err) {
-      setSubmitError("Falha ao salvar. Verifique os campos.");
-      console.error(err);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const renderFormFields = () => {
-    const commonFields = (
-      <>
-        <InputField
-          label="Data"
-          type="date"
-          value={formData.date || ""}
-          onChange={(e) => handleFormChange("date", e.target.value)}
-          required
-        />
-        <InputField
-          label="Descrição"
-          value={formData.description || ""}
-          onChange={(e) => handleFormChange("description", e.target.value)}
-          required
-        />
-      </>
-    );
-
-    if (expenseType === "Pessoal") {
-      return (
-        <>
-          <PersonnelFormFields
-            formData={formData}
-            handleFormChange={handleFormChange}
-          />
-        </>
-      );
-    }
-    if (expenseType === "Operacionais") {
-      return (
-        <>
-          <OperationalFormFields
-            formData={formData}
-            handleFormChange={handleFormChange}
-          />
-        </>
-      );
-    }
-    if (expenseType === "Utilitario") {
-      return (
-        <>
-          <UtilityFormFields
-            formData={formData}
-            handleFormChange={handleFormChange}
-          />
-        </>
-      );
-    }
-    if (expenseType === "Insumos") {
-      return (
-        <>
-          <SupplieFormFields
-            formData={formData}
-            handleFormChange={handleFormChange}
-          />
-        </>
-      );
-    }
-
-    return commonFields;
-  };
-
+  onSubmit,
+  children,
+}: OverlayCardProps) {
   return (
-    <div className="bg-white rounded-2xl p-6 w-80 max-w-md shadow-lg">
+    <div className="bg-white rounded-2xl p-6 w-96 max-w-md shadow-lg">
       <div className="flex items-center mb-8 gap-14">
         <img
           src={iconExit}
@@ -179,16 +25,13 @@ export default function OverlayCard({
           onClick={onClose}
           className="cursor-pointer"
         />
-        <h2 className="text-xl font-bold">
-          {`${isEditMode ? "Editar Despesa" : "Nova Despesa"} ${titleOverlay || ''}`}
-        </h2>
-        <div></div>
+        <h2 className="text-xl font-bold text-center">{title}</h2>
       </div>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        {renderFormFields()}
-        {submitError && <p className="text-red-500 text-sm">{submitError}</p>}
+
+      <form onSubmit={onSubmit} className="flex flex-col gap-4">
+        {children}
         <Button type="submit" variant="primary" disabled={isSubmitting}>
-          Salvar
+          {isSubmitting ? "Salvando..." : "Salvar"}
         </Button>
       </form>
     </div>
