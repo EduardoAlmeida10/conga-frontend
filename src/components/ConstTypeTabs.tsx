@@ -16,8 +16,8 @@ export default function CostTypeTabs({ onSelect }: CostTypeTabsProps) {
 
   return (
     <div className="w-full">
-      <p className="mb-1">Selecione o tipo de despesa</p>
-      <div className="flex justify-between bg-white rounded-xl px-10 py-4">
+      <p className="mb-1">Selecione o tipo de despesa:</p>
+      <div className="flex justify-between bg-white rounded-xl px-10 py-4 mt-4">
         {costTypes.map((type) => (
           <button
             key={type}
