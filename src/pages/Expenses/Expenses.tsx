@@ -1,19 +1,29 @@
-import Button from "../../components/Button";
-import CostTypeTabs from "../../components/ConstTypeTabs";
-import OverlayCard from "../../components/Overlay/OverlayCard";
-import OverlayBackdrop from "../../components/Overlay/OverlayBackdrop";
-import { CardExpenses } from "../../components/CardExpenses";
-import iconAdd from "../../assets/iconAdd.svg";
-import { useState } from "react";
-import { useExpenseModal } from "../../hooks/useExpenseModal";
-import { ExpenseContent } from "./ExpenseContent";
-import { useExpenseData, type BaseExpense } from "../../hooks/useExpenseData";
-import { useExpenseColumns } from "../../hooks/expenseColumnDefinitions";
+import { useCallback, useMemo, useState } from "react";
 
-export default function Expenses() {
-  const [selectedType, setSelectedType] = useState("Pessoal");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+import iconAdd from "../../assets/iconAdd.svg";
+import Button from "../../components/Button";
+
+import CostTypeTabs from "../../components/ConstTypeTabs";
+
+import { DataTableFacetedFilter } from "@/components/DataTable/DataTableFacetedFilter";
+import { getExpenseColumns } from "@/components/InvoicesTable/columns";
+import { DataTable } from "../../components/DataTable";
+import { DataTableContent } from "../../components/DataTable/DataTableContent";
+import { DataTablePagination } from "../../components/DataTable/DataTablePagination";
+import { DataTableTextFilter } from "../../components/DataTable/DataTableTextFilter";
+
+import OverlayBackdrop from "../../components/Overlay/OverlayBackdrop";
+import OverlayCard from "../../components/Overlay/OverlayCard";
+
+import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
+import { useExpenseData, type BaseExpense } from "../../hooks/useExpenseData";
+import { useExpenseModal } from "../../hooks/useExpenseModal";
+
+type ExpenseType = "Pessoal" | "Operacionais" | "Utilitario" | "Insumos";
+
+export default function ExpensesTable() {
+  const [selectedType, setSelectedType] = useState<ExpenseType>("Pessoal");
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
 
   const {
     isOverlayOpen,
@@ -23,45 +33,56 @@ export default function Expenses() {
     handleCloseModal,
   } = useExpenseModal();
 
-  const { expenses, isLoading, error, refetchExpenses, deleteExpense } =
+  const { expenses, refetchExpenses, deleteExpense } =
     useExpenseData(selectedType);
 
-  const columns = useExpenseColumns(selectedType);
+  const handleDelete = useCallback(
+    async (expense: BaseExpense) => {
+      try {
+        await deleteExpense(expense);
+        refetchExpenses();
+
+        if (expenses.length === 1 && pagination.pageIndex > 0) {
+          setPagination((prev) => ({ ...prev, pageIndex: prev.pageIndex - 1 }));
+        }
+      } catch (err) {
+        console.error("Erro ao deletar despesa:", err);
+      }
+    },
+    [deleteExpense, refetchExpenses, expenses.length, pagination.pageIndex],
+  );
+
+  const columns = useMemo(
+    () => getExpenseColumns(selectedType, handleOpenEditModal, handleDelete),
+    [selectedType, handleOpenEditModal, handleDelete],
+  );
+
+  const facetedFilterColumn = useMemo(() => {
+    switch (selectedType) {
+      case "Insumos":
+        return "name";
+      default:
+        return "type";
+    }
+  }, [selectedType]);
+
+  const handleTypeChange = (type: string) => {
+    setSelectedType(type as ExpenseType);
+    setPagination({ pageIndex: 0, pageSize: 5 });
+  };
 
   const handleSaveSuccess = () => {
     refetchExpenses();
     handleCloseModal();
   };
 
-  const handleTypeChange = (type: string) => {
-    setSelectedType(type);
-    setCurrentPage(1);
-  };
-
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentData =
-    expenses?.slice(startIndex, startIndex + itemsPerPage) || [];
-
-  const handleDeleteWithPagination = async (expense: BaseExpense) => {
-    const isLastItemOnPage = currentData.length === 1;
-    const isNotFirstPage = currentPage > 1;
-
-    try {
-      await deleteExpense(expense);
-      if (isLastItemOnPage && isNotFirstPage) {
-        setCurrentPage(currentPage - 1);
-      }
-    } catch (err) {
-      console.error("Wrapper handleDeleteWithPagination falhou:", err);
-    }
-  };
-
   return (
-    <div className="w-max">
-      <div className="mb-5 mt-10">
+    <div className="p-6 w-full max-w-6xl mx-auto">
+      <div className="mb-16 mt-10">
         <CostTypeTabs onSelect={handleTypeChange} />
       </div>
-      <Button styles="mb-3" onClick={handleOpenCreateModal}>
+
+      <Button styles="mb-8" onClick={handleOpenCreateModal}>
         <img src={iconAdd} alt="" />
         Nova Despesa
       </Button>
@@ -76,25 +97,36 @@ export default function Expenses() {
         />
       </OverlayBackdrop>
 
-      <CardExpenses.Root title={`Custos com ${selectedType}`}>
-        <CardExpenses.Search />
+      <div className="flex flex-col p-12 bg-white justify-center items-center-5 gap-5 rounded-2xl">
+        <div className="flex flex-col items-center p-5 gap-5 ">
+          <h1 className="font-bold text-2xl">
+            {" "}
+            Tabela de Custos com {selectedType}
+          </h1>
+        </div>
 
-        <ExpenseContent
-          isLoading={isLoading}
-          error={error}
-          costs={currentData}
+        <DataTable<BaseExpense>
+          data={expenses ?? []}
           columns={columns}
-          onEdit={handleOpenEditModal}
-          onDelete={handleDeleteWithPagination}
-        />
+          pagination={pagination}
+        >
+          <div className="mb-4 flex justify-between items-center gap-4">
+            <div>
+              <DataTableTextFilter placeholder="Buscar despesas" />
+            </div>
+            <div className="flex gap-8 items-center">
+              <DataTableFacetedFilter column={facetedFilterColumn} />
+              <DataTableColumnsVisibilityDropdown />
+            </div>
+          </div>
 
-        <CardExpenses.Footer
-          totalItems={expenses?.length || 0}
-          itemsPerPage={itemsPerPage}
-          currentPage={currentPage}
-          onPageChange={setCurrentPage}
-        />
-      </CardExpenses.Root>
+          <DataTableContent />
+
+          <div className="flex justify-end items-center mt-4">
+            <DataTablePagination />
+          </div>
+        </DataTable>
+      </div>
     </div>
   );
 }
