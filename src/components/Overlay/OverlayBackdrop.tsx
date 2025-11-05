@@ -1,7 +1,7 @@
 interface BackdropProps {
   children: React.ReactNode;
   isOpen: boolean;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export default function Backdrop({isOpen, children, onClose }: BackdropProps) {
