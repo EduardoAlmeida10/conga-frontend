@@ -32,7 +32,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const storedToken = localStorage.getItem("access_token");
     if (storedToken) {
       try {
-        const payload = JSON.parse(atob(storedToken.split(".")[1]));
+        const base64Url = storedToken.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split("")
+            .map(function (c) {
+              return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+            })
+            .join(""),
+        );
+
+        const payload = JSON.parse(jsonPayload) as {
+          sub: string;
+          username: string;
+          name: string;
+          role: string;
+        };
         setToken(storedToken);
         setUser({
           id: payload.sub,
