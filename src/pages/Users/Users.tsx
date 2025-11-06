@@ -1,83 +1,116 @@
-import { useState } from "react";
+// src/pages/Users/Users.tsx
+import { useCallback, useMemo } from "react";
 import Button from "../../components/Button";
-import OverlayBackdrop from "../../components/Overlay/OverlayBackdrop";
-import { CardExpenses } from "../../components/CardExpenses";
-import CardExpensesTable from "../../components/CardExpenses/CardExpensesTable";
 import iconAdd from "../../assets/iconAdd.svg";
-import { useUserData } from "../../hooks/users/useUserData";
-import { useUserDelete } from "../../hooks/users/useUserDelete";
-import type { User } from "../../api/users-costApi";
+import OverlayBackdrop from "../../components/Overlay/OverlayBackdrop";
 import UsersForm from "./UsersForm";
 
-export default function Users() {
-  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+import { DataTable } from "../../components/DataTable";
+import { DataTableContent } from "../../components/DataTable/DataTableContent";
+import { DataTablePagination } from "../../components/DataTable/DataTablePagination";
+import { DataTableTextFilter } from "../../components/DataTable/DataTableTextFilter";
+import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
 
-  const { removeUser, loading: deleting } = useUserDelete();
+import { useUserData } from "../../hooks/users/useUserData";
+import { useUserDelete } from "../../hooks/users/useUserDelete";
+import { useUserModal } from "../../hooks/users/useUserModal";
+import { getUserColumns } from "./columns";
+import type { User } from "../../api/users-costApi";
+
+export default function Users() {
+  const {
+    isOverlayOpen,
+    userToEdit,
+    handleOpenCreateModal,
+    handleOpenEditModal,
+    handleCloseModal,
+  } = useUserModal();
+
   const { data, loading, error, page, limit, setPage, refetch } = useUserData();
+  const { removeUser, loading: deleting } = useUserDelete();
 
   const users = data?.data || [];
 
-  const columns = [
-    { key: "name", header: "Nome" },
-    { key: "username", header: "Usuário" },
-    { key: "role", header: "Função" },
-  ];
+  const handleDelete = useCallback(
+    async (user: User) => {
+      if (!confirm(`Tem certeza que deseja excluir o usuário ${user.name}?`))
+        return;
+      await removeUser(user.id);
+      refetch();
+      if (users.length === 1 && page > 1) {
+        setPage(page - 1);
+      }
+    },
+    [removeUser, refetch, users.length, page, setPage],
+  );
 
-  const handleEdit = (user: User) => {
-    setSelectedUser(user);
-    setIsOverlayOpen(true);
+  const columns = useMemo(
+    () => getUserColumns(handleOpenEditModal, handleDelete),
+    [handleOpenEditModal, handleDelete],
+  );
+
+  const paginationProps = {
+    pageIndex: Math.max(0, (page || 1) - 1),
+    pageSize: limit || 10,
+    pageCount: data?.totalPages || 1,
+    manualPagination: true,
+    onPaginationChange: (updater: any) => {
+      const newPage =
+        typeof updater === "function"
+          ? updater({ pageIndex: (page || 1) - 1, pageSize: limit || 10 })
+              .pageIndex + 1
+          : updater.pageIndex + 1;
+
+      setPage(newPage);
+    },
   };
 
-  const handleDelete = async (user: any) => {
-    if (!confirm(`Tem certeza que deseja excluir o usuário ${user.name}?`))
-      return;
-    await removeUser(user.id);
+  const handleSaveSuccess = () => {
     refetch();
+    handleCloseModal();
   };
 
   return (
-    <div className="w-[950px]">
-      {deleting && <p className="text-gray-600">Excluindo usuário...</p>}
-      <Button
-        styles="mb-3"
-        onClick={() => {
-          setSelectedUser(null);
-          setIsOverlayOpen(true);
-        }}
-      >
+    <div className="p-6 w-full max-w-5xl mx-auto">
+      <Button styles="mb-8" onClick={handleOpenCreateModal}>
         <img src={iconAdd} alt="" />
         Novo Trabalhador
       </Button>
-      <OverlayBackdrop
-        isOpen={isOverlayOpen}
-        onClose={() => setIsOverlayOpen(false)}
-      >
+
+      <OverlayBackdrop isOpen={isOverlayOpen} onClose={handleCloseModal}>
         <UsersForm
-          selectedUser={selectedUser}
-          onClose={() => setIsOverlayOpen(false)}
-          onUserSaved={refetch}
+          selectedUser={userToEdit}
+          onClose={handleCloseModal}
+          onUserSaved={handleSaveSuccess}
         />
       </OverlayBackdrop>
+
       {loading && <p className="text-gray-600">Carregando usuários...</p>}
       {error && <p className="text-red-500">Erro: {error}</p>}
+      {deleting && <p className="text-gray-600">Excluindo usuário...</p>}
+
       {!loading && !error && (
-        <CardExpenses.Root title="Trabalhadores">
-          <CardExpenses.Search />
-          <CardExpensesTable
+        <div className="flex flex-col p-12 bg-white justify-center items-center-5 gap-5 rounded-2xl">
+          <DataTable<User>
             data={users}
             columns={columns}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-          <CardExpenses.Footer
-            text={`Total de Trabalhadores: ${data?.total ?? 0}`}
-            totalItems={data?.total ?? 0}
-            itemsPerPage={limit}
-            currentPage={page}
-            onPageChange={setPage}
-          />
-        </CardExpenses.Root>
+            pagination={paginationProps}
+          >
+            <div className="mb-4 flex justify-between items-center gap-4">
+              <DataTableTextFilter placeholder="Buscar trabalhadores" />
+              <DataTableColumnsVisibilityDropdown />
+            </div>
+
+            <DataTableContent />
+
+            <div className="flex justify-between items-center mt-4">
+              <h1 className="text-[20px] font-bold">
+                Número de Colaboradores: {data?.total}
+              </h1>
+              <DataTablePagination />
+            </div>
+          </DataTable>
+        </div>
       )}
     </div>
   );
