@@ -22,7 +22,7 @@ export function UtilityFormFields({ formData, handleFormChange }: Props) {
       <SelectField
         id="type"
         title="Tipo"
-        value={formData.type || UtilityTypes.AGUA}
+        value={formData.type}
         onChange={(e) =>
           handleFormChange("type", e.target.value as UtilityTypes)
         }
