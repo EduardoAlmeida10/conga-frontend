@@ -1,5 +1,5 @@
 // src/pages/Users/Users.tsx
-import { useCallback, useMemo } from "react";
+import { useMemo, useCallback, useState } from "react";
 import Button from "../../components/Button";
 import iconAdd from "../../assets/iconAdd.svg";
 import OverlayBackdrop from "../../components/Overlay/OverlayBackdrop";
@@ -26,10 +26,10 @@ export default function Users() {
     handleCloseModal,
   } = useUserModal();
 
-  const { data, loading, error, page, limit, setPage, refetch } = useUserData();
+  const { users, loading, error, refetch } = useUserData();
   const { removeUser, loading: deleting } = useUserDelete();
 
-  const users = data?.data || [];
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 3 });
 
   const handleDelete = useCallback(
     async (user: User) => {
@@ -37,33 +37,17 @@ export default function Users() {
         return;
       await removeUser(user.id);
       refetch();
-      if (users.length === 1 && page > 1) {
-        setPage(page - 1);
+      if (users.length === 1 && pagination.pageIndex > 0) {
+        setPagination((prev) => ({ ...prev, pageIndex: prev.pageIndex - 1 }));
       }
     },
-    [removeUser, refetch, users.length, page, setPage],
+    [removeUser, refetch, users.length, pagination.pageIndex],
   );
 
   const columns = useMemo(
     () => getUserColumns(handleOpenEditModal, handleDelete),
     [handleOpenEditModal, handleDelete],
   );
-
-  const paginationProps = {
-    pageIndex: Math.max(0, (page || 1) - 1),
-    pageSize: limit || 10,
-    pageCount: data?.totalPages || 1,
-    manualPagination: true,
-    onPaginationChange: (updater: any) => {
-      const newPage =
-        typeof updater === "function"
-          ? updater({ pageIndex: (page || 1) - 1, pageSize: limit || 10 })
-              .pageIndex + 1
-          : updater.pageIndex + 1;
-
-      setPage(newPage);
-    },
-  };
 
   const handleSaveSuccess = () => {
     refetch();
@@ -74,7 +58,7 @@ export default function Users() {
     <div className="p-6 w-full max-w-5xl mx-auto">
       <Button styles="mb-8" onClick={handleOpenCreateModal}>
         <img src={iconAdd} alt="" />
-        Novo Trabalhador
+        Novo Usuário
       </Button>
 
       <OverlayBackdrop isOpen={isOverlayOpen} onClose={handleCloseModal}>
@@ -90,22 +74,22 @@ export default function Users() {
       {deleting && <p className="text-gray-600">Excluindo usuário...</p>}
 
       {!loading && !error && (
-        <div className="flex flex-col p-12 bg-white justify-center items-center-5 gap-5 rounded-2xl">
+        <div className="flex flex-col p-12 bg-white justify-center items-center gap-5 rounded-2xl">
           <DataTable<User>
             data={users}
             columns={columns}
-            pagination={paginationProps}
+            pagination={pagination}
           >
-            <div className="mb-4 flex justify-between items-center gap-4">
+            <div className="mb-4 flex justify-between items-center w-full">
               <DataTableTextFilter placeholder="Buscar trabalhadores" />
               <DataTableColumnsVisibilityDropdown />
             </div>
 
             <DataTableContent />
 
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex justify-between items-center gap-5 mt-4">
               <h1 className="text-[20px] font-bold">
-                Número de Colaboradores: {data?.total}
+                Número de Colaboradores: {users.length}
               </h1>
               <DataTablePagination />
             </div>
