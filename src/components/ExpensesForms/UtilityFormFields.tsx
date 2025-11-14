@@ -6,10 +6,11 @@ import SelectField from "../SelectField";
 interface Props {
   formData: any;
   handleFormChange: (field: string, value: any) => void;
+  errors?: Record<string, string>;
 }
 
 
-export function UtilityFormFields({ formData, handleFormChange }: Props) {
+export function UtilityFormFields({ formData, handleFormChange, errors }: Props) {
   return (
     <>
       <InputField
@@ -17,6 +18,7 @@ export function UtilityFormFields({ formData, handleFormChange }: Props) {
         type="date"
         value={formData.date || ""}
         onChange={(e) => handleFormChange("date", e.target.value)}
+        error={errors?.date}
         required
       />
       <SelectField
@@ -38,12 +40,14 @@ export function UtilityFormFields({ formData, handleFormChange }: Props) {
         type="text"
         value={formData.value || ""}
         onChange={(e) => handleFormChange("value", e.target.value)}
+        error={errors?.value}
         required
       />
       <InputField
         label="Observações"
         value={formData.observations || ""}
         onChange={(e) => handleFormChange("observations", e.target.value)}
+        error={errors?.observations}
         required
       />
     </>
