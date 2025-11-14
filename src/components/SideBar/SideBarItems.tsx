@@ -33,3 +33,12 @@ export const sideBarItems = [
     hasSubmenu: true,
   },
 ];
+
+export const sideBarCollaboratorItems = [
+  {
+    to: "/dashboard-colaborador",
+    icon: <FaHome />,
+    text: "Dashboard",
+    hasSubmenu: false,
+  },
+];
