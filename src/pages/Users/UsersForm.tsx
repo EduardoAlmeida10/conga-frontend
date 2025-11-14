@@ -4,6 +4,11 @@ import InputField from "../../components/InputField";
 import { UserRole, type User } from "../../api/users-costApi";
 import { useUserSubmit } from "../../hooks/users/useUserSubmit";
 import { useUserUpdate } from "../../hooks/users/useUserUpdate";
+import { ZodError } from "zod";
+import {
+  createUserSchema,
+  updateUserSchema,
+} from "@/lib/validation/userSchema";
 
 interface UsersFormProps {
   selectedUser?: User | null;
@@ -23,7 +28,7 @@ export default function UsersForm({
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [formError, setFormError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (selectedUser) {
@@ -37,38 +42,50 @@ export default function UsersForm({
       setPassword("");
       setConfirmPassword("");
     }
-    setFormError(null);
+    setErrors({});
   }, [selectedUser]);
 
-  const validateForm = () => {
-    if (!name.trim() || !username.trim()) {
-      setFormError("Preencha todos os campos obrigatórios.");
+  const validate = () => {
+    try {
+      setErrors({});
+
+      if (selectedUser) {
+        updateUserSchema.parse({
+          name,
+          username,
+        });
+      } else {
+        createUserSchema.parse({
+          name,
+          username,
+          password,
+          confirmPassword,
+        });
+      }
+
+      return true;
+    } catch (err) {
+      if (err instanceof ZodError) {
+        const fieldErrors: Record<string, string> = {};
+        err.issues.forEach((e) => {
+          if (e.path.length > 0) {
+            fieldErrors[String(e.path[0])] = e.message;
+          }
+        });
+        setErrors(fieldErrors);
+      }
       return false;
     }
-    if (!selectedUser && (!password || !confirmPassword)) {
-      setFormError("A senha e a confirmação são obrigatórias.");
-      return false;
-    }
-    if (!selectedUser && password !== confirmPassword) {
-      setFormError("As senhas não coincidem.");
-      return false;
-    }
-    return true;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormError(null);
-    if (!validateForm()) return;
+    if (!validate()) return;
 
     if (selectedUser) {
-      const updated = await editUser(selectedUser.id, {
-        name,
-        username,
-        role: selectedUser.role,
-      });
-
-      if (!updated) {
+      const updated = await editUser(selectedUser.id, { name, username, role: selectedUser.role });
+      if (updateError && !updated) {
+        setErrors({ form: updateError });
         window.toast(
           "Erro",
           updateError || "Erro ao atualizar usuário.",
@@ -79,20 +96,13 @@ export default function UsersForm({
 
       window.toast("Sucesso", "Usuário atualizado com sucesso!", "success");
     } else {
-      const created = await submitUser({
-        name,
-        username,
-        password,
-        confirmPassword,
-        role: UserRole.COLLABORATOR,
-      });
+      const created = await submitUser({ name, username, password, confirmPassword, role: UserRole.COLLABORATOR });
 
-      if (!created) {
+      if (createError && !created) {
+        setErrors({ form: createError });
         window.toast("Erro", createError || "Erro ao criar usuário.", "error");
         return;
       }
-
-      window.toast("Sucesso", "Usuário criado com sucesso!", "success");
     }
 
     onUserSaved();
@@ -113,12 +123,14 @@ export default function UsersForm({
           label="Nome"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          error={errors?.name}
           required
         />
         <InputField
           label="Usuário"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          error={errors?.username}
           required
         />
 
@@ -129,6 +141,7 @@ export default function UsersForm({
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              error={errors?.password}
               required
             />
             <InputField
@@ -136,14 +149,15 @@ export default function UsersForm({
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              error={errors?.confirmPassword}
               required
             />
           </>
         )}
 
-        {(formError || createError || updateError) && (
+        {(Object.keys(errors).length > 0 || createError || updateError) && (
           <p className="text-red-500 text-sm mt-2">
-            {formError || createError || updateError}
+            {createError ?? updateError ?? (errors.form ?? (Object.keys(errors).length ? Object.values(errors).join(", ") : null))}
           </p>
         )}
       </div>

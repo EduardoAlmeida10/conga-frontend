@@ -41,7 +41,7 @@ const Login = () => {
     const errors: { name?: string; password?: string } = {};
 
     if (!name.trim()) {
-      errors.name = "O campo nome é obrigatório";
+      errors.name = "O campo username é obrigatório";
     }
     if (!password.trim()) {
       errors.password = "O campo senha é obrigatório";
