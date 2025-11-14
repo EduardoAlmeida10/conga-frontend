@@ -1,22 +1,23 @@
-import { HashRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login/Login";
-import AdminDashboard from "./pages/Dashboards/AdminDashboard";
-import CollaboratorDashboard from "./pages/Dashboards/ColaboradorDashboard";
+import { HashRouter, Route, Routes } from "react-router-dom";
+import DashboardLayout from "./components/DashboardLayout";
 import PrivateRoute from "./components/PrivateRoute";
 import ToastContainer from "./components/ToastNotification/ToastConteiner";
-import DashboardLayout from "./components/DashboardLayout";
+import CollaboratorDashboard from "./pages/ColaborattorDashboard/ColaboradorDashboard";
+import AdminDashboard from "./pages/Dashboards/AdminDashboard";
 import Expenses from "./pages/Expenses/Expenses";
+import Login from "./pages/Login/Login";
 import Users from "./pages/Users/Users";
 
 function App() {
   return (
     <>
-      <ToastContainer/>
+      <ToastContainer />
       <HashRouter>
         <Routes>
           <Route path="/" element={<Login />} />
+
           <Route element={<DashboardLayout />}>
-          <Route
+            <Route
               path="/dashboard-admin"
               element={
                 <PrivateRoute allowedRoles={["ADMIN"]}>
@@ -49,7 +50,7 @@ function App() {
               }
             />
           </Route>
-      </Routes>
+        </Routes>
       </HashRouter>
     </>
   );
