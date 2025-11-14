@@ -1,11 +1,6 @@
 import type { Invoice } from "@/entities/Invoice";
 import type { ColumnDef } from "@tanstack/react-table";
-import {
-  CreditCardIcon,
-  Edit2Icon,
-  EllipsisIcon,
-  Trash2Icon,
-} from "lucide-react";
+import { Edit2Icon, EllipsisIcon, Trash2Icon } from "lucide-react";
 import { DataTableColumnHeader } from "../../components/DataTable/DataTableColumnHeader";
 import { Button } from "../../components/ui/button";
 import {
@@ -18,7 +13,9 @@ import {
 export const columns: ColumnDef<Invoice>[] = [
   {
     accessorKey: "invoice",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="#" />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Vendável (Litros)" />
+    ),
     size: 80,
     enableResizing: false,
     enableSorting: false,
@@ -34,11 +31,7 @@ export const columns: ColumnDef<Invoice>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title={
-          <div className="flex items-center gap-1">
-            <CreditCardIcon className="size-4" /> Payment Status
-          </div>
-        }
+        title={<div className="flex items-center gap-1">Data</div>}
       />
     ),
     filterFn: "equalsString",
@@ -46,19 +39,10 @@ export const columns: ColumnDef<Invoice>[] = [
   {
     accessorKey: "paymentMethod",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Payment Method" />
+      <DataTableColumnHeader column={column} title="Produtor" />
     ),
     meta: {
       nameInFilters: "Payment Method",
-    },
-  },
-  {
-    accessorKey: "totalAmount",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Amount" />
-    ),
-    meta: {
-      nameInFilters: "Amount",
     },
   },
   {
