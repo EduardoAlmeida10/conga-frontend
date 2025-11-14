@@ -4,6 +4,8 @@ import InputField from "../../components/InputField";
 import { UserRole, type User } from "../../api/users-costApi";
 import { useUserSubmit } from "../../hooks/users/useUserSubmit";
 import { useUserUpdate } from "../../hooks/users/useUserUpdate";
+import { ZodError } from "zod";
+import { createUserSchema, updateUserSchema } from "@/lib/validation/userSchema";
 
 interface UsersFormProps {
   selectedUser?: User | null;
@@ -24,7 +26,8 @@ export default function UsersForm({
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState<UserRole>(UserRole.COLLABORATOR);
-  const [formError, setFormError] = useState<string | null>(null);
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (selectedUser) {
@@ -40,46 +43,75 @@ export default function UsersForm({
       setConfirmPassword("");
       setRole(UserRole.COLLABORATOR);
     }
-    setFormError(null);
+    setErrors({});
   }, [selectedUser]);
 
-  const validateForm = () => {
-    if (!name.trim() || !username.trim()) {
-      setFormError("Preencha todos os campos obrigatórios.");
+  const validate = () => {
+    try {
+      setErrors({});
+
+      if (selectedUser) {
+        updateUserSchema.parse({
+          name,
+          username,
+          role,
+        });
+      } else {
+        createUserSchema.parse({
+          name,
+          username,
+          password,
+          confirmPassword,
+          role,
+        });
+      }
+
+      return true;
+    } catch (err) {
+      if (err instanceof ZodError) {
+        const fieldErrors: Record<string, string> = {};
+        err.issues.forEach((e) => {
+          if (e.path.length > 0) {
+            fieldErrors[String(e.path[0])] = e.message;
+          }
+        });
+        setErrors(fieldErrors);
+      }
       return false;
     }
-    if (!selectedUser && (!password || !confirmPassword)) {
-      setFormError("A senha e a confirmação são obrigatórias.");
-      return false;
-    }
-    if (!selectedUser && password !== confirmPassword) {
-      setFormError("As senhas não coincidem.");
-      return false;
-    }
-    return true;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormError(null);
-    if (!validateForm()) return;
 
-    if (!validateForm()) return;
+    if (!validate()) return;
 
     if (selectedUser) {
-      const updated = await editUser(selectedUser.id, { name, username, role });
-      if (!updated) {
-        setFormError(updateError || "Erro ao atualizar usuário.");
+      await editUser(selectedUser.id, {
+        name,
+        username,
+        role,
+      });
+
+      if (updateError) {
+        setErrors({ form: updateError });
         return;
       }
     } else {
-      await submitUser({ name, username, password, confirmPassword, role });
-      
-    if (createError) {
-      setFormError(createError);
-      return;
+      await submitUser({
+        name,
+        username,
+        password,
+        confirmPassword,
+        role,
+      });
+
+      if (createError) {
+        setErrors({ form: createError });
+        return;
+      }
     }
-    }
+
     onUserSaved();
     onClose();
   };
@@ -98,12 +130,14 @@ export default function UsersForm({
           label="Nome"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          error={errors?.name}
           required
         />
         <InputField
           label="Usuário"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          error={errors?.username}
           required
         />
 
@@ -114,6 +148,7 @@ export default function UsersForm({
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              error={errors?.password}
               required
             />
             <InputField
@@ -121,6 +156,7 @@ export default function UsersForm({
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              error={errors?.confirmPassword}
               required
             />
           </>
@@ -135,10 +171,8 @@ export default function UsersForm({
           <option value={UserRole.ADMIN}>Administrador</option>
         </select>
 
-        {(formError || createError || updateError) && (
-          <p className="text-red-500 text-sm mt-2">
-            {formError || createError || updateError}
-          </p>
+        {errors.form && (
+          <p className="text-red-500 text-sm mt-2">{errors.form}</p>
         )}
       </div>
     </OverlayCard>
