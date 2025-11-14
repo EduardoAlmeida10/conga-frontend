@@ -17,7 +17,6 @@ export function useSupplieCosts(filters: SupplieCostFilterDto) {
     setError(null);
     try {
       const response = await findAllSupplieCosts(currentFilters);
-      console.log(response.data)
       setData(response.data);
     } catch (err) {
       setError("Falha ao buscar despesas.");

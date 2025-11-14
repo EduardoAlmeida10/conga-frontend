@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import iconSuccess from "../../assets/iconSuccess.png";
 import iconError from "../../assets/iconError.svg";
 import iconInfo from "../../assets/iconInfo.svg";
-import iconExit from "../../assets/iconExit.svg";
 
 interface ToastProps {
   message: string;
@@ -41,12 +40,6 @@ export default function Toast({ title, message, type, onClose }: ToastProps) {
           {title && <h1 className="font-bold">{title}</h1>}
           <p>{message}</p>
         </div>
-        <img
-          src={iconExit}
-          alt="exit icon"
-          onClick={onClose}
-          className="w-6 h-6 mt-0.5 cursor-pointer"
-        />
       </div>
     </div>
   );

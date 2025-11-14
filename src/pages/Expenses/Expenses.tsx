@@ -42,11 +42,23 @@ export default function ExpensesTable() {
         await deleteExpense(expense);
         refetchExpenses();
 
+        window.toast(
+          "Despesa deletada",
+          "Despesa foi removida com sucesso!",
+          "success",
+        );
+
         if (expenses.length === 1 && pagination.pageIndex > 0) {
           setPagination((prev) => ({ ...prev, pageIndex: prev.pageIndex - 1 }));
         }
       } catch (err) {
         console.error("Erro ao deletar despesa:", err);
+
+        window.toast(
+          "Erro ao deletar",
+          "Não foi possível remover esta despesa.",
+          "error",
+        );
       }
     },
     [deleteExpense, refetchExpenses, expenses.length, pagination.pageIndex],
@@ -71,9 +83,17 @@ export default function ExpensesTable() {
     setPagination({ pageIndex: 0, pageSize: 5 });
   };
 
-  const handleSaveSuccess = () => {
+  const handleSaveSuccess = (isEdit?: boolean) => {
     refetchExpenses();
     handleCloseModal();
+
+    window.toast(
+      isEdit ? "Despesa atualizada" : "Despesa criada",
+      isEdit
+        ? "A despesa foi atualizada com sucesso!"
+        : "A despesa foi criada com sucesso!",
+      "success",
+    );
   };
 
   return (

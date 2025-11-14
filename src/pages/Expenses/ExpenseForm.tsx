@@ -11,7 +11,7 @@ interface ExpenseOverlayProps {
   type: string;
   titleOverlay?: string;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (isEdit: boolean) => void;
   expenseToEdit?: BaseExpense | null;
 }
 
@@ -55,7 +55,7 @@ export default function ExpenseOverlay({
       } else {
         await createExpense(formData);
       }
-      onSuccess();
+      onSuccess(isEditMode);
       onClose();
     } catch (err) {
       setSubmitError("Falha ao salvar. Verifique os campos.");

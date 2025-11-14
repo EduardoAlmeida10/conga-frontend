@@ -20,6 +20,7 @@ export function useUserSubmit() {
       const response = await registerUser(userData);
       setCreatedUser(response);
       setSuccess(true);
+      return response;
     } catch (err: any) {
       setError(err.response?.data?.message || "Erro ao registrar usuário");
     } finally {

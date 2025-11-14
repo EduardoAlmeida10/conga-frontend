@@ -23,14 +23,12 @@ export default function UsersForm({
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState<UserRole>(UserRole.COLLABORATOR);
   const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     if (selectedUser) {
       setName(selectedUser.name);
       setUsername(selectedUser.username);
-      setRole(selectedUser.role);
       setPassword("");
       setConfirmPassword("");
     } else {
@@ -38,7 +36,6 @@ export default function UsersForm({
       setUsername("");
       setPassword("");
       setConfirmPassword("");
-      setRole(UserRole.COLLABORATOR);
     }
     setFormError(null);
   }, [selectedUser]);
@@ -64,22 +61,40 @@ export default function UsersForm({
     setFormError(null);
     if (!validateForm()) return;
 
-    if (!validateForm()) return;
-
     if (selectedUser) {
-      const updated = await editUser(selectedUser.id, { name, username, role });
+      const updated = await editUser(selectedUser.id, {
+        name,
+        username,
+        role: selectedUser.role,
+      });
+
       if (!updated) {
-        setFormError(updateError || "Erro ao atualizar usuário.");
+        window.toast(
+          "Erro",
+          updateError || "Erro ao atualizar usuário.",
+          "error",
+        );
         return;
       }
+
+      window.toast("Sucesso", "Usuário atualizado com sucesso!", "success");
     } else {
-      await submitUser({ name, username, password, confirmPassword, role });
-      
-    if (createError) {
-      setFormError(createError);
-      return;
+      const created = await submitUser({
+        name,
+        username,
+        password,
+        confirmPassword,
+        role: UserRole.COLLABORATOR,
+      });
+
+      if (!created) {
+        window.toast("Erro", createError || "Erro ao criar usuário.", "error");
+        return;
+      }
+
+      window.toast("Sucesso", "Usuário criado com sucesso!", "success");
     }
-    }
+
     onUserSaved();
     onClose();
   };
@@ -125,15 +140,6 @@ export default function UsersForm({
             />
           </>
         )}
-
-        <select
-          className="border p-2 rounded"
-          value={role}
-          onChange={(e) => setRole(e.target.value as UserRole)}
-        >
-          <option value={UserRole.COLLABORATOR}>Colaborador</option>
-          <option value={UserRole.ADMIN}>Administrador</option>
-        </select>
 
         {(formError || createError || updateError) && (
           <p className="text-red-500 text-sm mt-2">

@@ -26,8 +26,8 @@ export default function Users() {
     handleCloseModal,
   } = useUserModal();
 
-  const { users, loading, error, refetch } = useUserData();
-  const { removeUser, loading: deleting } = useUserDelete();
+  const { users, loading, error: errorData, refetch } = useUserData();
+  const { removeUser,error: errorDelete, loading: deleting } = useUserDelete();
 
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 3 });
 
@@ -36,12 +36,19 @@ export default function Users() {
       if (!confirm(`Tem certeza que deseja excluir o usuário ${user.name}?`))
         return;
       await removeUser(user.id);
+
+      if (!errorDelete) {
+        window.toast("Sucesso", "Usuário removido com sucesso!", "success");
+      } else {
+        window.toast("Erro", "Falha ao excluir o usuário.", "error");
+      }
+
       refetch();
       if (users.length === 1 && pagination.pageIndex > 0) {
         setPagination((prev) => ({ ...prev, pageIndex: prev.pageIndex - 1 }));
       }
     },
-    [removeUser, refetch, users.length, pagination.pageIndex],
+    [removeUser, refetch, errorDelete, users.length, pagination.pageIndex],
   );
 
   const columns = useMemo(
@@ -70,10 +77,10 @@ export default function Users() {
       </OverlayBackdrop>
 
       {loading && <p className="text-gray-600">Carregando usuários...</p>}
-      {error && <p className="text-red-500">Erro: {error}</p>}
+      {errorData && <p className="text-red-500">Erro: {errorData}</p>}
       {deleting && <p className="text-gray-600">Excluindo usuário...</p>}
 
-      {!loading && !error && (
+      {!loading && !errorData && (
         <div className="flex flex-col p-12 bg-white justify-center items-center gap-5 rounded-2xl">
           <DataTable<User>
             data={users}
@@ -87,7 +94,7 @@ export default function Users() {
 
             <DataTableContent />
 
-            <div className="flex justify-between items-center gap-5 mt-4">
+            <div className="flex justify-between items-center gap-15 mt-4">
               <h1 className="text-[20px] font-bold">
                 Número de Colaboradores: {users.length}
               </h1>
