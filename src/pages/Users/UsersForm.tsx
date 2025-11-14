@@ -155,11 +155,6 @@ export default function UsersForm({
           </>
         )}
 
-        {(Object.keys(errors).length > 0 || createError || updateError) && (
-          <p className="text-red-500 text-sm mt-2">
-            {createError ?? updateError ?? (errors.form ?? (Object.keys(errors).length ? Object.values(errors).join(", ") : null))}
-          </p>
-        )}
       </div>
     </OverlayCard>
   );
