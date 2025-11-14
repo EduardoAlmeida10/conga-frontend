@@ -9,6 +9,8 @@ import type { BaseExpense } from "../../hooks/useExpenseData";
 import { CostType } from "@/api/personnel-costApi";
 import { OperationalTypes } from "@/api/operational-costApi";
 import { UtilityTypes } from "@/api/utility-costApi";
+import { expenseValidators } from "@/lib/validation";
+import { ZodError } from "zod";
 
 interface ExpenseOverlayProps {
   type: string;
@@ -26,8 +28,8 @@ const defaultFormValues: Record<string, any> = {
     type: OperationalTypes.HIGIENE,
   },
   Utilitario: {
-    type: UtilityTypes.AGUA
-  }
+    type: UtilityTypes.AGUA,
+  },
 };
 
 export default function ExpenseOverlay({
@@ -41,6 +43,7 @@ export default function ExpenseOverlay({
   const isEditMode = !!expenseToEdit;
 
   const [formData, setFormData] = useState<any>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -57,6 +60,7 @@ export default function ExpenseOverlay({
 
   const handleChange = (field: string, value: any) => {
     setFormData((prev: any) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,18 +68,32 @@ export default function ExpenseOverlay({
     setIsSubmitting(true);
     setSubmitError(null);
 
+    const schema = expenseValidators[type];
+
     try {
+      const parsed = schema.parse(formData);
+
       if (isEditMode && expenseToEdit) {
-        await updateExpense(String(expenseToEdit.id), formData);
+        await updateExpense(String(expenseToEdit.id), parsed);
       } else {
-        await createExpense(formData);
+        await createExpense(parsed);
       }
       onSuccess();
       onClose();
-    } catch (err) {
-      setSubmitError("Falha ao salvar. Verifique os campos.");
-      console.error(err);
-    } finally {
+    } catch (error) {
+        if (error instanceof ZodError) {
+          const formatted: Record<string, string> = {};
+          error.issues.forEach((err) => {
+            console.log("ZOD ERROR", error.issues);
+            const field = String(err.path[0] ?? "");
+            formatted[field] = err.message;
+          });
+          setErrors(formatted);
+        } else {
+          console.error(error);
+          setSubmitError("Falha ao salvar. Verifique os campos.");
+        }
+      } finally {
       setIsSubmitting(false);
     }
   };
@@ -83,13 +101,37 @@ export default function ExpenseOverlay({
   const renderFields = () => {
     switch (type) {
       case "Pessoal":
-        return <PersonnelFormFields formData={formData} handleFormChange={handleChange} />;
+        return (
+          <PersonnelFormFields
+            formData={formData}
+            handleFormChange={handleChange}
+            errors={errors}
+          />
+        );
       case "Operacionais":
-        return <OperationalFormFields formData={formData} handleFormChange={handleChange} />;
+        return (
+          <OperationalFormFields
+            formData={formData}
+            handleFormChange={handleChange}
+            errors={errors}
+          />
+        );
       case "Utilitario":
-        return <UtilityFormFields formData={formData} handleFormChange={handleChange} />;
+        return (
+          <UtilityFormFields
+            formData={formData}
+            handleFormChange={handleChange}
+            errors={errors}
+          />
+        );
       case "Insumos":
-        return <SupplieFormFields formData={formData} handleFormChange={handleChange} />;
+        return (
+          <SupplieFormFields
+            formData={formData}
+            handleFormChange={handleChange}
+            errors={errors}
+          />
+        );
       default:
         return <p>Tipo de despesa desconhecido.</p>;
     }
