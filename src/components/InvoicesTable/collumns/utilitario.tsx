@@ -28,7 +28,9 @@ export const utilitarioColumns = (
     cell: ({ getValue }) => {
       const date = getValue<string>();
       if (!date || date === "0000-00-00") return "-";
-      return new Date(date).toLocaleDateString("pt-BR");
+
+      const [year, month, day] = date.split("-").map(Number);
+      return new Date(year, month - 1, day).toLocaleDateString("pt-BR");
     },
     meta: { nameInFilters: "Data" },
   },
