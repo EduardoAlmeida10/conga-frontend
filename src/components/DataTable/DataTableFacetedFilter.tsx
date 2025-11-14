@@ -40,11 +40,11 @@ export function DataTableFacetedFilter({
       <Select value={currentFilter} onValueChange={handleValueChange}>
         <SelectTrigger
           className={cn(
-            "w-max [&_.lucide-chevron-down]:hidden px-4",
+            "w-max [&_.lucide-chevron-down]:hidden px-4 text-black [&>span]:text-black",
             currentFilter && "border-primary bg-primary/5",
           )}
         >
-          <FilterIcon className="h-4 w-4" />
+          <FilterIcon className="h-4 w-4 text-black" />
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
 
