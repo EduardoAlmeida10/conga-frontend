@@ -6,6 +6,9 @@ import { OperationalFormFields } from "../../components/ExpensesForms/Operationa
 import { UtilityFormFields } from "../../components/ExpensesForms/UtilityFormFields";
 import { SupplieFormFields } from "../../components/ExpensesForms/SupplieFormFields";
 import type { BaseExpense } from "../../hooks/useExpenseData";
+import { CostType } from "@/api/personnel-costApi";
+import { OperationalTypes } from "@/api/operational-costApi";
+import { UtilityTypes } from "@/api/utility-costApi";
 
 interface ExpenseOverlayProps {
   type: string;
@@ -14,6 +17,18 @@ interface ExpenseOverlayProps {
   onSuccess: (isEdit: boolean) => void;
   expenseToEdit?: BaseExpense | null;
 }
+
+const defaultFormValues: Record<string, any> = {
+  Pessoal: {
+    type: CostType.SALARIOS_FIXOS,
+  },
+  Operacionais: {
+    type: OperationalTypes.HIGIENE,
+  },
+  Utilitario: {
+    type: UtilityTypes.AGUA
+  }
+};
 
 export default function ExpenseOverlay({
   type,
@@ -36,7 +51,7 @@ export default function ExpenseOverlay({
         date: new Date(expenseToEdit.date).toISOString().split("T")[0],
       });
     } else {
-      setFormData({});
+      setFormData(defaultFormValues[type] || {});
     }
   }, [expenseToEdit, type]);
 
