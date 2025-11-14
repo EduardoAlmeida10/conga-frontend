@@ -1,10 +1,10 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { User } from "../../api/users-costApi";
 import {
-  EllipsisIcon,
   Edit2Icon,
+  EllipsisIcon,
   Trash2Icon,
 } from "lucide-react";
+import type { User } from "../../api/users-costApi";
 import { Button } from "../../components/ui/button";
 import {
   DropdownMenu,
@@ -20,14 +20,24 @@ export const getUserColumns = (
   {
     accessorKey: "name",
     header: "Nome",
+    meta: { nameInFilters: "Nome" },
   },
   {
     accessorKey: "username",
     header: "Usuário",
+    meta: { nameInFilters: "Usuário" },
   },
   {
     accessorKey: "role",
     header: "Função",
+    cell: ({ getValue }) => {
+      const name = getValue<string>();
+      if (name == "COLLABORATOR") {
+        return "Colaborador"
+      }
+      return "Admin"
+    },
+    meta: { nameInFilters: "Função" },
   },
   {
     id: "actions",
