@@ -3,9 +3,10 @@ import InputField from "../InputField";
 interface Props {
   formData: any;
   handleFormChange: (field: string, value: any) => void;
+  errors?: Record<string, string>;
 }
 
-export function SupplieFormFields({ formData, handleFormChange }: Props) {
+export function SupplieFormFields({ formData, handleFormChange, errors }: Props) {
   return (
     <>
       <InputField
@@ -13,6 +14,7 @@ export function SupplieFormFields({ formData, handleFormChange }: Props) {
         type="text"
         value={formData.name || ""}
         onChange={(e) => handleFormChange("name", e.target.value)}
+        error={errors?.name}
         required
       />
       <InputField
@@ -20,6 +22,7 @@ export function SupplieFormFields({ formData, handleFormChange }: Props) {
         type="date"
         value={formData.date || ""}
         onChange={(e) => handleFormChange("date", e.target.value)}
+        error={errors?.date}
         required
       />
       <InputField
@@ -27,6 +30,7 @@ export function SupplieFormFields({ formData, handleFormChange }: Props) {
         type="text"
         value={formData.quantity || ""}
         onChange={(e) => handleFormChange("quantity", e.target.value)}
+        error={errors?.quantity}
         required
       />
       <InputField
@@ -34,6 +38,7 @@ export function SupplieFormFields({ formData, handleFormChange }: Props) {
         type="text"
         value={formData.unitPrice || ""}
         onChange={(e) => handleFormChange("unitPrice", e.target.value)}
+        error={errors?.unitPrice}
         required
       />
     </>
