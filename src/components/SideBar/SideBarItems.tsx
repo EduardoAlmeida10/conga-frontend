@@ -1,4 +1,5 @@
-import { FaHome, FaRegCircle, FaFileAlt, FaUsers } from "react-icons/fa";
+import { TrendingDown, TrendingUp } from "lucide-react";
+import { FaFileAlt, FaHome, FaUsers } from "react-icons/fa";
 
 export const sideBarItems = [
   {
@@ -9,13 +10,13 @@ export const sideBarItems = [
   },
   {
     to: "/producao",
-    icon: <FaRegCircle />,
+    icon: <TrendingUp />,
     text: "Produção e Receita",
     hasSubmenu: true,
   },
   {
     to: "/despesas",
-    icon: <FaRegCircle />,
+    icon: <TrendingDown />,
     text: "Despesas",
     hasSubmenu: true,
   },
