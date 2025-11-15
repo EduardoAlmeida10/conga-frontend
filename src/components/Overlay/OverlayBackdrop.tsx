@@ -4,10 +4,10 @@ interface BackdropProps {
   onClose?: () => void;
 }
 
-export default function Backdrop({isOpen, children, onClose }: BackdropProps) {
+export default function Backdrop({isOpen, children }: BackdropProps) {
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
       <div onClick={(e) => e.stopPropagation()}>{children}</div>
     </div>
   );
