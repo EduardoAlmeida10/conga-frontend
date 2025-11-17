@@ -27,6 +27,8 @@ export default function DashboardLayout() {
         return "Gestão de Despesas";
       case "/usuarios":
         return "Gestão de Usuários";
+      case "/producao":
+        return "Gestão de Produção";
       default:
         return "Dashboard";
     }
