@@ -29,7 +29,7 @@ export function SupplieFormFields({ formData, handleFormChange, errors }: Props)
         label="Quantidade"
         type="text"
         value={formData.quantity || ""}
-        onChange={(e) => handleFormChange("quantity", e.target.value)}
+        onChange={(e) => handleFormChange("quantity", Number(e.target.value))}
         error={errors?.quantity}
         required
       />
