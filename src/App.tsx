@@ -7,6 +7,7 @@ import AdminDashboard from "./pages/Dashboards/AdminDashboard";
 import Expenses from "./pages/Expenses/Expenses";
 import Login from "./pages/Login/Login";
 import Users from "./pages/Users/Users";
+import ProductionRevenue from "./pages/ProductionRevenue/ProductionRevenue";
 
 function App() {
   return (
@@ -22,6 +23,14 @@ function App() {
               element={
                 <PrivateRoute allowedRoles={["ADMIN"]}>
                   <AdminDashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/producao"
+              element={
+                <PrivateRoute allowedRoles={["ADMIN"]}>
+                  <ProductionRevenue />
                 </PrivateRoute>
               }
             />
