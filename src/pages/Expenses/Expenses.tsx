@@ -19,6 +19,7 @@ import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataT
 import { useExpenseData, type BaseExpense } from "../../hooks/useExpenseData";
 import { useExpenseModal } from "../../hooks/useExpenseModal";
 
+const costTypes = ["Pessoal", "Utilitario", "Insumos", "Operacionais"];
 type ExpenseType = "Pessoal" | "Operacionais" | "Utilitario" | "Insumos";
 
 export default function ExpensesTable() {
@@ -99,7 +100,8 @@ export default function ExpensesTable() {
   return (
     <div className="p-6 w-full max-w-6xl mx-auto">
       <div className="mb-16 mt-10">
-        <CostTypeTabs onSelect={handleTypeChange} />
+        <p>Selecione o tipo de despesa:</p>
+        <CostTypeTabs tabs={costTypes} onSelect={handleTypeChange} />
       </div>
 
       <Button styles="mb-8" onClick={handleOpenCreateModal}>

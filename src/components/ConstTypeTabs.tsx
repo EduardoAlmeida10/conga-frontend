@@ -1,13 +1,12 @@
 import { useState } from "react";
 
 interface CostTypeTabsProps {
+  tabs: string[];
   onSelect: (type: string) => void;
 }
 
-const costTypes = ["Pessoal", "Utilitario", "Insumos", "Operacionais"];
-
-export default function CostTypeTabs({ onSelect }: CostTypeTabsProps) {
-  const [activeTab, setActiveTab] = useState(costTypes[0]);
+export default function CostTypeTabs({ tabs, onSelect }: CostTypeTabsProps) {
+  const [activeTab, setActiveTab] = useState(tabs[0]);
 
   const handleSelect = (type: string) => {
     setActiveTab(type);
@@ -16,9 +15,8 @@ export default function CostTypeTabs({ onSelect }: CostTypeTabsProps) {
 
   return (
     <div className="w-full">
-      <p className="mb-1">Selecione o tipo de despesa:</p>
       <div className="flex justify-between bg-white rounded-xl px-10 py-4 mt-4">
-        {costTypes.map((type) => (
+        {tabs.map((type) => (
           <button
             key={type}
             onClick={() => handleSelect(type)}
