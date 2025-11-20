@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import OverlayCard from "../../components/Overlay/OverlayCard";
-import { useExpenseSubmit } from "../../hooks/useExpenseSubmit";
+import { useExpenseSubmit } from "../../hooks/expenses/useExpenseSubmit";
 import { PersonnelFormFields } from "../../components/ExpensesForms/PersonnelFormFields";
 import { OperationalFormFields } from "../../components/ExpensesForms/OperationalFormFields";
 import { UtilityFormFields } from "../../components/ExpensesForms/UtilityFormFields";
 import { SupplieFormFields } from "../../components/ExpensesForms/SupplieFormFields";
-import type { BaseExpense } from "../../hooks/useExpenseData";
+import type { BaseExpense } from "../../hooks/expenses/useExpenseData";
 import { CostType } from "@/api/costs/personnel-costApi";
 import { OperationalTypes } from "@/api/costs/operational-costApi";
 import { UtilityTypes } from "@/api/costs/utility-costApi";

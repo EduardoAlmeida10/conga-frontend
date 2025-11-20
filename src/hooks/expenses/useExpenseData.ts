@@ -1,12 +1,12 @@
 import { useCallback, useMemo } from "react";
-import { deletePersonnelCost } from "../api/costs/personnel-costApi";
-import { usePersonnelCosts } from "./usePersonnelCosts";
-import { deleteOperationalCost } from "../api/costs/operational-costApi";
-import { useOperationalCosts } from "./useOperationalCosts";
-import { deleteUtilityCost } from "../api/costs/utility-costApi";
-import { useUtilityCosts } from "./useUtilityCosts";
-import { deleteSupplieCost } from "../api/costs/supllie-costApi";
-import { useSupplieCosts } from "./useSupplieCosts";
+import { deletePersonnelCost } from "../../api/costs/personnel-costApi";
+import { usePersonnelCosts } from "../costs/usePersonnelCosts";
+import { deleteOperationalCost } from "../../api/costs/operational-costApi";
+import { useOperationalCosts } from "../costs/useOperationalCosts";
+import { deleteUtilityCost } from "../../api/costs/utility-costApi";
+import { useUtilityCosts } from "../costs/useUtilityCosts";
+import { deleteSupplieCost } from "../../api/costs/supllie-costApi";
+import { useSupplieCosts } from "../costs/useSupplieCosts";
 
 export interface BaseExpense {
   id: string;
@@ -33,10 +33,18 @@ export function useExpenseData(type: keyof typeof deleteFunctionsMap) {
 
   const emptyFilters = useMemo(() => ({}), []);
 
-  const personnelData = usePersonnelCosts(type === "Pessoal" ? filters : emptyFilters);
-  const utilityData = useUtilityCosts(type === "Utilitario" ? filters : emptyFilters);
-  const supplieData = useSupplieCosts(type === "Insumos" ? filters : emptyFilters);
-  const operationalData = useOperationalCosts(type === "Operacionais" ? filters : emptyFilters);
+  const personnelData = usePersonnelCosts(
+    type === "Pessoal" ? filters : emptyFilters,
+  );
+  const utilityData = useUtilityCosts(
+    type === "Utilitario" ? filters : emptyFilters,
+  );
+  const supplieData = useSupplieCosts(
+    type === "Insumos" ? filters : emptyFilters,
+  );
+  const operationalData = useOperationalCosts(
+    type === "Operacionais" ? filters : emptyFilters,
+  );
 
   const emptyData = useEmptyData();
 
@@ -53,7 +61,14 @@ export function useExpenseData(type: keyof typeof deleteFunctionsMap) {
       default:
         return emptyData;
     }
-  }, [type, personnelData, utilityData, supplieData, operationalData, emptyData]);
+  }, [
+    type,
+    personnelData,
+    utilityData,
+    supplieData,
+    operationalData,
+    emptyData,
+  ]);
 
   const deleteFunction = useMemo(() => {
     return deleteFunctionsMap[type];

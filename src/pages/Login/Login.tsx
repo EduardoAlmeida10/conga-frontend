@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthentication } from "../../hooks/useAuth";
+import { useAuthentication } from "../../hooks/auth/useAuth";
 
 import Button from "../../components/Button";
 import InputField from "../../components/InputField";

@@ -16,8 +16,11 @@ import OverlayBackdrop from "../../components/Overlay/OverlayBackdrop";
 import ExpenseForm from "../../pages/Expenses/ExpenseForm";
 
 import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
-import { useExpenseData, type BaseExpense } from "../../hooks/useExpenseData";
-import { useExpenseModal } from "../../hooks/useExpenseModal";
+import {
+  useExpenseData,
+  type BaseExpense,
+} from "../../hooks/expenses/useExpenseData";
+import { useExpenseModal } from "../../hooks/expenses/useExpenseModal";
 
 const costTypes = ["Pessoal", "Utilitario", "Insumos", "Operacionais"];
 type ExpenseType = "Pessoal" | "Operacionais" | "Utilitario" | "Insumos";
@@ -129,7 +132,7 @@ export default function ExpensesTable() {
 
         <DataTable<BaseExpense>
           data={expenses ?? []}
-          columns={columns}
+          columns={columns as any}
           pagination={pagination}
         >
           <div className="mb-4 flex justify-between items-center gap-4">

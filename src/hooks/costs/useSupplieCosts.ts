@@ -1,20 +1,20 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
-  findAllPersonnelCosts,
-  type PersonnelCost,
-  type PersonnelCostFilterDto,
-} from "../api/costs/personnel-costApi";
+  findAllSupplieCosts,
+  type SupplieCost,
+  type SupplieCostFilterDto,
+} from "../../api/costs/supllie-costApi";
 
-export function usePersonnelCosts(filters: PersonnelCostFilterDto) {
-  const [data, setData] = useState<PersonnelCost[]>([]);
+export function useSupplieCosts(filters: SupplieCostFilterDto) {
+  const [data, setData] = useState<SupplieCost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = async (currentFilters: PersonnelCostFilterDto) => {
+  const fetchData = async (currentFilters: SupplieCostFilterDto) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await findAllPersonnelCosts(currentFilters);
+      const response = await findAllSupplieCosts(currentFilters);
       setData(response.data);
     } catch (err) {
       setError("Falha ao buscar despesas.");

@@ -4,28 +4,28 @@ import {
   findOperationalCostById,
   registerOperationalCost,
   updateOperationalCost,
-} from "../api/costs/operational-costApi";
+} from "../../api/costs/operational-costApi";
 import {
   deletePersonnelCost,
   findAllPersonnelCosts,
   findPersonnelCostById,
   registerPersonnelCost,
   updatePersonnelCost,
-} from "../api/costs/personnel-costApi";
+} from "../../api/costs/personnel-costApi";
 import {
   deleteSupplieCost,
   findAllSupplieCosts,
   findSupplieCostById,
   registerSupplieCost,
   updateSupplieCost,
-} from "../api/costs/supllie-costApi";
+} from "../../api/costs/supllie-costApi";
 import {
   deleteUtilityCost,
   findAllUtilityCosts,
   findUtilityCostById,
   registerUtilityCost,
   updateUtilityCost,
-} from "../api/costs/utility-costApi";
+} from "../../api/costs/utility-costApi";
 
 const apiFunctionsMap = {
   Pessoal: {

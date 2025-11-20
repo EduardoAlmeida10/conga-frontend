@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
 import {
-  findAllUtilityCosts,
-  type UtilityCost,
-  type UtilityCostFilterDto,
-} from "../api/costs/utility-costApi";
+  findAllOperationalCosts,
+  type OperationalCost,
+  type OperationalCostFilterDto,
+} from "../../api/costs/operational-costApi";
 
-export function useUtilityCosts(filters: UtilityCostFilterDto) {
-  const [data, setData] = useState<UtilityCost[]>([]);
+export function useOperationalCosts(filters: OperationalCostFilterDto) {
+  const [data, setData] = useState<OperationalCost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = async (currentFilters: UtilityCostFilterDto) => {
+  const fetchData = async (currentFilters: OperationalCostFilterDto) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await findAllUtilityCosts(currentFilters);
-      setData(response.data || []);
+      const response = await findAllOperationalCosts(currentFilters);
+      setData(response.data);
     } catch (err) {
       setError("Falha ao buscar despesas.");
       console.error(err);
@@ -25,7 +25,6 @@ export function useUtilityCosts(filters: UtilityCostFilterDto) {
   };
 
   useEffect(() => {
-    if (!filters) return;
     fetchData(filters);
   }, [filters]);
 
