@@ -4,7 +4,7 @@ import {
   EllipsisIcon,
   Trash2Icon,
 } from "lucide-react";
-import type { User } from "../../api/users-costApi";
+import type { User } from "../../api/user/users-costApi";
 import { Button } from "../../components/ui/button";
 import {
   DropdownMenu,
@@ -61,11 +61,11 @@ export const getUserColumns = (
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuItem onSelect={() => handleEdit(user)}>
+              <DropdownMenuItem className="cursor-pointer" onSelect={() => handleEdit(user)}>
                 <Edit2Icon className="size-4 mr-2" /> Editar
               </DropdownMenuItem>
 
-              <DropdownMenuItem onSelect={() => handleDelete(user)}>
+              <DropdownMenuItem className="cursor-pointer" onSelect={() => handleDelete(user)}>
                 <Trash2Icon className="size-4 mr-2" /> Excluir
               </DropdownMenuItem>
             </DropdownMenuContent>
