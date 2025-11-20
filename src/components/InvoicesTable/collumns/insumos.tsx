@@ -81,10 +81,10 @@ export const insumosColumns = (
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuItem onSelect={() => onEdit(expense)}>
+              <DropdownMenuItem className="cursor-pointer" onSelect={() => onEdit(expense)}>
                 <Edit2Icon className="size-4" /> Edit
               </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => onDelete(expense)}>
+              <DropdownMenuItem className="cursor-pointer" onSelect={() => onDelete(expense)}>
                 <Trash2Icon className="size-4" /> Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
