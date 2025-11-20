@@ -1,6 +1,6 @@
 // src/hooks/users/useUserData.ts
 import { useEffect, useState, useCallback } from "react";
-import { findAllUsers, type User } from "../../api/users-costApi";
+import { findAllUsers, type User } from "../../api/user/users-costApi";
 
 export function useUserData() {
   const [users, setUsers] = useState<User[]>([]);

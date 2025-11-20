@@ -1,6 +1,6 @@
 import z from "zod";
 import { dateSchema, descriptionSchema, valueSchema } from "./commun.schema";
-import { OperationalTypes } from "@/api/operational-costApi";
+import { OperationalTypes } from "@/api/costs/operational-costApi";
 
 export const operationalSchema = z.object({
   date: dateSchema,

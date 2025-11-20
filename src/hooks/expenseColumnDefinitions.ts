@@ -62,6 +62,11 @@ const columnMap = {
   Insumos: supplieColumns,
 };
 
+type ExpenseType = keyof typeof columnMap;
+
 export function useExpenseColumns(type: string) {
-  return useMemo(() => columnMap[type] || commonColumns, [type]);
+  return useMemo(
+    () => columnMap[type as ExpenseType] || commonColumns,
+    [type]
+  );
 }

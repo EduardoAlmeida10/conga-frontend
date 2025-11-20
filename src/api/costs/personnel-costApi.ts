@@ -1,11 +1,13 @@
-import { api } from './authApi';
+import { api } from "../auth/authApi";
 
-export enum CostType {
-  SALARIOS_FIXOS = 'Salários Fixos',
-  TERCEIRIZADOS = 'Terceirizados',
-  ENCARGOS = 'Encargos',
-  BENEFICIOS = 'Benefícios',
-}
+export const CostType = {
+  SALARIOS_FIXOS: "Salários Fixos",
+  TERCEIRIZADOS: "Terceirizados",
+  ENCARGOS: "Encargos",
+  BENEFICIOS: "Benefícios",
+} as const;
+
+export type CostType = typeof CostType[keyof typeof CostType];
 
 export interface PersonnelCost {
   id: string;
@@ -27,7 +29,7 @@ export type UpdatePersonnelCostDto = Partial<RegisterPersonnelCostDto>;
 export interface PersonnelCostFilterDto {
   type?: CostType;
   dateFrom?: string; //  'YYYY-MM-DD'
-  dateTo?: string;   //  'YYYY-MM-DD'
+  dateTo?: string; //  'YYYY-MM-DD'
   minValue?: number;
   maxValue?: number;
   description?: string;
@@ -43,13 +45,13 @@ export interface PaginatedPersonnelCosts {
   data: PersonnelCost[];
 }
 
-const BASE_URL = '/personnel-cost';
+const BASE_URL = "/personnel-cost";
 
 /**
  * @POST /personnel-cost/register
  */
 export async function registerPersonnelCost(
-  dto: RegisterPersonnelCostDto
+  dto: RegisterPersonnelCostDto,
 ): Promise<PersonnelCost> {
   const response = await api.post(`${BASE_URL}/register`, dto);
   return response.data;
@@ -59,10 +61,10 @@ export async function registerPersonnelCost(
  * @GET /personnel-cost
  */
 export async function findAllPersonnelCosts(
-  filters: PersonnelCostFilterDto
+  filters: PersonnelCostFilterDto,
 ): Promise<PaginatedPersonnelCosts> {
   const response = await api.get(BASE_URL, {
-    params: filters, 
+    params: filters,
   });
   return response.data;
 }
@@ -70,7 +72,9 @@ export async function findAllPersonnelCosts(
 /**
  * @GET /personnel-cost/:id
  */
-export async function findPersonnelCostById(id: string): Promise<PersonnelCost> {
+export async function findPersonnelCostById(
+  id: string,
+): Promise<PersonnelCost> {
   const response = await api.get(`${BASE_URL}/${id}`);
   return response.data;
 }
@@ -80,7 +84,7 @@ export async function findPersonnelCostById(id: string): Promise<PersonnelCost> 
  */
 export async function updatePersonnelCost(
   id: string,
-  dto: UpdatePersonnelCostDto
+  dto: UpdatePersonnelCostDto,
 ): Promise<PersonnelCost> {
   const response = await api.put(`${BASE_URL}/${id}`, dto);
   return response.data;
@@ -89,7 +93,9 @@ export async function updatePersonnelCost(
 /**
  * @DELETE /personnel-cost/:id
  */
-export async function deletePersonnelCost(id: string): Promise<{ message: string }> {
+export async function deletePersonnelCost(
+  id: string,
+): Promise<{ message: string }> {
   const response = await api.delete(`${BASE_URL}/${id}`);
   return response.data;
 }

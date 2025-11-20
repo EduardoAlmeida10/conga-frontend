@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import OverlayCard from "../../components/Overlay/OverlayCard";
 import InputField from "../../components/InputField";
-import { UserRole, type User } from "../../api/users-costApi";
+import { UserRole, type User } from "../../api/user/users-costApi";
 import { useUserSubmit } from "../../hooks/users/useUserSubmit";
 import { useUserUpdate } from "../../hooks/users/useUserUpdate";
 import { ZodError } from "zod";

@@ -1,6 +1,6 @@
 import z from "zod";
 import { dateSchema, observationSchema, valueSchema } from "./commun.schema";
-import { UtilityTypes } from "@/api/utility-costApi";
+import { UtilityTypes } from "@/api/costs/utility-costApi";
 
 export const utilitySchema = z.object({
   date: dateSchema,

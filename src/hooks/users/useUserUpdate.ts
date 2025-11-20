@@ -1,6 +1,6 @@
 // src/hooks/users/useUserUpdate.ts
 import { useState } from "react";
-import { updateUser, type UpdateUserDto, type User } from "../../api/users-costApi";
+import { updateUser, type UpdateUserDto, type User } from "../../api/user/users-costApi";
 
 export function useUserUpdate() {
   const [loading, setLoading] = useState(false);

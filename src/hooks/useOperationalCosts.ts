@@ -3,7 +3,7 @@ import {
   findAllOperationalCosts,
   type OperationalCost,
   type OperationalCostFilterDto,
-} from "../api/operational-costApi";
+} from "../api/costs/operational-costApi";
 
 export function useOperationalCosts(filters: OperationalCostFilterDto) {
   const [data, setData] = useState<OperationalCost[]>([]);

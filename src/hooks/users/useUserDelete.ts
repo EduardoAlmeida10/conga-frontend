@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { deleteUser } from "../../api/users-costApi";
+import { deleteUser } from "../../api/user/users-costApi";
 
 export function useUserDelete() {
   const [loading, setLoading] = useState(false);

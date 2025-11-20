@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { findAllUtilityCosts, type UtilityCost, type UtilityCostFilterDto } from "../api/utility-costApi";
-
+import {
+  findAllUtilityCosts,
+  type UtilityCost,
+  type UtilityCostFilterDto,
+} from "../api/costs/utility-costApi";
 
 export function useUtilityCosts(filters: UtilityCostFilterDto) {
   const [data, setData] = useState<UtilityCost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
 
   const fetchData = async (currentFilters: UtilityCostFilterDto) => {
     setIsLoading(true);
@@ -22,12 +24,10 @@ export function useUtilityCosts(filters: UtilityCostFilterDto) {
     }
   };
 
-
   useEffect(() => {
     if (!filters) return;
     fetchData(filters);
   }, [filters]);
-
 
   return { data, isLoading, error, refetch: () => fetchData(filters) };
 }

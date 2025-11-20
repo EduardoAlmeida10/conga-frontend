@@ -3,7 +3,7 @@ import {
   registerUser,
   type RegisterUserDto,
   type User,
-} from "../../api/users-costApi";
+} from "../../api/user/users-costApi";
 
 export function useUserSubmit() {
   const [loading, setLoading] = useState(false);

@@ -1,4 +1,4 @@
-import { OperationalTypes } from "../../api/operational-costApi";
+import { OperationalTypes } from "../../api/costs/operational-costApi";
 import InputField from "../InputField";
 import SelectField from "../SelectField";
 

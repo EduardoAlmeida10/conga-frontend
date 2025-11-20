@@ -6,14 +6,16 @@ import { OperationalFormFields } from "../../components/ExpensesForms/Operationa
 import { UtilityFormFields } from "../../components/ExpensesForms/UtilityFormFields";
 import { SupplieFormFields } from "../../components/ExpensesForms/SupplieFormFields";
 import type { BaseExpense } from "../../hooks/useExpenseData";
-import { CostType } from "@/api/personnel-costApi";
-import { OperationalTypes } from "@/api/operational-costApi";
-import { UtilityTypes } from "@/api/utility-costApi";
+import { CostType } from "@/api/costs/personnel-costApi";
+import { OperationalTypes } from "@/api/costs/operational-costApi";
+import { UtilityTypes } from "@/api/costs/utility-costApi";
 import { expenseValidators } from "@/lib/validation";
 import { ZodError } from "zod";
 
+type ExpenseType = "Pessoal" | "Operacionais" | "Utilitario" | "Insumos";
+
 interface ExpenseOverlayProps {
-  type: string;
+  type: ExpenseType;
   titleOverlay?: string;
   onClose: () => void;
   onSuccess: (isEdit: boolean) => void;

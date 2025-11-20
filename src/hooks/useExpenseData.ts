@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from "react";
-import { deletePersonnelCost } from "../api/personnel-costApi";
+import { deletePersonnelCost } from "../api/costs/personnel-costApi";
 import { usePersonnelCosts } from "./usePersonnelCosts";
-import { deleteOperationalCost } from "../api/operational-costApi";
+import { deleteOperationalCost } from "../api/costs/operational-costApi";
 import { useOperationalCosts } from "./useOperationalCosts";
-import { deleteUtilityCost } from "../api/utility-costApi";
+import { deleteUtilityCost } from "../api/costs/utility-costApi";
 import { useUtilityCosts } from "./useUtilityCosts";
-import { deleteSupplieCost } from "../api/supllie-costApi";
+import { deleteSupplieCost } from "../api/costs/supllie-costApi";
 import { useSupplieCosts } from "./useSupplieCosts";
 
 export interface BaseExpense {

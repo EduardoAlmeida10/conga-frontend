@@ -1,4 +1,4 @@
-import { UtilityTypes } from "../../api/utility-costApi";
+import { UtilityTypes } from "../../api/costs/utility-costApi";
 import InputField from "../InputField";
 import SelectField from "../SelectField";
 

@@ -15,7 +15,7 @@ import { useUserData } from "../../hooks/users/useUserData";
 import { useUserDelete } from "../../hooks/users/useUserDelete";
 import { useUserModal } from "../../hooks/users/useUserModal";
 import { getUserColumns } from "./columns";
-import type { User } from "../../api/users-costApi";
+import type { User } from "../../api/user/users-costApi";
 
 export default function Users() {
   const {
@@ -84,7 +84,7 @@ export default function Users() {
         <div className="flex flex-col p-12 bg-white justify-center items-center gap-5 rounded-2xl">
           <DataTable<User>
             data={users}
-            columns={columns}
+            columns={columns as any}
             pagination={pagination}
           >
             <div className="mb-4 flex justify-between items-center w-full">

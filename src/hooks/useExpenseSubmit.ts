@@ -4,28 +4,28 @@ import {
   findOperationalCostById,
   registerOperationalCost,
   updateOperationalCost,
-} from "../api/operational-costApi";
+} from "../api/costs/operational-costApi";
 import {
   deletePersonnelCost,
   findAllPersonnelCosts,
   findPersonnelCostById,
   registerPersonnelCost,
   updatePersonnelCost,
-} from "../api/personnel-costApi";
+} from "../api/costs/personnel-costApi";
 import {
   deleteSupplieCost,
   findAllSupplieCosts,
   findSupplieCostById,
   registerSupplieCost,
   updateSupplieCost,
-} from "../api/supllie-costApi";
+} from "../api/costs/supllie-costApi";
 import {
   deleteUtilityCost,
   findAllUtilityCosts,
   findUtilityCostById,
   registerUtilityCost,
   updateUtilityCost,
-} from "../api/utility-costApi";
+} from "../api/costs/utility-costApi";
 
 const apiFunctionsMap = {
   Pessoal: {
@@ -58,7 +58,9 @@ const apiFunctionsMap = {
   },
 };
 
-export function useExpenseSubmit(expenseType: string) {
+export function useExpenseSubmit(
+  expenseType: keyof typeof apiFunctionsMap
+) {
   const api = apiFunctionsMap[expenseType];
 
   if (!api) {

@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import type { User } from "../../api/users-costApi";
+import type { User } from "../../api/user/users-costApi";
 
 export function useUserModal() {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);

@@ -3,7 +3,7 @@ import {
   findAllSupplieCosts,
   type SupplieCost,
   type SupplieCostFilterDto,
-} from "../api/supllie-costApi";
+} from "../api/costs/supllie-costApi";
 
 
 export function useSupplieCosts(filters: SupplieCostFilterDto) {

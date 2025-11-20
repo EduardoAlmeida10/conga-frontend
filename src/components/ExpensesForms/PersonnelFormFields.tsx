@@ -1,4 +1,4 @@
-import { CostType } from "../../api/personnel-costApi";
+import { CostType } from "../../api/costs/personnel-costApi";
 import InputField from "../InputField";
 import SelectField from "../SelectField";
 

@@ -3,7 +3,7 @@ import {
   findAllPersonnelCosts,
   type PersonnelCost,
   type PersonnelCostFilterDto,
-} from "../api/personnel-costApi";
+} from "../api/costs/personnel-costApi";
 
 export function usePersonnelCosts(filters: PersonnelCostFilterDto) {
   const [data, setData] = useState<PersonnelCost[]>([]);
