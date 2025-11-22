@@ -83,7 +83,11 @@ export default function UsersForm({
     if (!validate()) return;
 
     if (selectedUser) {
-      const updated = await editUser(selectedUser.id, { name, username, role: selectedUser.role });
+      const updated = await editUser(selectedUser.id, {
+        name,
+        username,
+        role: selectedUser.role,
+      });
       if (updateError && !updated) {
         setErrors({ form: updateError });
         window.toast(
@@ -96,7 +100,13 @@ export default function UsersForm({
 
       window.toast("Sucesso", "Usuário atualizado com sucesso!", "success");
     } else {
-      const created = await submitUser({ name, username, password, confirmPassword, role: UserRole.COLLABORATOR });
+      const created = await submitUser({
+        name,
+        username,
+        password,
+        confirmPassword,
+        role: UserRole.COLLABORATOR,
+      });
 
       if (createError && !created) {
         setErrors({ form: createError });
@@ -154,7 +164,6 @@ export default function UsersForm({
             />
           </>
         )}
-
       </div>
     </OverlayCard>
   );

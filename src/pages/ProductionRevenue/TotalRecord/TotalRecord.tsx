@@ -13,7 +13,7 @@ export default function TotalRecord() {
   const [data] = useState(totalRecords);
 
   return (
-    <div className="p-6 w-full">
+    <div className="w-full">
       <div className="flex flex-col p-8 bg-white justify-center gap-5 rounded-2xl">
         <div className="flex flex-col items-center p-5 gap-5">
           <h1 className="font-bold text-2xl">Registro Total</h1>
