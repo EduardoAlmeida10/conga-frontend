@@ -1,4 +1,4 @@
-import type { BaseExpense } from "@/hooks/useExpenseData";
+import type { BaseExpense } from "@/hooks/expenses/useExpenseData";
 import { insumosColumns } from "./collumns/insumos";
 import { operacionaisColumns } from "./collumns/operacionais";
 import { pessoalColumns } from "./collumns/pessoal";
