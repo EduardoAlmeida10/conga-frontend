@@ -8,10 +8,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { ProducerProductionRequest } from "@/api/productions/productionProducerRequest";
+import { CheckIcon, XIcon } from "lucide-react";
 
 export const getProducerProductionColumns = (
   handleEdit: (record: ProducerProduction) => void,
-  handleDelete: (record: ProducerProduction) => void
+  handleDelete: (record: ProducerProduction) => void,
 ): ColumnDef<ProducerProduction>[] => [
   {
     accessorKey: "date",
@@ -52,15 +54,70 @@ export const getProducerProductionColumns = (
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuItem className="cursor-pointer" onSelect={() => handleEdit(record)}>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={() => handleEdit(record)}
+              >
                 <Edit2Icon className="size-4 mr-2" /> Editar
               </DropdownMenuItem>
 
-              <DropdownMenuItem className="cursor-pointer" onSelect={() => handleDelete(record)}>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={() => handleDelete(record)}
+              >
                 <Trash2Icon className="size-4 mr-2" /> Excluir
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+        </div>
+      );
+    },
+  },
+];
+
+export const getValidationColumns = (
+  handleAction: (
+    request: ProducerProductionRequest,
+    type: "approve" | "reject",
+  ) => void,
+): ColumnDef<ProducerProductionRequest>[] => [
+  {
+    accessorKey: "date",
+    header: "Data",
+    cell: ({ getValue }) => {
+      const dateStr = getValue<string>();
+      const [year, month, day] = dateStr.split("-");
+      return `${day}/${month}/${year}`;
+    },
+  },
+  {
+    accessorKey: "producerName",
+    header: "Produtor",
+  },
+  {
+    accessorKey: "totalQuantity",
+    header: "Vendável (Litros)",
+  },
+  {
+    id: "actions",
+    header: "Ações",
+    cell: ({ row }) => {
+      const request = row.original;
+      return (
+        <div className="flex gap-5">
+          <button
+            onClick={() => handleAction(request, "approve")}
+            className="cursor-pointer"
+          >
+            <CheckIcon className="w-5 h-5 text-green-500" />
+          </button>
+
+          <button
+            onClick={() => handleAction(request, "reject")}
+            className="cursor-pointer"
+          >
+            <XIcon className="w-5 h-5 text-red-500" />
+          </button>
         </div>
       );
     },
