@@ -66,7 +66,7 @@ export const getProducerProductionRequestColumns = (
           label = "Pendente";
           colorClass = "text-blue-500";
           break;
-        case "APPROVED":
+        case "ACCEPTED":
           label = "Aprovado";
           colorClass = "text-green-500";
           break;
@@ -90,6 +90,8 @@ export const getProducerProductionRequestColumns = (
     enableSorting: false,
     cell: ({ row }) => {
       const request = row.original;
+
+      if (request.status !== "PENDING") return null;
 
       return (
         <div className="flex justify-end">
