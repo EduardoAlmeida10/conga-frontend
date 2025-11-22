@@ -2,7 +2,7 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 
 import DashboardLayout from "../components/DashboardLayout";
 import PrivateRoute from "../components/PrivateRoute";
-import CollaboratorDashboard from "../pages/ColaborattorDashboard/ColaboradorDashboard";
+import CollaboratorDashboard from "../pages/CollaboratorDashboard/CollaboratorDashboard";
 import AdminDashboard from "../pages/AdminDashboard/AdminDashboard";
 import Expenses from "../pages/Expenses/Expenses";
 import Login from "../pages/Login/Login";

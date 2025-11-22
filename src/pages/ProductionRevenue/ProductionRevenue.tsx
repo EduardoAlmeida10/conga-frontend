@@ -3,10 +3,10 @@ import { useState } from "react";
 import ConstTypeTabs from "@/components/ConstTypeTabs"
 import TotalRecord from "./TotalRecord/TotalRecord";
 import DailyRecipe from "./DailyRecipe/DailyRecipe";
-import DailyRecord from "./DailyRecord/DailyRecord";
+import ProductorsRecord from "./ProductorsRecord/ProductorsRecord";
 import LocalRecord from "./LocalRecord/LocalRecord";
 
-const ConstTypes = ["Receita diária", "Registro total", "Registros do dia", "Registro Local"];
+const ConstTypes = ["Receita diária", "Registro total", "Registro Local", "Registro Produtores"];
 
 export default function ProductionRevenue(){
 
@@ -17,13 +17,13 @@ export default function ProductionRevenue(){
   };
 
   return(
-    <div>
+    <div className="p-6 w-full max-w-6xl mx-auto">
       <ConstTypeTabs tabs={ConstTypes} onSelect={handleTypeChange} />
       <div>
         {selectedType === "Receita diária" && <DailyRecipe />}
         {selectedType === "Registro total" && <TotalRecord />}
-        {selectedType === "Registros do dia" && <DailyRecord />}
         {selectedType === "Registro Local" && <LocalRecord />}
+        {selectedType === "Registro Produtores" && <ProductorsRecord />}
       </div>
     </div>
   )
