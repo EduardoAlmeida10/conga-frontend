@@ -33,8 +33,15 @@ export default function CollaboratorDashboard() {
   const [editingRequest, setEditingRequest] =
     useState<ProducerProductionRequest | null>(null);
 
-  const handleOpenCreateModal = () => setOverlayOpen(true);
-  const handleCloseModal = () => setOverlayOpen(false);
+  const handleOpenCreateModal = () => {
+    setEditingRequest(null); 
+    setOverlayOpen(true);
+  };
+
+  const handleCloseModal = () => {
+  setEditingRequest(null);
+  setOverlayOpen(false);
+};
 
   const handleSaveSuccess = () => {
     refetch();
