@@ -3,26 +3,26 @@ import { api } from "../auth/authApi";
 export interface LocalProduction {
   id: string;
   date: string; 
-  grossQuantity: number; 
-  consumedQuantity: number; 
-  totalQuantity: number; 
+  grossQuantity: string; 
+  consumedQuantity: string; 
+  totalQuantity: string; 
 }
 
 export interface RegisterLocalProductionDto {
   date: string; 
-  grossQuantity: number;
-  consumedQuantity: number;
+  grossQuantity: string;
+  consumedQuantity: string;
 }
 
 export interface FilterLocalProductionDto {
   dateFrom?: string; // 'YYYY-MM-DD'
   dateTo?: string;
-  grossQuantityMin?: number;
-  grossQuantityMax?: number;
-  consumedQuantityMin?: number;
-  consumedQuantityMax?: number;
-  totalQuantityMin?: number;
-  totalQuantityMax?: number;
+  grossQuantityMin?: string;
+  grossQuantityMax?: string;
+  consumedQuantityMin?: string;
+  consumedQuantityMax?: string;
+  totalQuantityMin?: string;
+  totalQuantityMax?: string;
   page?: number;
   limit?: number;
 }
