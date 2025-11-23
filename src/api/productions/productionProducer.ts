@@ -13,6 +13,8 @@ export interface RegisterProducerProductionDto {
   totalQuantity: string;
 }
 
+export type UpdateProducerProductionDto = Partial<RegisterProducerProductionDto>;
+
 export interface FilterProducerProductionDto {
   startDate?: string;
   endDate?: string;
@@ -21,12 +23,6 @@ export interface FilterProducerProductionDto {
   totalQuantityMax?: number;
   page?: number;
   limit?: number;
-}
-
-export interface UpdateProducerProductionDto {
-  date?: string;
-  producerName?: string;
-  totalQuantity?: string;
 }
 
 export interface PaginatedProducerProductions {
