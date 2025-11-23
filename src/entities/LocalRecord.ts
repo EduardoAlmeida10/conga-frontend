@@ -1,6 +1,7 @@
 export interface LocalRecord {
-  producaoLocal: number;
-  consumoLocal: number;
-  producaoTotal: number;
-  date: Date;
+    id: string;
+    grossQuantity: number;
+    consumedQuantity: number;
+    totalQuantity: number;
+    date: Date;
 }
