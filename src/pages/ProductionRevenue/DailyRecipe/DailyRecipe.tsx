@@ -1,29 +1,41 @@
-import Button from "@/components/Button";
-import OverviewSection, {
-  type OverviewMetrics,
-} from "@/components/Overview/OverviewSection";
-import { DataTableTextFilter } from "@/components/DataTable/DataTableTextFilter";
-import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
-import { DataTableContent } from "@/components/DataTable/DataTableContent";
-import { DataTablePagination } from "@/components/DataTable/DataTablePagination";
-import { DataTable } from "@/components/DataTable";
-import { useEffect, useState } from "react";
 import {
   getCurrentSalePrice,
   type SalePrice,
 } from "@/api/sale-price/salePrice";
-import {
-  mapDailyProductionToRecipe,
-  type DailyRecipe,
-} from "@/entities/DailyRecipe";
+import { useEffect, useMemo, useState } from "react";
 import { dailyRecipeColumns } from "./columns";
-import { getDailyProduction } from "@/api/productions/productions";
 import React from "react";
+import {
+  findAllReceives,
+  mapApiToReceive,
+  type PaginatedReceives,
+} from "@/api/receives/receives";
+import type { OverviewMetrics } from "@/components/Overview/OverviewSection";
+import Button from "@/components/Button";
+import OverviewSection from "@/components/Overview/OverviewSection";
+import { DataTable } from "@/components/DataTable";
+import { DataTableTextFilter } from "@/components/DataTable/DataTableTextFilter";
+import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
+import { DataTableContent } from "@/components/DataTable/DataTableContent";
+import { DataTablePagination } from "@/components/DataTable/DataTablePagination";
+import Backdrop from "@/components/Overlay/OverlayBackdrop";
+import SalePriceForm from "./SalePriceForm";
+
+interface DailyRecipe {
+  id: string;
+  total: number;
+  tanque: number;
+  precoLeite: number;
+  date: Date;
+}
 
 export default function DailyRecipe() {
   const [data, setData] = useState<DailyRecipe[]>([]);
   const [salePrice, setSalePrice] = useState<SalePrice | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
+  const [reloadKey, setReloadKey] = useState(0);
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -33,41 +45,61 @@ export default function DailyRecipe() {
 
   const columns = dailyRecipeColumns;
 
-  useEffect(() => {
-    async function fetchDailyData() {
-      setIsLoading(true);
-      try {
-        const priceResponse = await getCurrentSalePrice();
-        setSalePrice(priceResponse);
+  const fetchData = React.useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const priceResponse = await getCurrentSalePrice();
+      setSalePrice(priceResponse);
 
-        const productionResponse = await getDailyProduction({});
+      const filters = {
+        page: pagination.pageIndex + 1,
+        limit: pagination.pageSize,
+      };
 
-        const mappedData = mapDailyProductionToRecipe(
-          productionResponse,
-          priceResponse,
-        );
+      const receivesResponse: PaginatedReceives =
+        await findAllReceives(filters);
+      const receivedData = mapApiToReceive(receivesResponse.data);
 
-        console.log(mappedData);
+      const mappedData: DailyRecipe[] = receivedData.map((item) => {
+        const [year, month, day] = item.date.split("-").map(Number);
 
-        setData(mappedData);
+        const localDate = new Date(year, month - 1, day);
 
-        setPagination((prev) => ({
-          ...prev,
-          total: productionResponse.length,
-        }));
-      } catch (error) {
-        console.error("Erro ao buscar dados diários:", error);
-        setSalePrice(null);
-        setData([]);
-      } finally {
-        setIsLoading(false);
-      }
+        return {
+          id: item.id,
+          total: item.totalPrice,
+          tanque: item.tankQuantity,
+          precoLeite: item.salePrice,
+          date: localDate, 
+        };
+      });
+
+      setData(mappedData);
+
+      setPagination((prev) => ({
+        ...prev,
+        total: receivesResponse.total,
+        totalPages: receivesResponse.totalPages,
+      }));
+    } catch (error) {
+      console.error("Erro ao buscar dados diários:", error);
+      setSalePrice(null);
+      setData([]);
+    } finally {
+      setIsLoading(false);
     }
+  }, [pagination.pageIndex, pagination.pageSize, reloadKey]);
 
-    fetchDailyData();
-  }, []);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
-  const metrics: OverviewMetrics = React.useMemo(() => {
+  const handleSaved = () => {
+    setIsFormOpen(false);
+    setReloadKey((prev) => prev + 1);
+  };
+
+  const metrics: OverviewMetrics = useMemo(() => {
     const price = parseFloat(salePrice?.value?.toString() || "0") || 0;
 
     const totalDaysLoaded = data.length;
@@ -86,7 +118,7 @@ export default function DailyRecipe() {
     const monthlyTotal = totalRevenue;
 
     const lastDateString =
-      data.length > 0
+      data.length > 0 && data[0].date instanceof Date
         ? data[0].date.toLocaleDateString("pt-BR")
         : new Date().toLocaleDateString("pt-BR");
 
@@ -101,7 +133,9 @@ export default function DailyRecipe() {
 
   return (
     <div className="p-6 w-full">
-      <Button>Definir preço do Leite</Button>
+      <Button onClick={() => setIsFormOpen(true)}>
+        Definir preço do Leite
+      </Button>
       <div className="pt-8 pb-8">
         <OverviewSection metrics={metrics}></OverviewSection>
       </div>
@@ -130,6 +164,15 @@ export default function DailyRecipe() {
           </DataTable>
         )}
       </div>
+
+      {isFormOpen && (
+        <Backdrop isOpen={isFormOpen}>
+          <SalePriceForm
+            onClose={() => setIsFormOpen(false)}
+            onSaved={handleSaved}
+          />
+        </Backdrop>
+      )}
     </div>
   );
 }
