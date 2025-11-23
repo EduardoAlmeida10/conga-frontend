@@ -1,40 +1,57 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { TotalRecord } from "@/entities/TotalRecord";
+import type { DailyProduction } from "@/api/productions/dailyProduction";
 import { DataTableColumnHeader } from "@/components/DataTable/DataTableColumnHeader";
 
-export const columns: ColumnDef<TotalRecord>[] = [
+export const dailyProductionColumns: ColumnDef<DailyProduction>[] = [
   {
-    accessorKey: "localProduction",
+    accessorKey: "grossQuantity",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Local Production (L)" />
+      <DataTableColumnHeader column={column} title="Produção Local(L)" />
     ),
+    cell: ({ row }) => {
+      const value = Number(row.getValue("grossQuantity"));
+      return <span>{value.toFixed(2)}</span>;
+    },
   },
   {
-    accessorKey: "consumption",
+    accessorKey: "consumedQuantity",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Consumption (L)" />
+      <DataTableColumnHeader column={column} title="Consumido (L)" />
     ),
+    cell: ({ row }) => {
+      const value = Number(row.getValue("consumedQuantity"));
+      return <span>{value.toFixed(2)}</span>;
+    },
   },
   {
-    accessorKey: "totalProduction",
+    accessorKey: "totalQuantity",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Production (L)" />
+      <DataTableColumnHeader column={column} title="Produção Total (L)" />
     ),
+    cell: ({ row }) => {
+      const value = Number(row.getValue("totalQuantity"));
+      return <span>{value.toFixed(2)}</span>;
+    },
   },
   {
-    accessorKey: "otherProducers",
+    accessorKey: "totalProducers",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Other Producers (L)" />
+      <DataTableColumnHeader column={column} title="Outros Produtores" />
     ),
+    cell: ({ row }) => {
+      const value = Number(row.getValue("totalProducers"));
+      return <span>{value}</span>;
+    },
   },
   {
     accessorKey: "date",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Date" />
+      <DataTableColumnHeader column={column} title="Data" />
     ),
     cell: ({ row }) => {
-      const d = row.original.date;
-      return d.toLocaleDateString("pt-BR");
+      const iso = row.getValue<string>("date");
+      const formatted = new Date(iso).toLocaleDateString("pt-BR");
+      return <span>{formatted}</span>;
     },
   },
 ];
