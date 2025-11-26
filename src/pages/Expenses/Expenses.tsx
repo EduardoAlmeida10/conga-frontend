@@ -27,7 +27,8 @@ type ExpenseType = "Pessoal" | "Operacionais" | "Utilitario" | "Insumos";
 
 export default function ExpensesTable() {
   const [selectedType, setSelectedType] = useState<ExpenseType>("Pessoal");
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
+
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
 
   const {
     isOverlayOpen,
@@ -37,8 +38,10 @@ export default function ExpensesTable() {
     handleCloseModal,
   } = useExpenseModal();
 
-  const { expenses, refetchExpenses, deleteExpense } =
-    useExpenseData(selectedType);
+  const { expenses, totalItems, refetchExpenses, deleteExpense } =
+    useExpenseData(selectedType, pagination.pageIndex, pagination.pageSize);
+
+  const pageCount = Math.ceil(totalItems / pagination.pageSize);
 
   const handleDelete = useCallback(
     async (expense: BaseExpense) => {
@@ -84,7 +87,7 @@ export default function ExpensesTable() {
 
   const handleTypeChange = (type: string) => {
     setSelectedType(type as ExpenseType);
-    setPagination({ pageIndex: 0, pageSize: 5 });
+    setPagination({ pageIndex: 0, pageSize: 10 });
   };
 
   const handleSaveSuccess = (isEdit?: boolean) => {
@@ -134,6 +137,8 @@ export default function ExpensesTable() {
           data={expenses ?? []}
           columns={columns as any}
           pagination={pagination}
+          onPaginationChange={setPagination}
+          pageCount={pageCount}
         >
           <div className="mb-4 flex justify-between items-center gap-4">
             <div>
