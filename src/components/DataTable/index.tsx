@@ -5,12 +5,13 @@ import {
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
+  type OnChangeFn,
   type PaginationState,
   useReactTable,
 } from "@tanstack/react-table";
 
+import { useState } from "react";
 import { DataTableContext } from "./DataTableContext";
 
 interface IDataTableProps<TData> {
@@ -18,33 +19,45 @@ interface IDataTableProps<TData> {
   columns: ColumnDef<TData>[];
   children: React.ReactNode;
   pagination?: PaginationState;
+  pageCount: number;
+  onPaginationChange?: OnChangeFn<PaginationState>;
 }
 
 export function DataTable<TData>({
   columns,
   data,
   children,
-  pagination,
+  pagination: externalPagination,
+  onPaginationChange,
+  pageCount,
 }: IDataTableProps<TData>) {
+  const [internalPagination, setInternalPagination] = useState<PaginationState>(
+    {
+      pageIndex: 0,
+      pageSize: 10,
+    },
+  );
+
+  const pagination = externalPagination ?? internalPagination;
+  const onPaginationChangeHandler = onPaginationChange ?? setInternalPagination;
+
   const table = useReactTable({
     data,
     columns,
-    columnResizeMode: "onChange",
-    defaultColumn: {
-      size: 100,
-      minSize: 80,
-    },
-    globalFilterFn: "includesString",
-    initialState: {
+    state: {
       pagination,
     },
+    manualPagination: true,
+    pageCount,
+
+    onPaginationChange: onPaginationChangeHandler,
+
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
     getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
