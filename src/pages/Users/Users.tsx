@@ -1,23 +1,25 @@
 // src/pages/Users/Users.tsx
-import { useMemo, useCallback, useState } from "react";
-import Button from "../../components/Button";
+import { useCallback, useMemo, useState } from "react";
 import iconAdd from "../../assets/iconAdd.svg";
+import Button from "../../components/Button";
 import OverlayBackdrop from "../../components/Overlay/OverlayBackdrop";
 import UsersForm from "./UsersForm";
 
+import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
 import { DataTable } from "../../components/DataTable";
 import { DataTableContent } from "../../components/DataTable/DataTableContent";
 import { DataTablePagination } from "../../components/DataTable/DataTablePagination";
 import { DataTableTextFilter } from "../../components/DataTable/DataTableTextFilter";
-import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
 
+import type { User } from "../../api/user/users-costApi";
 import { useUserData } from "../../hooks/users/useUserData";
 import { useUserDelete } from "../../hooks/users/useUserDelete";
 import { useUserModal } from "../../hooks/users/useUserModal";
 import { getUserColumns } from "./columns";
-import type { User } from "../../api/user/users-costApi";
 
 export default function Users() {
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 6 });
+
   const {
     isOverlayOpen,
     userToEdit,
@@ -26,10 +28,17 @@ export default function Users() {
     handleCloseModal,
   } = useUserModal();
 
-  const { users, loading, error: errorData, refetch } = useUserData();
-  const { removeUser,error: errorDelete, loading: deleting } = useUserDelete();
+  const {
+    users,
+    totalItems,
+    loading,
+    error: errorData,
+    refetch,
+  } = useUserData(pagination.pageIndex, pagination.pageSize);
 
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 3 });
+  const { removeUser, error: errorDelete, loading: deleting } = useUserDelete();
+
+  const pageCount = Math.ceil(totalItems / pagination.pageSize);
 
   const handleDelete = useCallback(
     async (user: User) => {
@@ -44,6 +53,7 @@ export default function Users() {
       }
 
       refetch();
+
       if (users.length === 1 && pagination.pageIndex > 0) {
         setPagination((prev) => ({ ...prev, pageIndex: prev.pageIndex - 1 }));
       }
@@ -86,6 +96,8 @@ export default function Users() {
             data={users}
             columns={columns as any}
             pagination={pagination}
+            onPaginationChange={setPagination}
+            pageCount={pageCount}
           >
             <div className="mb-4 flex justify-between items-center w-full">
               <DataTableTextFilter placeholder="Buscar trabalhadores" />
@@ -96,7 +108,7 @@ export default function Users() {
 
             <div className="flex justify-between items-center gap-15 mt-4">
               <h1 className="text-[20px] font-bold">
-                Número de Colaboradores: {users.length}
+                Número de Colaboradores: {totalItems}
               </h1>
               <DataTablePagination />
             </div>
