@@ -33,14 +33,12 @@ export default function ProductorsRecord() {
     useState<ProducerProductionRequest | null>(null);
   const [overlayMessage, setOverlayMessage] = useState("");
 
+  const [producerProductionPagination, setProducerProductionPagination] =
+    useState({ pageIndex: 0, pageSize: 6 });
+
   const [
-    producerProductionPagination, 
-    setProducerProductionPagination
-  ] = useState({ pageIndex: 0, pageSize: 6 });
-  
-  const [
-    producerProductionRequestsPagination, 
-    setProducerProductionRequestsPagination
+    producerProductionRequestsPagination,
+    setProducerProductionRequestsPagination,
   ] = useState({ pageIndex: 0, pageSize: 6 });
 
   // Registros existentes
@@ -55,14 +53,14 @@ export default function ProductorsRecord() {
     producerProductionPagination.pageSize,
   );
 
-  
-  const pageCountProducerProduction = 
-  Math.ceil(totalItemsProducerProduction / producerProductionPagination.pageSize);
+  const pageCountProducerProduction = Math.ceil(
+    totalItemsProducerProduction / producerProductionPagination.pageSize,
+  );
 
   const { remove } = useDeleteProducerProduction();
 
   // Requests pendentes
-  const fere = "PENDING"
+  const fere = "PENDING";
   const {
     data: requestData,
     totalItems: totalItemsProducerProductionRequests,
@@ -70,13 +68,15 @@ export default function ProductorsRecord() {
     error: errorRequests,
     refetch: refetchRequests,
   } = useFetchProducerProductionRequests(
-    producerProductionRequestsPagination.pageIndex, 
+    producerProductionRequestsPagination.pageIndex,
     producerProductionRequestsPagination.pageSize,
-    fere
+    fere,
   );
 
-    const pageCountProducerProductionRequests = 
-  Math.ceil(totalItemsProducerProductionRequests / producerProductionRequestsPagination.pageSize);
+  const pageCountProducerProductionRequests = Math.ceil(
+    totalItemsProducerProductionRequests /
+      producerProductionRequestsPagination.pageSize,
+  );
 
   const { validate, loading: validating } =
     useValidateProducerProductionRequest();
@@ -119,6 +119,7 @@ export default function ProductorsRecord() {
     setValidationOpen(false);
     setActionRequest(null);
     refetchRequests();
+    refetchProduction();
     window.toast("Sucesso", "Ação realizada com sucesso!", "success");
   };
 
