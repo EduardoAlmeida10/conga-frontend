@@ -33,7 +33,7 @@ function mapApiData(apiData: LocalProductionApiData[]): LocalRecord[] {
 
 export default function LocalRecord() {
   const [data, setData] = useState<LocalRecord[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 6 });
@@ -83,31 +83,27 @@ export default function LocalRecord() {
           <h1 className="font-bold text-2xl">Registro Local</h1>
         </div>
 
-        {isLoading && <p>Carregando dados...</p>}
+        <DataTable
+          data={data}
+          columns={columns}
+          pagination={pagination}
+          onPaginationChange={setPagination}
+          pageCount={pageCount}
+        >
+          <div className="mb-4 flex justify-between items-center gap-4">
+            <DataTableTextFilter placeholder="Pesquisar" />
 
-        {(!isLoading || data.length > 0) && (
-          <DataTable
-            data={data}
-            columns={columns}
-            pagination={pagination}
-            onPaginationChange={setPagination}
-            pageCount={pageCount}
-          >
-            <div className="mb-4 flex justify-between items-center gap-4">
-              <DataTableTextFilter placeholder="Pesquisar" />
-
-              <div className="flex gap-6 items-center">
-                <DataTableColumnsVisibilityDropdown />
-              </div>
+            <div className="flex gap-6 items-center">
+              <DataTableColumnsVisibilityDropdown />
             </div>
+          </div>
 
-            <DataTableContent />
+          <DataTableContent />
 
-            <div className="flex justify-end items-center mt-4">
-              <DataTablePagination />
-            </div>
-          </DataTable>
-        )}
+          <div className="flex justify-end items-center mt-4">
+            <DataTablePagination />
+          </div>
+        </DataTable>
       </div>
 
       {isFormOpen && (
