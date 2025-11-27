@@ -1,7 +1,7 @@
 import { UtilityTypes } from "../../api/costs/utility-costApi";
+import { InputCurrency } from "../InputCurrency";
 import InputField from "../InputField";
 import SelectField from "../SelectField";
-
 
 interface Props {
   formData: any;
@@ -9,8 +9,11 @@ interface Props {
   errors?: Record<string, string>;
 }
 
-
-export function UtilityFormFields({ formData, handleFormChange, errors }: Props) {
+export function UtilityFormFields({
+  formData,
+  handleFormChange,
+  errors,
+}: Props) {
   return (
     <>
       <InputField
@@ -35,11 +38,10 @@ export function UtilityFormFields({ formData, handleFormChange, errors }: Props)
         <option value={UtilityTypes.INTERNET}>Internet</option>
         <option value={UtilityTypes.TELEFONE}>Telefone</option>
       </SelectField>
-      <InputField
+      <InputCurrency
         label="Valor"
-        type="text"
         value={formData.value || ""}
-        onChange={(e) => handleFormChange("value", e.target.value)}
+        onChange={(newValue) => handleFormChange("value", newValue)}
         error={errors?.value}
         required
       />
@@ -53,3 +55,4 @@ export function UtilityFormFields({ formData, handleFormChange, errors }: Props)
     </>
   );
 }
+
