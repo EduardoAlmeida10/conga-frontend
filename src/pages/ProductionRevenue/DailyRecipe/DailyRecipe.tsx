@@ -10,7 +10,7 @@ import {
   mapApiToReceive,
   type PaginatedReceives,
 } from "@/api/receives/receives";
-import type { OverviewMetrics } from "@/components/Overview/OverviewSection";
+import { AiOutlineAreaChart } from "react-icons/ai";
 import Button from "@/components/Button";
 import OverviewSection from "@/components/Overview/OverviewSection";
 import { DataTable } from "@/components/DataTable";
@@ -20,6 +20,9 @@ import { DataTableContent } from "@/components/DataTable/DataTableContent";
 import { DataTablePagination } from "@/components/DataTable/DataTablePagination";
 import Backdrop from "@/components/Overlay/OverlayBackdrop";
 import SalePriceForm from "./SalePriceForm";
+import type { CardItem } from "@/types/OverviewSection.types";
+import { formatCurrency } from "@/lib/formatters";
+import { FaDollarSign } from "react-icons/fa";
 
 interface DailyRecipe {
   id: string;
@@ -70,7 +73,7 @@ export default function DailyRecipe() {
           total: item.totalPrice,
           tanque: item.tankQuantity,
           precoLeite: item.salePrice,
-          date: localDate, 
+          date: localDate,
         };
       });
 
@@ -99,7 +102,7 @@ export default function DailyRecipe() {
     setReloadKey((prev) => prev + 1);
   };
 
-  const metrics: OverviewMetrics = useMemo(() => {
+  const metrics = useMemo(() => {
     const price = parseFloat(salePrice?.value?.toString() || "0") || 0;
 
     const totalDaysLoaded = data.length;
@@ -131,13 +134,44 @@ export default function DailyRecipe() {
     };
   }, [data, salePrice]);
 
+  const dailyRecipeCards: CardItem[] = useMemo(
+    () => [
+      {
+        id: "daily",
+        icon: AiOutlineAreaChart,
+        title: "Receita Diária Média",
+        value: formatCurrency(metrics.dailyAverage),
+        iconBgColor: "bg-blue-500",
+      },
+      {
+        id: "monthly",
+        icon: AiOutlineAreaChart,
+        title: "Receita Total Mensal",
+        value: formatCurrency(metrics.monthlyTotal),
+        iconBgColor: "bg-blue-500",
+      },
+      {
+        id: "price",
+        icon: FaDollarSign,
+        title: "Preço do Leite (por L)",
+        value: formatCurrency(metrics.milkPrice),
+        iconBgColor: "bg-blue-500",
+      },
+    ],
+    [metrics],
+  );
+
   return (
     <div className="p-6 w-full">
       <Button onClick={() => setIsFormOpen(true)}>
         Definir preço do Leite
       </Button>
       <div className="pt-8 pb-8">
-        <OverviewSection metrics={metrics}></OverviewSection>
+        <OverviewSection
+          title="Visão Geral"
+          cards={dailyRecipeCards}
+          lastUpdated={metrics.lastUpdated}
+        ></OverviewSection>
       </div>
 
       <div className="flex flex-col p-8 bg-white justify-center gap-5 rounded-2xl">
