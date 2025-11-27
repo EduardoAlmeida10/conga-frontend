@@ -1,15 +1,22 @@
 import { DataTable } from "@/components/DataTable";
 import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
 import { DataTableContent } from "@/components/DataTable/DataTableContent";
-import { DataTableTextFilter } from "@/components/DataTable/DataTableTextFilter";
 import { DataTablePagination } from "@/components/DataTable/DataTablePagination";
+import { DataTableTextFilter } from "@/components/DataTable/DataTableTextFilter";
 
 import { useFetchDailyProducerProduction } from "@/hooks/productions/useFetchDailyProducerProductions";
+import { useState } from "react";
 import { dailyProductionColumns } from "./columns";
 
 export default function DailyProductionPage() {
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 6 });
 
-  const { data, loading, error } = useFetchDailyProducerProduction();
+  const { data, totalItems, loading, error } = useFetchDailyProducerProduction(
+    pagination.pageIndex,
+    pagination.pageSize,
+  );
+
+  const pageCount = Math.ceil(totalItems / pagination.pageSize);
 
   return (
     <div className="w-full">
@@ -29,10 +36,9 @@ export default function DailyProductionPage() {
           <DataTable
             data={data}
             columns={dailyProductionColumns}
-            pagination={{
-              pageIndex: 0,
-              pageSize: 6,
-            }}
+            pagination={pagination}
+            onPaginationChange={setPagination}
+            pageCount={pageCount}
           >
             <div className="mb-4 flex justify-between items-center gap-4">
               <DataTableTextFilter placeholder="Pesquisar" />

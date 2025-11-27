@@ -8,14 +8,24 @@ export interface DailyProduction {
   totalProducers: number;
 }
 
-export interface DailyProductionResponse {
+export interface PaginatedDailyProduction {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
   data: DailyProduction[];
 }
 
-export async function getDailyProduction(filters?: Record<string, any>) {
-  const response = await api.get<DailyProduction[]>("/productions/daily", {
-    params: filters,
-  });
+export async function getDailyProduction(filters?: {
+  page: number;
+  limit: number;
+}): Promise<PaginatedDailyProduction> {
+  const response = await api.get<PaginatedDailyProduction>(
+    "/productions/daily",
+    {
+      params: filters,
+    },
+  );
 
-  return { data: response.data };
+  return response.data;
 }
