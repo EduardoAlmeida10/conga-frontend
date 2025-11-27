@@ -1,24 +1,24 @@
 import {
-  getCurrentSalePrice,
-  type SalePrice,
-} from "@/api/sale-price/salePrice";
-import { useEffect, useMemo, useState } from "react";
-import { dailyRecipeColumns } from "./columns";
-import React from "react";
-import {
   findAllReceives,
   mapApiToReceive,
   type PaginatedReceives,
 } from "@/api/receives/receives";
+import {
+  getCurrentSalePrice,
+  type SalePrice,
+} from "@/api/sale-price/salePrice";
 import { AiOutlineAreaChart } from "react-icons/ai";
 import Button from "@/components/Button";
-import OverviewSection from "@/components/Overview/OverviewSection";
 import { DataTable } from "@/components/DataTable";
-import { DataTableTextFilter } from "@/components/DataTable/DataTableTextFilter";
 import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
 import { DataTableContent } from "@/components/DataTable/DataTableContent";
 import { DataTablePagination } from "@/components/DataTable/DataTablePagination";
+import { DataTableTextFilter } from "@/components/DataTable/DataTableTextFilter";
 import Backdrop from "@/components/Overlay/OverlayBackdrop";
+import type { OverviewMetrics } from "@/components/Overview/OverviewSection";
+import OverviewSection from "@/components/Overview/OverviewSection";
+import React, { useEffect, useMemo, useState } from "react";
+import { dailyRecipeColumns } from "./columns";
 import SalePriceForm from "./SalePriceForm";
 import type { CardItem } from "@/types/OverviewSection.types";
 import { formatCurrency } from "@/lib/formatters";
@@ -37,14 +37,10 @@ export default function DailyRecipe() {
   const [salePrice, setSalePrice] = useState<SalePrice | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 6 });
+  const [totalPages, setTotalPages] = useState(0);
 
   const [reloadKey, setReloadKey] = useState(0);
-
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 6,
-    total: 0,
-  });
 
   const columns = dailyRecipeColumns;
 
@@ -79,10 +75,11 @@ export default function DailyRecipe() {
 
       setData(mappedData);
 
+      setTotalPages(receivesResponse.totalPages);
+
       setPagination((prev) => ({
         ...prev,
         total: receivesResponse.total,
-        totalPages: receivesResponse.totalPages,
       }));
     } catch (error) {
       console.error("Erro ao buscar dados diários:", error);
@@ -91,11 +88,11 @@ export default function DailyRecipe() {
     } finally {
       setIsLoading(false);
     }
-  }, [pagination.pageIndex, pagination.pageSize, reloadKey]);
+  }, [pagination.pageIndex, pagination.pageSize]);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, reloadKey]);
 
   const handleSaved = () => {
     setIsFormOpen(false);
@@ -134,6 +131,7 @@ export default function DailyRecipe() {
     };
   }, [data, salePrice]);
 
+  const pageCount = totalPages;
   const dailyRecipeCards: CardItem[] = useMemo(
     () => [
       {
@@ -182,7 +180,13 @@ export default function DailyRecipe() {
         {isLoading && <p>Carregando dados de receitas...</p>}
 
         {(!isLoading || data.length > 0) && (
-          <DataTable data={data} columns={columns} pagination={pagination}>
+          <DataTable
+            data={data}
+            columns={columns as any}
+            pagination={pagination}
+            onPaginationChange={setPagination}
+            pageCount={pageCount}
+          >
             <div className="mb-4 flex justify-between items-center gap-4">
               <DataTableTextFilter placeholder="Pesquisar" />
               <div className="flex gap-6 items-center">

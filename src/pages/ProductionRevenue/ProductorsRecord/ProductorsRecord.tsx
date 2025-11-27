@@ -1,26 +1,26 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import Button from "@/components/Button";
 import iconAdd from "@/assets/iconAdd.svg";
+import Button from "@/components/Button";
+import { useMemo, useState } from "react";
 import ProductoresRecordForms from "./ProductorsRecordForm";
 import ValidationForm from "./ValidationForm";
 
 import { DataTable } from "@/components/DataTable";
+import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
 import { DataTableContent } from "@/components/DataTable/DataTableContent";
 import { DataTablePagination } from "@/components/DataTable/DataTablePagination";
 import { DataTableTextFilter } from "@/components/DataTable/DataTableTextFilter";
-import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
 
-import { useFetchProducerProduction } from "@/hooks/productions/producer_productions/useFetchProducerProductions";
 import { useDeleteProducerProduction } from "@/hooks/productions/producer_productions/useDeleteProducerProduction";
+import { useFetchProducerProduction } from "@/hooks/productions/producer_productions/useFetchProducerProductions";
 import { useFetchProducerProductionRequests } from "@/hooks/productions/producer_productions_request/useFetchProducerProductionRequest";
 import { useValidateProducerProductionRequest } from "@/hooks/productions/producer_productions_request/useValidateProducerProductionRequest";
 
-import { getProducerProductionColumns, getValidationColumns } from "./columns";
 import type { ProducerProduction } from "@/api/productions/productionProducer";
 import type { ProducerProductionRequest } from "@/api/productions/productionProducerRequest";
 import OverlayBackdrop from "@/components/Overlay/OverlayBackdrop";
+import { getProducerProductionColumns, getValidationColumns } from "./columns";
 
 export default function ProductorsRecord() {
   const [isFormOpen, setFormOpen] = useState(false);
@@ -33,22 +33,51 @@ export default function ProductorsRecord() {
     useState<ProducerProductionRequest | null>(null);
   const [overlayMessage, setOverlayMessage] = useState("");
 
+  const [producerProductionPagination, setProducerProductionPagination] =
+    useState({ pageIndex: 0, pageSize: 6 });
+
+  const [
+    producerProductionRequestsPagination,
+    setProducerProductionRequestsPagination,
+  ] = useState({ pageIndex: 0, pageSize: 6 });
+
   // Registros existentes
   const {
     data: productionData,
+    totalItems: totalItemsProducerProduction,
     loading: loadingProduction,
     error: errorProduction,
     refetch: refetchProduction,
-  } = useFetchProducerProduction();
+  } = useFetchProducerProduction(
+    producerProductionPagination.pageIndex,
+    producerProductionPagination.pageSize,
+  );
+
+  const pageCountProducerProduction = Math.ceil(
+    totalItemsProducerProduction / producerProductionPagination.pageSize,
+  );
+
   const { remove } = useDeleteProducerProduction();
 
   // Requests pendentes
+  const fere = "PENDING";
   const {
     data: requestData,
+    totalItems: totalItemsProducerProductionRequests,
     loading: loadingRequests,
     error: errorRequests,
     refetch: refetchRequests,
-  } = useFetchProducerProductionRequests();
+  } = useFetchProducerProductionRequests(
+    producerProductionRequestsPagination.pageIndex,
+    producerProductionRequestsPagination.pageSize,
+    fere,
+  );
+
+  const pageCountProducerProductionRequests = Math.ceil(
+    totalItemsProducerProductionRequests /
+      producerProductionRequestsPagination.pageSize,
+  );
+
   const { validate, loading: validating } =
     useValidateProducerProductionRequest();
 
@@ -90,6 +119,7 @@ export default function ProductorsRecord() {
     setValidationOpen(false);
     setActionRequest(null);
     refetchRequests();
+    refetchProduction();
     window.toast("Sucesso", "Ação realizada com sucesso!", "success");
   };
 
@@ -138,10 +168,9 @@ export default function ProductorsRecord() {
           <DataTable
             data={productionData.data}
             columns={productionColumns as any}
-            pagination={{
-              pageIndex: productionData.page - 1,
-              pageSize: productionData.limit,
-            }}
+            pagination={producerProductionPagination}
+            onPaginationChange={setProducerProductionPagination}
+            pageCount={pageCountProducerProduction}
           >
             <div className="mb-4 flex justify-between w-full">
               <DataTableTextFilter placeholder="Buscar registros" />
@@ -161,12 +190,11 @@ export default function ProductorsRecord() {
             Registros de Produção Pendentes
           </h2>
           <DataTable
-            data={requestData.data.filter((req) => req.status === "PENDING")}
+            data={requestData.filter((req) => req.status === "PENDING")}
             columns={requestColumns as any}
-            pagination={{
-              pageIndex: requestData.page - 1,
-              pageSize: requestData.limit,
-            }}
+            pagination={producerProductionRequestsPagination}
+            onPaginationChange={setProducerProductionRequestsPagination}
+            pageCount={pageCountProducerProductionRequests}
           >
             <div className="mb-4 flex justify-between w-full">
               <DataTableTextFilter placeholder="Buscar requests" />

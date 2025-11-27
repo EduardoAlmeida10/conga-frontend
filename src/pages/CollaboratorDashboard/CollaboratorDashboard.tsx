@@ -1,20 +1,20 @@
-import { useState, useMemo } from "react";
 import Button from "@/components/Button";
+import { useMemo, useState } from "react";
 import iconAdd from "../../assets/iconAdd.svg";
 
 import OverlayBackdrop from "@/components/Overlay/OverlayBackdrop";
 import ProducerProductionRequestForm from "./ProducerProductionRequestForm";
 
 import { DataTable } from "@/components/DataTable";
+import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
 import { DataTableContent } from "@/components/DataTable/DataTableContent";
 import { DataTablePagination } from "@/components/DataTable/DataTablePagination";
 import { DataTableTextFilter } from "@/components/DataTable/DataTableTextFilter";
-import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
 
+import type { ProducerProductionRequest } from "@/api/productions/productionProducerRequest";
+import { deleteProducerProductionRequest } from "@/api/productions/productionProducerRequest";
 import { useFetchProducerProduction } from "@/hooks/productions/producer_productions/useFetchProducerProductions";
 import { useFetchProducerProductionRequests } from "@/hooks/productions/producer_productions_request/useFetchProducerProductionRequest";
-import { deleteProducerProductionRequest } from "@/api/productions/productionProducerRequest";
-import type { ProducerProductionRequest } from "@/api/productions/productionProducerRequest";
 
 import {
   getProducerProductionColumns,
@@ -23,13 +23,46 @@ import {
 
 export default function CollaboratorDashboard() {
   const [isOverlayOpen, setOverlayOpen] = useState(false);
-  const { data, loading, error, refetch } = useFetchProducerProduction();
+
+  const [
+    producerProductionPagination, 
+    setProducerProductionPagination
+  ] = useState({ pageIndex: 0, pageSize: 6 });
+  
+  const [
+    producerProductionRequestsPagination, 
+    setProducerProductionRequestsPagination
+  ] = useState({ pageIndex: 0, pageSize: 6 });
+
+
+  const {
+    data,
+    totalItems: totalItemsProducerProduction,
+    loading,
+    error,
+    refetch
+  } = useFetchProducerProduction(
+    producerProductionPagination.pageIndex,
+    producerProductionPagination.pageSize
+  );
+
+  const pageCountProducerProduction = 
+  Math.ceil(totalItemsProducerProduction / producerProductionPagination.pageSize);
+
   const {
     data: requestData,
+    totalItems: totalItemsProducerProductionRequests,
     loading: loadingRequests,
     error: errorRequests,
     refetch: refetchRequests,
-  } = useFetchProducerProductionRequests();
+  } = useFetchProducerProductionRequests(
+    producerProductionRequestsPagination.pageIndex, 
+    producerProductionRequestsPagination.pageSize,
+  );
+
+  const pageCountProducerProductionRequests = 
+  Math.ceil(totalItemsProducerProductionRequests / producerProductionRequestsPagination.pageSize);
+
   const [editingRequest, setEditingRequest] =
     useState<ProducerProductionRequest | null>(null);
 
@@ -60,6 +93,9 @@ export default function CollaboratorDashboard() {
     await deleteProducerProductionRequest(request.id);
     refetchRequests();
     window.toast("Sucesso", "Registro excluído!", "success");
+    if (requestData.length === 1 && producerProductionRequestsPagination.pageIndex > 0) {
+      setProducerProductionRequestsPagination((prev) => ({ ...prev, pageIndex: prev.pageIndex - 1 }));
+    }
   };
 
   const productionColumns = useMemo(() => getProducerProductionColumns(), []);
@@ -92,13 +128,15 @@ export default function CollaboratorDashboard() {
       <div className="flex flex-col gap-10">
         {!loading && !error && data && (
           <div className="flex flex-col p-12 bg-white justify-center items-center gap-5 rounded-2xl">
+            <h2 className="font-bold text-xl w-full mb-4">
+              Produções Aceitas
+            </h2>
             <DataTable
               data={data.data}
               columns={productionColumns as any}
-              pagination={{
-                pageIndex: data.page - 1,
-                pageSize: data.limit,
-              }}
+              pagination={producerProductionPagination}
+              onPaginationChange={setProducerProductionPagination}
+              pageCount={pageCountProducerProduction}
             >
               <div className="mb-4 flex justify-between items-center w-full">
                 <DataTableTextFilter placeholder="Buscar registros" />
@@ -120,15 +158,14 @@ export default function CollaboratorDashboard() {
         {!loadingRequests && !errorRequests && requestData && (
           <div className="flex flex-col p-12 bg-white justify-center items-center gap-5 rounded-2xl">
             <h2 className="font-bold text-xl w-full mb-4">
-              Requests de Produção
+              Produções Pendentes
             </h2>
             <DataTable
-              data={requestData.data}
+              data={requestData}
               columns={requestColumns as any}
-              pagination={{
-                pageIndex: requestData.page - 1,
-                pageSize: requestData.limit,
-              }}
+              pagination={producerProductionRequestsPagination}
+              onPaginationChange={setProducerProductionRequestsPagination}
+              pageCount={pageCountProducerProductionRequests}
             >
               <div className="mb-4 flex justify-between items-center w-full">
                 <DataTableTextFilter placeholder="Buscar requests" />

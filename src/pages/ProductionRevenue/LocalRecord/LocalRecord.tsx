@@ -1,18 +1,18 @@
-import Button from "@/components/Button";
-import { DataTableTextFilter } from "@/components/DataTable/DataTableTextFilter";
-import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
-import { DataTableContent } from "@/components/DataTable/DataTableContent";
-import { DataTablePagination } from "@/components/DataTable/DataTablePagination";
-import { DataTable } from "@/components/DataTable";
-import { useState, useEffect, useCallback } from "react";
-import { localRecordColumns } from ".//columns";
-import type { LocalRecord } from "@/entities/LocalRecord";
 import {
   findAllLocalProductions,
   type LocalProductionApiData,
 } from "@/api/productions/productionLocal";
 import iconAdd from "@/assets/iconAdd.svg";
+import Button from "@/components/Button";
+import { DataTable } from "@/components/DataTable";
+import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
+import { DataTableContent } from "@/components/DataTable/DataTableContent";
+import { DataTablePagination } from "@/components/DataTable/DataTablePagination";
+import { DataTableTextFilter } from "@/components/DataTable/DataTableTextFilter";
 import Backdrop from "@/components/Overlay/OverlayBackdrop";
+import type { LocalRecord } from "@/entities/LocalRecord";
+import { useCallback, useEffect, useState } from "react";
+import { localRecordColumns } from ".//columns";
 import LocalRecordForm from "./LocalRecordForm";
 
 function mapApiData(apiData: LocalProductionApiData[]): LocalRecord[] {
@@ -33,14 +33,11 @@ function mapApiData(apiData: LocalProductionApiData[]): LocalRecord[] {
 
 export default function LocalRecord() {
   const [data, setData] = useState<LocalRecord[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 6,
-    total: 0,
-  });
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 6 });
+  const [pageCount, setPageCount] = useState(1);
 
   const columns = localRecordColumns;
 
@@ -52,31 +49,26 @@ export default function LocalRecord() {
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     try {
-      const filters = {
+      const apiResponse = await findAllLocalProductions({
         page: pagination.pageIndex + 1,
         limit: pagination.pageSize,
-      };
+      });
 
-      const apiResponse = await findAllLocalProductions(filters);
+      setPageCount(Math.ceil(apiResponse.total / pagination.pageSize));
 
       const mappedData = mapApiData(apiResponse.data);
 
       setData(mappedData);
-      setPagination((prev) => ({
-        ...prev,
-        total: apiResponse.total,
-        totalPages: apiResponse.totalPages,
-      }));
     } catch (error) {
       console.error("Erro ao buscar dados de produção local:", error);
     } finally {
       setIsLoading(false);
     }
-  }, [pagination.pageIndex, pagination.pageSize, reloadKey]);
+  }, [pagination.pageIndex, pagination.pageSize]);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, reloadKey]);
 
   return (
     <div className="p-6 w-full">
@@ -91,32 +83,27 @@ export default function LocalRecord() {
           <h1 className="font-bold text-2xl">Registro Local</h1>
         </div>
 
-        {isLoading && <p>Carregando dados...</p>}
+        <DataTable
+          data={data}
+          columns={columns}
+          pagination={pagination}
+          onPaginationChange={setPagination}
+          pageCount={pageCount}
+        >
+          <div className="mb-4 flex justify-between items-center gap-4">
+            <DataTableTextFilter placeholder="Pesquisar" />
 
-        {(!isLoading || data.length > 0) && (
-          <DataTable
-            data={data}
-            columns={columns}
-            pagination={{
-              pageIndex: pagination.pageIndex,
-              pageSize: pagination.pageSize,
-            }}
-          >
-            <div className="mb-4 flex justify-between items-center gap-4">
-              <DataTableTextFilter placeholder="Pesquisar" />
-
-              <div className="flex gap-6 items-center">
-                <DataTableColumnsVisibilityDropdown />
-              </div>
+            <div className="flex gap-6 items-center">
+              <DataTableColumnsVisibilityDropdown />
             </div>
+          </div>
 
-            <DataTableContent />
+          <DataTableContent />
 
-            <div className="flex justify-end items-center mt-4">
-              <DataTablePagination />
-            </div>
-          </DataTable>
-        )}
+          <div className="flex justify-end items-center mt-4">
+            <DataTablePagination />
+          </div>
+        </DataTable>
       </div>
 
       {isFormOpen && (
