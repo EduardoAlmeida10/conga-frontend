@@ -1,3 +1,4 @@
+import { InputCurrency } from "../InputCurrency";
 import InputField from "../InputField";
 
 interface Props {
@@ -6,7 +7,11 @@ interface Props {
   errors?: Record<string, string>;
 }
 
-export function SupplieFormFields({ formData, handleFormChange, errors }: Props) {
+export function SupplieFormFields({
+  formData,
+  handleFormChange,
+  errors,
+}: Props) {
   return (
     <>
       <InputField
@@ -33,12 +38,11 @@ export function SupplieFormFields({ formData, handleFormChange, errors }: Props)
         error={errors?.quantity}
         required
       />
-      <InputField
-        label="Valor Unitário"
-        type="text"
-        value={formData.unitPrice || ""}
-        onChange={(e) => handleFormChange("unitPrice", e.target.value)}
-        error={errors?.unitPrice}
+      <InputCurrency
+        label="Valor"
+        value={formData.value || ""}
+        onChange={(newValue) => handleFormChange("value", newValue)}
+        error={errors?.value}
         required
       />
     </>

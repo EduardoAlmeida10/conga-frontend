@@ -1,7 +1,7 @@
 import { OperationalTypes } from "../../api/costs/operational-costApi";
+import { InputCurrency } from "../InputCurrency";
 import InputField from "../InputField";
 import SelectField from "../SelectField";
-
 
 interface Props {
   formData: any;
@@ -9,8 +9,11 @@ interface Props {
   errors?: Record<string, string>;
 }
 
-
-export function OperationalFormFields({ formData, handleFormChange, errors }: Props) {
+export function OperationalFormFields({
+  formData,
+  handleFormChange,
+  errors,
+}: Props) {
   return (
     <>
       <InputField
@@ -31,13 +34,14 @@ export function OperationalFormFields({ formData, handleFormChange, errors }: Pr
         required
       >
         <option value={OperationalTypes.HIGIENE}>Higiene</option>
-        <option value={OperationalTypes.MANUTENCAO}>Manutenção de Equipamentos</option>
+        <option value={OperationalTypes.MANUTENCAO}>
+          Manutenção de Equipamentos
+        </option>
       </SelectField>
-      <InputField
+      <InputCurrency
         label="Valor"
-        type="text"
         value={formData.value || ""}
-        onChange={(e) => handleFormChange("value", e.target.value)}
+        onChange={(newValue) => handleFormChange("value", newValue)}
         error={errors?.value}
         required
       />
@@ -51,3 +55,4 @@ export function OperationalFormFields({ formData, handleFormChange, errors }: Pr
     </>
   );
 }
+

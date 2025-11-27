@@ -1,4 +1,5 @@
 import { CostType } from "../../api/costs/personnel-costApi";
+import { InputCurrency } from "../InputCurrency";
 import InputField from "../InputField";
 import SelectField from "../SelectField";
 
@@ -8,14 +9,18 @@ interface Props {
   errors?: Record<string, string>;
 }
 
-export function PersonnelFormFields({ formData, handleFormChange, errors }: Props) {
+export function PersonnelFormFields({
+  formData,
+  handleFormChange,
+  errors,
+}: Props) {
   return (
     <>
       <InputField
         label="Data"
         type="date"
-        value={formData.date || ""} 
-        onChange={(e) => handleFormChange("date", e.target.value)} 
+        value={formData.date || ""}
+        onChange={(e) => handleFormChange("date", e.target.value)}
         error={errors?.date}
         required
       />
@@ -23,9 +28,7 @@ export function PersonnelFormFields({ formData, handleFormChange, errors }: Prop
         id="type"
         title="Tipo"
         value={formData.type || CostType.SALARIOS_FIXOS}
-        onChange={(e) =>
-          handleFormChange("type", e.target.value as CostType) 
-        }
+        onChange={(e) => handleFormChange("type", e.target.value as CostType)}
         required
       >
         <option value="Salários Fixos">Salários Fixos</option>
@@ -33,17 +36,16 @@ export function PersonnelFormFields({ formData, handleFormChange, errors }: Prop
         <option value="Encargos">Encargos</option>
         <option value="Benefícios">Benefícios</option>
       </SelectField>
-      <InputField
+      <InputCurrency
         label="Valor"
-        type="text"
-        value={formData.value || ""} 
-        onChange={(e) => handleFormChange("value", e.target.value)}
+        value={formData.value || ""}
+        onChange={(newValue) => handleFormChange("value", newValue)}
         error={errors?.value}
         required
       />
       <InputField
         label="Descrição"
-        value={formData.description || ""} 
+        value={formData.description || ""}
         onChange={(e) => handleFormChange("description", e.target.value)}
         error={errors?.description}
         required
