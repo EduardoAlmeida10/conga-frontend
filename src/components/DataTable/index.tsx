@@ -39,7 +39,8 @@ export function DataTable<TData>({
   );
 
   const pagination = externalPagination ?? internalPagination;
-  const onPaginationChangeHandler = onPaginationChange ?? setInternalPagination;
+
+  const handlePaginationChange = onPaginationChange ?? setInternalPagination;
 
   const table = useReactTable({
     data,
@@ -50,7 +51,7 @@ export function DataTable<TData>({
     manualPagination: true,
     pageCount,
 
-    onPaginationChange: onPaginationChangeHandler,
+    onPaginationChange: handlePaginationChange,
 
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
