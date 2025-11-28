@@ -39,7 +39,6 @@ export default function ProductorsRecord() {
     setProducerProductionRequestsPagination,
   ] = useState({ pageIndex: 0, pageSize: 6 });
 
-  // Registros existentes
   const {
     data: productionData,
     totalItems: totalItemsProducerProduction,
@@ -57,7 +56,6 @@ export default function ProductorsRecord() {
 
   const { remove } = useDeleteProducerProduction();
 
-  // Requests pendentes
   const fere = "PENDING";
   const {
     data: requestData,
@@ -79,7 +77,6 @@ export default function ProductorsRecord() {
   const { validate, loading: validating } =
     useValidateProducerProductionRequest();
 
-  // --- Formulário ---
   const handleOpenForm = () => {
     setRecordToEdit(null);
     setFormOpen(true);
@@ -96,7 +93,6 @@ export default function ProductorsRecord() {
     refetchProduction();
   };
 
-  // --- Validação ---
   const handleOpenValidation = (
     request: ProducerProductionRequest,
     type: "approve" | "reject",
@@ -131,15 +127,12 @@ export default function ProductorsRecord() {
   );
 
   return (
-    <div className="w-full p-8 flex flex-col gap-12">
-      {/* Botão Novo Registro */}
-      <div>
-        <Button styles="my-8" onClick={handleOpenForm}>
+    <div className="p-6 w-full">
+      <div className="pt-6 pb-6">
+        <Button onClick={handleOpenForm}>
           <img src={iconAdd} alt="" /> Novo Registro
         </Button>
       </div>
-
-      {/* Overlay Formulário */}
       <OverlayBackdrop isOpen={isFormOpen} onClose={() => setFormOpen(false)}>
         <ProductoresRecordForms
           record={recordToEdit}
@@ -156,10 +149,8 @@ export default function ProductorsRecord() {
         type={overlayMessage.includes("aprovar") ? "approve" : "reject"}
         isLoading={validating}
       />
-
-      {/* Tabela registros */}
       {!loadingProduction && !errorProduction && productionData && (
-        <div className="flex flex-col p-12 bg-white justify-center items-center gap-5 rounded-2xl">
+        <div className="flex flex-col p-12 bg-white justify-center items-center gap-5 rounded-2xl mb-10">
           <h2 className="font-bold text-xl w-full mb-4 text-center">
             Registros Pequenos Produtores
           </h2>

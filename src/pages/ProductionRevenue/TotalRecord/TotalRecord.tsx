@@ -19,7 +19,7 @@ export default function DailyProductionPage() {
   const pageCount = Math.ceil(totalItems / pagination.pageSize);
 
   return (
-    <div className="w-full">
+    <div className="w-full mt-10">
       <div className="flex flex-col p-8 bg-white justify-center gap-5 rounded-2xl">
         <div className="flex flex-col items-center p-5 gap-5">
           <h1 className="font-bold text-2xl">Produção Diária</h1>
