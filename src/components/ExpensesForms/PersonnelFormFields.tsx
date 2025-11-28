@@ -38,6 +38,7 @@ export function PersonnelFormFields({
       </SelectField>
       <InputCurrency
         label="Valor"
+        name="price"
         value={formData.value || ""}
         onChange={(newValue) => handleFormChange("value", newValue)}
         error={errors?.value}
