@@ -7,6 +7,7 @@ interface InputFieldProps {
   onChange: (value: string) => void;
   error?: string;
   required?: boolean;
+  placeholder?: string;
 }
 
 export function InputCurrency({
@@ -15,6 +16,7 @@ export function InputCurrency({
   value,
   onChange,
   error,
+  placeholder,
 }: InputFieldProps) {
   const handleValueChange = (values: NumberFormatValues) => {
     const numericStringValue =
@@ -31,6 +33,7 @@ export function InputCurrency({
         <NumericFormat
           name={name}
           value={value}
+          placeholder={placeholder}
           onValueChange={handleValueChange}
           thousandSeparator="."
           decimalSeparator=","
