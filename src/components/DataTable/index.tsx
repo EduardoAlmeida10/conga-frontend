@@ -19,7 +19,7 @@ interface IDataTableProps<TData> {
   columns: ColumnDef<TData>[];
   children: React.ReactNode;
   pagination?: PaginationState;
-  pageCount: number;
+  pageCount?: number;
   onPaginationChange?: OnChangeFn<PaginationState>;
 }
 
