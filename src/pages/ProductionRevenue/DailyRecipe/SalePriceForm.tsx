@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react";
-import OverlayCard from "@/components/Overlay/OverlayCard";
-import InputField from "@/components/InputField";
-import { useSaveSalePrice } from "@/hooks/productions/sale_price/useSaveSalePrice";
-import { useCurrentSalePrice } from "@/hooks/productions/sale_price/useCurrentSalePrice";
 import type { NewSalePriceDto } from "@/api/sale-price/salePrice";
+import { InputCurrency } from "@/components/InputCurrency";
+import OverlayCard from "@/components/Overlay/OverlayCard";
+import { useCurrentSalePrice } from "@/hooks/productions/sale_price/useCurrentSalePrice";
+import { useSaveSalePrice } from "@/hooks/productions/sale_price/useSaveSalePrice";
+import React, { useCallback, useEffect, useState } from "react";
 
 interface Props {
   onClose: () => void;
@@ -19,10 +19,10 @@ export default function SalePriceForm({ onClose, onSaved }: Props) {
     useCurrentSalePrice();
 
   useEffect(() => {
-  if (!currentPriceData) {
+    if (!currentPriceData) {
       setNewPrice("");
-  }
-}, [currentPriceData]);
+    }
+  }, [currentPriceData]);
 
   const formatCurrentPrice = (price: number | null) => {
     const value = typeof price === "number" && !isNaN(price) ? price : 0;
@@ -73,7 +73,7 @@ export default function SalePriceForm({ onClose, onSaved }: Props) {
     }
   };
 
- const priceToDisplay =
+  const priceToDisplay =
     currentPriceData?.value !== undefined && currentPriceData.value !== null
       ? parseFloat(currentPriceData.value.toString())
       : null;
@@ -97,12 +97,17 @@ export default function SalePriceForm({ onClose, onSaved }: Props) {
           )}
         </div>
 
-        <InputField
+        <InputCurrency
           label="Novo Preço (R$/Litro)"
-          type="text"
           value={newPrice}
-          onChange={(e) => setNewPrice(e.target.value)}
-          error={errors.newPrice}
+          placeholder="R$ 0,00"
+          onChange={(newValue) => {
+            setNewPrice(newValue);
+            if (errors.newPrice) {
+              setErrors((prev) => ({ ...prev, newPrice: "" }));
+            }
+          }}
+          error={errors?.newPrice}
           required
         />
 
