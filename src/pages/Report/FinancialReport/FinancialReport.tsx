@@ -25,8 +25,8 @@ export default function RevenueAnalysis() {
         <header>
           <h1>Visão geral</h1>
           <div>
-            <CardAnalysis title="Receita total" value={10}>
-              <ArrowDown/>
+            <CardAnalysis title="Receita total" value={10} color="bg-blue-500">
+              <ArrowDown />
             </CardAnalysis>
           </div>
         </header>
