@@ -1,5 +1,3 @@
-"use client";
-
 import type {
   ProducerProductionRequest
 } from "@/api/productions/productionProducerRequest";

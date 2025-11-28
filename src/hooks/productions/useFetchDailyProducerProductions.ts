@@ -1,5 +1,3 @@
-"use client";
-
 import type { DailyProduction } from "@/api/productions/dailyProduction";
 import { getDailyProduction } from "@/api/productions/dailyProduction";
 import { useCallback, useEffect, useMemo, useState } from "react";

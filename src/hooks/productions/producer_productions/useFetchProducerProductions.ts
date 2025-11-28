@@ -1,5 +1,3 @@
-"use client";
-
 import type {
   PaginatedProducerProductions,
 } from "@/api/productions/productionProducer.ts";

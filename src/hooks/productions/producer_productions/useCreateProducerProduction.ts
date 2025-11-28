@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { registerProducerProduction} from "@/api/productions/productionProducer.ts";
 import type { RegisterProducerProductionDto } from "@/api/productions/productionProducer.ts";

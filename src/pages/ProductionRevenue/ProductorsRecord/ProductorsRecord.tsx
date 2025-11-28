@@ -1,5 +1,3 @@
-"use client";
-
 import iconAdd from "@/assets/iconAdd.svg";
 import Button from "@/components/Button";
 import { useMemo, useState } from "react";

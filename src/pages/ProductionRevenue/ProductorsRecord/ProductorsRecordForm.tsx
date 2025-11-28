@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import OverlayCard from "@/components/Overlay/OverlayCard";
 import InputField from "@/components/InputField";
