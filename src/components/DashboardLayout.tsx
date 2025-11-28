@@ -29,6 +29,8 @@ export default function DashboardLayout() {
         return "Gestão de Usuários";
       case "/producao":
         return "Gestão de Produção";
+      case "/relatorios":
+        return "Relatórios Financeiros";
       default:
         return "Dashboard";
     }
