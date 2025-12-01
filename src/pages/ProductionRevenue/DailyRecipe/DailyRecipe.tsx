@@ -15,7 +15,6 @@ import { DataTableContent } from "@/components/DataTable/DataTableContent";
 import { DataTablePagination } from "@/components/DataTable/DataTablePagination";
 import { DataTableTextFilter } from "@/components/DataTable/DataTableTextFilter";
 import Backdrop from "@/components/Overlay/OverlayBackdrop";
-import type { OverviewMetrics } from "@/components/Overview/OverviewSection";
 import OverviewSection from "@/components/Overview/OverviewSection";
 import React, { useEffect, useMemo, useState } from "react";
 import { dailyRecipeColumns } from "./columns";
@@ -40,6 +39,9 @@ export default function DailyRecipe() {
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 6 });
   const [totalPages, setTotalPages] = useState(0);
 
+  const [averageDaily, setAverageDaily] = useState(0);
+  const [monthlyTotal, setMonthlyTotal] = useState(0);
+
   const [reloadKey, setReloadKey] = useState(0);
 
   const columns = dailyRecipeColumns;
@@ -57,6 +59,10 @@ export default function DailyRecipe() {
 
       const receivesResponse: PaginatedReceives =
         await findAllReceives(filters);
+
+      setAverageDaily(parseFloat(receivesResponse.average) || 0);
+      setMonthlyTotal(parseFloat(receivesResponse.monthly) || 0);
+
       const receivedData = mapApiToReceive(receivesResponse.data);
 
       const mappedData: DailyRecipe[] = receivedData.map((item) => {
@@ -85,6 +91,8 @@ export default function DailyRecipe() {
       console.error("Erro ao buscar dados diários:", error);
       setSalePrice(null);
       setData([]);
+      setAverageDaily(0);
+      setMonthlyTotal(0);
     } finally {
       setIsLoading(false);
     }
@@ -102,20 +110,13 @@ export default function DailyRecipe() {
   const metrics = useMemo(() => {
     const price = parseFloat(salePrice?.value?.toString() || "0") || 0;
 
-    const totalDaysLoaded = data.length;
+    const dailyAverage = averageDaily;
+    const totalRevenue = monthlyTotal;
 
-    let totalRevenue = 0;
     let totalLiters = 0;
-
     data.forEach((item) => {
-      totalRevenue += item.total;
       totalLiters += item.tanque;
     });
-
-    const dailyAverage =
-      totalDaysLoaded > 0 ? totalRevenue / totalDaysLoaded : 0;
-
-    const monthlyTotal = totalRevenue;
 
     const lastDateString =
       data.length > 0 && data[0].date instanceof Date
@@ -124,12 +125,12 @@ export default function DailyRecipe() {
 
     return {
       dailyAverage,
-      monthlyTotal,
+      monthlyTotal: totalRevenue,
       milkPrice: price,
       lastUpdated: lastDateString,
       totalLiters,
     };
-  }, [data, salePrice]);
+  }, [data, salePrice, monthlyTotal, averageDaily]);
 
   const pageCount = totalPages;
   const dailyRecipeCards: CardItem[] = useMemo(
