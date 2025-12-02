@@ -13,10 +13,7 @@ export const relatorioColumns: ColumnDef<Relatorio>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Categoria" />
     ),
-    cell: ({ row }) => {
-      const value = row.original.categoria;
-      return <div className="text font-semibold">{value}</div>;
-    },
+    cell: ({ row }) => <div>{row.original.categoria}</div>,
   },
   {
     accessorKey: "tipo",
@@ -25,11 +22,7 @@ export const relatorioColumns: ColumnDef<Relatorio>[] = [
     ),
     cell: ({ row }) => {
       const value = row.original.tipo;
-      return (
-        <div className={`${value === "receita"}`}>
-          {value.charAt(0).toUpperCase() + value.slice(1)}
-        </div>
-      );
+      return <div>{value.charAt(0).toUpperCase() + value.slice(1)}</div>;
     },
   },
   {
