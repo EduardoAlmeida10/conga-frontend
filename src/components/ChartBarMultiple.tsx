@@ -1,76 +1,52 @@
+import { BarChart, CartesianGrid, XAxis, Bar } from "recharts";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import type { ChartConfig } from "@/components/ui/chart";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+interface ChartBarMultipleProps {
+  data: { month: string; receives: number; expenses: number; periodResult: number }[];
+}
 
-export const description = "A multiple bar chart";
+export function ChartBarMultiple({ data }: ChartBarMultipleProps) {
+  const chartConfig = {
+    receives: { label: "Receitas", color: "#10b981" },
+    expenses: { label: "Despesas", color: "#ef4444" },
+    periodResult: { label: "Resultado", color: "#3b82f6" },
+  };
 
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 }
-];
-
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "var(--chart-1)",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "var(--chart-2)",
-  },
-} satisfies ChartConfig;
-
-export function ChartBarMultiple() {
   return (
     <Card className="w-max">
       <CardHeader>
-        <CardTitle>Bar Chart - Multiple</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Comparação de Meses</CardTitle>
+        <CardDescription>Valores do mês selecionado</CardDescription>
       </CardHeader>
       <CardContent>
-          <ChartContainer config={chartConfig} className="h-58 w-120">
-            <BarChart accessibilityLayer data={chartData}>
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey="month"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-                tickFormatter={(value) => value.slice(0, 3)}
-              />
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent indicator="dashed" />}
-              />
-              <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-              <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
-            </BarChart>
-          </ChartContainer>
+        <ChartContainer config={chartConfig} className="h-58 w-120">
+          <BarChart data={data}>
+            <CartesianGrid vertical={false} />
+            <XAxis dataKey="month" tickLine={false} axisLine={false} />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
+            <Bar dataKey="receives" fill={chartConfig.receives.color} radius={4} />
+            <Bar dataKey="expenses" fill={chartConfig.expenses.color} radius={4} />
+            <Bar dataKey="periodResult" fill={chartConfig.periodResult.color} radius={4} />
+          </BarChart>
+        </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+      <CardFooter className="flex flex-col items-start gap-2 text-sm">
+        <div className="flex gap-2 items-center font-medium">
+          Comparação de valores <TrendingUp className="h-4 w-4" />
         </div>
-        <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 months
+        {/* Legenda */}
+        <div className="flex gap-4 mt-2">
+          {Object.entries(chartConfig).map(([key, value]) => (
+            <div key={key} className="flex items-center gap-1">
+              <span
+                className="w-4 h-4 rounded-sm"
+                style={{ backgroundColor: value.color }}
+              ></span>
+              <span>{value.label}</span>
+            </div>
+          ))}
         </div>
       </CardFooter>
     </Card>
