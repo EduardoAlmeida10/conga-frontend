@@ -10,14 +10,6 @@
   --color-primary-300: #005482;
 
   --font-sans: "DM Sans", sans-serif;
-
-  
-}
-
-:root {
-  --color-receives: #3b82f6; /* azul */
-  --color-expenses: #ef4444; /* vermelho */
-  --color-periodResult: #10b981; /* verde */
 }
 
 body {

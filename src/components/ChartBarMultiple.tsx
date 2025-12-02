@@ -36,12 +36,11 @@ export function ChartBarMultiple({ data }: ChartBarMultipleProps) {
         <div className="flex gap-2 items-center font-medium">
           Comparação de valores <TrendingUp className="h-4 w-4" />
         </div>
-        {/* Legenda */}
-        <div className="flex gap-4 mt-2">
+        <div className="flex gap-4 mt-2 justify-center w-full">
           {Object.entries(chartConfig).map(([key, value]) => (
             <div key={key} className="flex items-center gap-1">
               <span
-                className="w-4 h-4 rounded-sm"
+                className="w-2 h-2 rounded-[2px]"
                 style={{ backgroundColor: value.color }}
               ></span>
               <span>{value.label}</span>
