@@ -83,6 +83,7 @@ export default function FinancialReport() {
           title="Receita total"
           value={dataOverview?.totalReceives ?? 0}
           color="bg-blue-500"
+          is="valor"
         >
           <ArrowUp />
         </CardAnalysis>
@@ -90,6 +91,7 @@ export default function FinancialReport() {
           title="Despesas Totais"
           value={dataOverview?.totalExpenses ?? 0}
           color="bg-blue-500"
+          is="valor"
         >
           <ArrowDown />
         </CardAnalysis>
@@ -97,6 +99,7 @@ export default function FinancialReport() {
           title="Resultado Mensal"
           value={result}
           color={result >= 0 ? "bg-green-500" : "bg-red-500"}
+          is="valor"
         >
           <DollarSign />
         </CardAnalysis>

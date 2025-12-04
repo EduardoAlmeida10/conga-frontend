@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import iconAdd from "../../assets/iconAdd.svg";
 import Button from "../../components/Button";
@@ -21,12 +21,19 @@ import {
   type BaseExpense,
 } from "../../hooks/expenses/useExpenseData";
 import { useExpenseModal } from "../../hooks/expenses/useExpenseModal";
+import { useLocation } from "react-router-dom";
 
 const costTypes = ["Pessoal", "Utilitario", "Insumos", "Operacionais"];
 type ExpenseType = "Pessoal" | "Operacionais" | "Utilitario" | "Insumos";
 
 export default function ExpensesTable() {
-  const [selectedType, setSelectedType] = useState<ExpenseType>("Pessoal");
+  const location = useLocation();
+
+  const defaultType: ExpenseType = "Pessoal";
+  const initialType: ExpenseType =
+    location.state?.targetExpenseType ?? defaultType;
+
+  const [selectedType, setSelectedType] = useState<ExpenseType>(initialType);
 
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
 
@@ -103,11 +110,17 @@ export default function ExpensesTable() {
     );
   };
 
+  useEffect(() => {
+    if (location.state?.targetExpenseType) {
+      setSelectedType(location.state.targetExpenseType);
+    }
+  }, [location.state?.targetExpenseType]);
+
   return (
     <div className="p-6 w-full max-w-6xl mx-auto">
       <div className="mb-16 mt-10">
         <p>Selecione o tipo de despesa:</p>
-        <CostTypeTabs tabs={costTypes} onSelect={handleTypeChange} />
+        <CostTypeTabs tabs={costTypes} onSelect={handleTypeChange} selected={selectedType}/>
       </div>
 
       <Button styles="mb-8" onClick={handleOpenCreateModal}>
