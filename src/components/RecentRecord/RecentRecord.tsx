@@ -1,7 +1,5 @@
-// src/components/dashboard/RecentRecords.tsx
-
 import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Exemplo, use o router do seu sistema
+import { useNavigate } from 'react-router-dom';
 import { AiOutlineLineChart, AiOutlineArrowRight } from "react-icons/ai";
 import { RECENT_RECORDS, type RecentRecord } from './mock';
 

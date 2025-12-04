@@ -1,12 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface CostTypeTabsProps {
   tabs: string[];
+  selected?: string;
   onSelect: (type: string) => void;
 }
 
-export default function CostTypeTabs({ tabs, onSelect }: CostTypeTabsProps) {
-  const [activeTab, setActiveTab] = useState(tabs[0]);
+export default function CostTypeTabs({
+  tabs,
+  selected,
+  onSelect,
+}: CostTypeTabsProps) {
+  const initial = selected || tabs[0];
+
+  const [activeTab, setActiveTab] = useState(initial);
+
+  useEffect(() => {
+    if (selected) setActiveTab(selected);
+  }, [selected]);
 
   const handleSelect = (type: string) => {
     setActiveTab(type);

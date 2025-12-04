@@ -23,16 +23,16 @@ export default function AdminDashboard() {
   return (
     <div className="p-6 w-full text-black min-h-screen">
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-10">
-        <CardAnalysis title="Produção Diária" value={10} color="bg-blue-500">
+        <CardAnalysis title="Produção Diária" value={dailyProduction} color="bg-blue-500" is="litros">
           <Activity className="bg-red" />
         </CardAnalysis>
-        <CardAnalysis title="Receita Diária" value={10} color="bg-blue-500">
+        <CardAnalysis title="Receita Diária" value={dailyReceive} color="bg-blue-500" is="valor">
           <TrendingDown className="bg-red" />
         </CardAnalysis>
-        <CardAnalysis title="Despesas Mensal" value={10} color="bg-blue-500">
+        <CardAnalysis title="Despesas Mensal" value={monthlyExpense} color="bg-blue-500" is="valor">
           <DollarSign className="bg-red" />
         </CardAnalysis>
-        <CardAnalysis title="Receita Mensal" value={10} color="bg-blue-500">
+        <CardAnalysis title="Receita Mensal" value={monthlyReceive} color="bg-blue-500" is="valor">
           <DollarSign className="bg-red" />
         </CardAnalysis>
       </div>

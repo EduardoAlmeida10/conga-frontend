@@ -1,6 +1,6 @@
 import iconAdd from "@/assets/iconAdd.svg";
 import Button from "@/components/Button";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ProductoresRecordForms from "./ProductorsRecordForm";
 import ValidationForm from "./ValidationForm";
 
@@ -19,8 +19,12 @@ import type { ProducerProduction } from "@/api/productions/productionProducer";
 import type { ProducerProductionRequest } from "@/api/productions/productionProducerRequest";
 import OverlayBackdrop from "@/components/Overlay/OverlayBackdrop";
 import { getProducerProductionColumns, getValidationColumns } from "./columns";
+import { useLocation } from "react-router-dom";
 
 export default function ProductorsRecord() {
+  const pendingSectionRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+
   const [isFormOpen, setFormOpen] = useState(false);
   const [recordToEdit, setRecordToEdit] = useState<ProducerProduction | null>(
     null,
@@ -126,6 +130,14 @@ export default function ProductorsRecord() {
     [],
   );
 
+  useEffect(() => {
+    if (location.state?.targetFilter === "PENDING") {
+      setTimeout(() => {
+        pendingSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 300);
+    }
+  }, [location.state]);
+
   return (
     <div className="p-6 w-full">
       <div className="pt-6 pb-6">
@@ -174,7 +186,7 @@ export default function ProductorsRecord() {
       )}
 
       {!loadingRequests && !errorRequests && requestData && (
-        <div className="flex flex-col p-12 bg-white justify-center items-center gap-5 rounded-2xl">
+        <div ref={pendingSectionRef} className="flex flex-col p-12 bg-white justify-center items-center gap-5 rounded-2xl">
           <h2 className="font-bold text-xl w-full mb-4 text-center">
             Registros de Produção Pendentes
           </h2>
