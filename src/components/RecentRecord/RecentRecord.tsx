@@ -7,9 +7,9 @@ const RecordItem: React.FC<{ item: RecentRecord }> = ({ item }) => {
   const navigate = useNavigate();
 
   const handleNavigation = () => {
-    if (item.route === "/despesas" && item.expenseType) {
-      navigate("/despesas", {
-        state: { targetExpenseType: item.expenseType },
+    if (item.route === "/despesas" && item.description) {
+      navigate(item.route, {
+        state: { targetExpenseType: item.description },
       });
     } else {
       const statePayload = {
