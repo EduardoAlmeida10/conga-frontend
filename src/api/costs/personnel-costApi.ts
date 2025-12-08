@@ -7,7 +7,7 @@ export const CostType = {
   BENEFICIOS: "Benefícios",
 } as const;
 
-export type CostType = typeof CostType[keyof typeof CostType];
+export type CostType = (typeof CostType)[keyof typeof CostType];
 
 export interface PersonnelCost {
   id: string;
@@ -99,3 +99,4 @@ export async function deletePersonnelCost(
   const response = await api.delete(`${BASE_URL}/${id}`);
   return response.data;
 }
+
