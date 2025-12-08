@@ -56,12 +56,6 @@ export default function ExpensesTable() {
         await deleteExpense(expense);
         refetchExpenses();
 
-        window.toast(
-          "Despesa deletada",
-          "Despesa foi removida com sucesso!",
-          "success",
-        );
-
         if (expenses.length === 1 && pagination.pageIndex > 0) {
           setPagination((prev) => ({ ...prev, pageIndex: prev.pageIndex - 1 }));
         }

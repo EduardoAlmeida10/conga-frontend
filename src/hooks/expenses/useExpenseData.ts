@@ -78,6 +78,13 @@ export function useExpenseData(
       try {
         await deleteFunction(expense.id);
         selectedHook.refetch();
+
+        window.toast(
+          "Despesa deletada",
+          "Despesa foi removida com sucesso!",
+          "success",
+        );
+        
       } catch (err) {
         console.error("Falha ao deletar despesa:", err);
         alert("Não foi possível deletar a despesa.");

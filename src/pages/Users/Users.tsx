@@ -69,6 +69,7 @@ export default function Users() {
   const handleSaveSuccess = () => {
     refetch();
     handleCloseModal();
+    window.toast("Sucesso", "Usuário salvo com sucesso!", "success");
   };
 
   return (
