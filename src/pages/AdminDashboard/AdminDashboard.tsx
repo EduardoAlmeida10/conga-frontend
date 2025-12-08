@@ -2,7 +2,7 @@ import CardAnalysis from "@/components/CardAnalysis";
 import PendingApprovals from "@/components/PendingApprovals/PendingApprovals";
 import RecentRecords from "@/components/RecentRecord/RecentRecord";
 import { useDashboardMetrics } from "@/hooks/dashboard/useDashboardMetrics";
-import { Activity, DollarSign, TrendingDown } from "lucide-react";
+import { Activity, DollarSign, TrendingUp, TrendingDown } from "lucide-react";
 
 export default function AdminDashboard() {
   const { metrics, isLoading, error } = useDashboardMetrics();
@@ -27,10 +27,10 @@ export default function AdminDashboard() {
           <Activity className="bg-red" />
         </CardAnalysis>
         <CardAnalysis title="Receita Diária" value={dailyReceive} color="bg-blue-500" is="valor">
-          <TrendingDown className="bg-red" />
+          <TrendingUp className="bg-red" />
         </CardAnalysis>
         <CardAnalysis title="Despesas Mensal" value={monthlyExpense} color="bg-blue-500" is="valor">
-          <DollarSign className="bg-red" />
+          <TrendingDown className="bg-red" />
         </CardAnalysis>
         <CardAnalysis title="Receita Mensal" value={monthlyReceive} color="bg-blue-500" is="valor">
           <DollarSign className="bg-red" />

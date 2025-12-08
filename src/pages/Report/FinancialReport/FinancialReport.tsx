@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import CardAnalysis from "@/components/CardAnalysis";
-import { ArrowDown, ArrowUp, DollarSign } from "lucide-react";
+import { TrendingUp, TrendingDown, DollarSign } from "lucide-react";
 import { DataTable } from "@/components/DataTable";
 import { DataTableContent } from "@/components/DataTable/DataTableContent";
 import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
@@ -63,7 +63,7 @@ export default function FinancialReport() {
 
       <header className="flex justify-between items-center">
         <label>
-          <p>Data Inicial</p>
+          <p>Data Inicial:</p>
           <input
             type="date"
             className="bg-white h-12 px-3 rounded cursor-pointer"
@@ -72,7 +72,7 @@ export default function FinancialReport() {
           />
         </label>
         <label>
-          <p>Data Final</p>
+          <p>Data Final:</p>
           <input
             type="date"
             className="bg-white h-12 px-3 rounded cursor-pointer"
@@ -89,7 +89,7 @@ export default function FinancialReport() {
           color="bg-blue-500"
           is="valor"
         >
-          <ArrowUp />
+          <TrendingUp />
         </CardAnalysis>
         <CardAnalysis
           title="Despesas Totais"
@@ -97,7 +97,7 @@ export default function FinancialReport() {
           color="bg-blue-500"
           is="valor"
         >
-          <ArrowDown />
+          <TrendingDown />
         </CardAnalysis>
         <CardAnalysis
           title="Resultado Mensal"
