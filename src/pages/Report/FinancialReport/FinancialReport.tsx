@@ -15,10 +15,12 @@ import { ChartAreaDaily } from "@/components/ChartAreaInteractive";
 import { ChartBarMultiple } from "@/components/ChartBarMultiple";
 import { formatPeriod } from "@/utils/formatters";
 import { MonthYearPicker } from "@/components/MonthYearPicker";
+import { getCurrentMonthRange } from "@/utils/getCurrentMonth";
 
 export default function FinancialReport() {
-  const [dateFrom, setDateFrom] = useState<string>();
-  const [dateTo, setDateTo] = useState<string>();
+  const {dateFrom: initialFrom, dateTo: initialTo} = getCurrentMonthRange()
+  const [dateFrom, setDateFrom] = useState<string>(initialFrom);
+  const [dateTo, setDateTo] = useState<string>(initialTo);
   const [periodOne, setPeriodOne] = useState<string>();
   const [periodTwo, setPeriodTwo] = useState<string>();
 
@@ -53,7 +55,9 @@ export default function FinancialReport() {
       <div>
         <p className="text-center text-gray-400">
           Período Selecionado <br />
-          {dateFrom && dateTo ? formatPeriod(dateFrom, dateTo) : "Todos"}
+          <b>
+            {dateFrom && dateTo ? formatPeriod(dateFrom, dateTo) : "Todos"}
+          </b>
         </p>
       </div>
 
