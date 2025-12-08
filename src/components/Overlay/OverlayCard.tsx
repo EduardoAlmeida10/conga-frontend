@@ -18,7 +18,7 @@ export default function OverlayCard({
 }: OverlayCardProps) {
   return (
     <div className="bg-white rounded-2xl p-6 w-96 max-w-md shadow-lg">
-      <div className="flex items-center mb-8 gap-14">
+      <div className="flex items-center justify-between mb-8">
         <img
           src={iconExit}
           alt="icon exit"
@@ -26,6 +26,7 @@ export default function OverlayCard({
           className="cursor-pointer"
         />
         <h2 className="text-xl font-bold text-center">{title}</h2>
+        <div></div>
       </div>
 
       <form onSubmit={onSubmit} className="flex flex-col gap-4">

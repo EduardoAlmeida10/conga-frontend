@@ -37,7 +37,7 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden gap-5 pr-5">
+    <div className="flex h-screen overflow-hidden gap-3">
       {getSidebar()}
       <main className="flex-1 overflow-y-auto p-5">
         <PageHeader title={getTitle()} nameUser={name} date={today} />

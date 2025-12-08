@@ -168,7 +168,7 @@ export default function CollaboratorDashboard() {
               pageCount={pageCountProducerProductionRequests}
             >
               <div className="mb-4 flex justify-between items-center w-full">
-                <DataTableTextFilter placeholder="Buscar requests" />
+                <DataTableTextFilter placeholder="Buscar pendências" />
                 <DataTableColumnsVisibilityDropdown />
               </div>
               <DataTableContent />
