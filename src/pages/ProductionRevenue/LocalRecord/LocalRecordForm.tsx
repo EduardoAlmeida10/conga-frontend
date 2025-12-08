@@ -23,7 +23,7 @@ export default function LocalRecordForm({ record = null, onClose, onSaved }: Pro
       setGrossQuantity(record.grossQuantity.toFixed(2));
       setConsumedQuantity(record.consumedQuantity.toFixed(2));
     } else {
-      setDate(new Date().toISOString().substring(0, 10)); 
+      setDate(""); 
       setGrossQuantity("");
       setConsumedQuantity("");
     }
@@ -89,7 +89,7 @@ export default function LocalRecordForm({ record = null, onClose, onSaved }: Pro
       <div className="flex flex-col gap-3">
         
         <InputField
-          label="Data"
+          label="Data *"
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
@@ -98,7 +98,7 @@ export default function LocalRecordForm({ record = null, onClose, onSaved }: Pro
         />
         
         <InputField
-          label="Total Produzido (L)"
+          label="Total Produzido (L) *"
           type="number"
           value={grossQuantity}
           onChange={(e) => setGrossQuantity(e.target.value)}

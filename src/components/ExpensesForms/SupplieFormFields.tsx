@@ -40,9 +40,9 @@ export function SupplieFormFields({
       />
       <InputCurrency
         label="Valor"
-        value={formData.value || ""}
-        onChange={(newValue) => handleFormChange("value", newValue)}
-        error={errors?.value}
+        value={formData.unitPrice || ""}
+        onChange={(newValue) => handleFormChange("unitPrice", newValue)}
+        error={errors?.unitPrice}
         required
       />
     </>
