@@ -45,7 +45,7 @@ const RecordItem: React.FC<{ item: RecentRecord }> = ({ item }) => {
 
       <button
         onClick={handleNavigation}
-        className="flex items-center text-blue-600 hover:text-blue-800 transition duration-150 text-sm font-medium"
+        className="flex items-center text-blue-600 hover:text-blue-800 transition duration-150 text-sm font-medium cursor-pointer"
       >
         Ver Mais
         <AiOutlineArrowRight className="w-4 h-4 ml-1" />

@@ -11,7 +11,7 @@ export function MonthYearPicker({ value, onChange }: MonthYearPickerProps) {
   return (
     <div className="flex gap-2">
       <select
-        className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm
+        className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm
                    outline-none transition focus:border-black focus:ring-1 focus:ring-black w-30"
         value={month}
         onChange={(e) => onChange(`${year}-${e.target.value}`)}
