@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Card,
   CardContent,
@@ -13,71 +14,108 @@ import {
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/ui/chart";
 import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-export const description = "A stacked bar chart with a legend";
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-];
+
+interface ChartBarStackedProps {
+  data: {
+    month: string;
+    local: number;
+    producer: number;
+    total: number;
+  }[];
+  isLoading?: boolean;
+}
+
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  local: {
+    label: "Produção Local",
     color: "var(--chart-1)",
   },
-  mobile: {
-    label: "Mobile",
+  producer: {
+    label: "Produtor",
     color: "var(--chart-2)",
   },
 } satisfies ChartConfig;
-export function ChartBarStacked() {
+
+const CustomTooltipContent = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    const dataItem = payload[0].payload;
+
+    const total = Number(dataItem.total).toLocaleString("pt-BR");
+
+    return (
+      <div className="rounded-lg border bg-white p-2 shadow-sm text-sm">
+        <p className="font-semibold">{label}</p>
+
+        <p className="text-muted-foreground mb-1">Total: {total} Litros</p>
+
+        {payload.map((entry: any, index: number) => {
+          const dataKey = entry.name as keyof typeof chartConfig;
+          const friendlyLabel = chartConfig[dataKey]?.label || entry.name;
+
+          return (
+            <div
+              key={`item-${index}`}
+              className="flex justify-between items-center"
+              style={{ color: entry.color }}
+            >
+              <span className="capitalize">{friendlyLabel}:</span>
+              <span className="font-medium ml-2">
+                {Number(entry.value).toLocaleString("pt-BR")} Litros
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  return null;
+};
+
+export function ChartBarStacked({
+  data,
+  isLoading = false,
+}: ChartBarStackedProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Bar Chart - Stacked + Legend</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Produção por Mês</CardTitle>
+        <CardDescription>Local x Produtor</CardDescription>
       </CardHeader>
+
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
+          <BarChart data={data} accessibilityLayer>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="month"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
             />
-            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+            <ChartTooltip
+              // 💡 SOLUÇÃO: Aumenta a largura mínima do container do tooltip
+              wrapperStyle={{ minWidth: 200, padding: 0 }}
+              content={<CustomTooltipContent chartConfig={chartConfig} />}
+            />
             <ChartLegend content={<ChartLegendContent />} />
-            <Bar
-              dataKey="desktop"
-              stackId="a"
-              fill="var(--color-desktop)"
-              radius={[0, 0, 4, 4]}
-            />
-            <Bar
-              dataKey="mobile"
-              stackId="a"
-              fill="var(--color-mobile)"
-              radius={[4, 4, 0, 0]}
-            />
+            <Bar dataKey="local" stackId="a" fill="var(--color-local)" />
+            <Bar dataKey="producer" stackId="a" fill="var(--color-producer)" />
           </BarChart>
         </ChartContainer>
       </CardContent>
+
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 months
-        </div>
+        {isLoading ? (
+          <span className="text-muted-foreground">Carregando dados...</span>
+        ) : (
+          <div className="flex gap-2 leading-none font-medium">
+            Distribuição mensal <TrendingUp className="h-4 w-4" />
+          </div>
+        )}
       </CardFooter>
     </Card>
   );
