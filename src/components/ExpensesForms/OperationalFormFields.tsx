@@ -17,7 +17,7 @@ export function OperationalFormFields({
   return (
     <>
       <InputField
-        label="Data"
+        label="Data*"
         type="date"
         value={formData.date || ""}
         onChange={(e) => handleFormChange("date", e.target.value)}
@@ -26,7 +26,7 @@ export function OperationalFormFields({
       />
       <SelectField
         id="type"
-        title="Tipo"
+        title="Tipo*"
         value={formData.type || OperationalTypes.HIGIENE}
         onChange={(e) =>
           handleFormChange("type", e.target.value as OperationalTypes)
@@ -39,7 +39,7 @@ export function OperationalFormFields({
         </option>
       </SelectField>
       <InputCurrency
-        label="Valor"
+        label="Valor*"
         value={formData.value || ""}
         onChange={(newValue) => handleFormChange("value", newValue)}
         error={errors?.value}
@@ -50,7 +50,6 @@ export function OperationalFormFields({
         value={formData.description || ""}
         onChange={(e) => handleFormChange("description", e.target.value)}
         error={errors?.description}
-        required
       />
     </>
   );

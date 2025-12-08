@@ -17,7 +17,7 @@ export function PersonnelFormFields({
   return (
     <>
       <InputField
-        label="Data"
+        label="Data*"
         type="date"
         value={formData.date || ""}
         onChange={(e) => handleFormChange("date", e.target.value)}
@@ -26,7 +26,7 @@ export function PersonnelFormFields({
       />
       <SelectField
         id="type"
-        title="Tipo"
+        title="Tipo*"
         value={formData.type || CostType.SALARIOS_FIXOS}
         onChange={(e) => handleFormChange("type", e.target.value as CostType)}
         required
@@ -37,7 +37,7 @@ export function PersonnelFormFields({
         <option value="Benefícios">Benefícios</option>
       </SelectField>
       <InputCurrency
-        label="Valor"
+        label="Valor*"
         name="price"
         value={formData.value || ""}
         onChange={(newValue) => handleFormChange("value", newValue)}

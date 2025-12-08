@@ -77,7 +77,7 @@ export default function ProductoresRecordForms({ record = null, onClose, onSaved
     >
       <div className="flex flex-col gap-3">
         <InputField
-          label="Data"
+          label="Data*"
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
@@ -85,14 +85,14 @@ export default function ProductoresRecordForms({ record = null, onClose, onSaved
           required
         />
         <InputField
-          label="Produtor"
+          label="Produtor*"
           value={producerName}
           onChange={(e) => setProducerName(e.target.value)}
           error={errors.producerName}
           required
         />
         <InputField
-          label="Quantidade (L)"
+          label="Quantidade (L)*"
           type="number"
           value={totalQuantity}
           onChange={(e) => setTotalQuantity(e.target.value)}

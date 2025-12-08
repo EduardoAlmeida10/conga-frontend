@@ -17,7 +17,7 @@ export function UtilityFormFields({
   return (
     <>
       <InputField
-        label="Data"
+        label="Data*"
         type="date"
         value={formData.date || ""}
         onChange={(e) => handleFormChange("date", e.target.value)}
@@ -26,7 +26,7 @@ export function UtilityFormFields({
       />
       <SelectField
         id="type"
-        title="Tipo"
+        title="Tipo*"
         value={formData.type}
         onChange={(e) =>
           handleFormChange("type", e.target.value as UtilityTypes)
@@ -39,7 +39,7 @@ export function UtilityFormFields({
         <option value={UtilityTypes.TELEFONE}>Telefone</option>
       </SelectField>
       <InputCurrency
-        label="Valor"
+        label="Valor*"
         value={formData.value || ""}
         onChange={(newValue) => handleFormChange("value", newValue)}
         error={errors?.value}

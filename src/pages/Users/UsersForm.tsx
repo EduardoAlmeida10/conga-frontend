@@ -130,14 +130,14 @@ export default function UsersForm({
     >
       <div className="flex flex-col gap-3">
         <InputField
-          label="Nome"
+          label="Nome*"
           value={name}
           onChange={(e) => setName(e.target.value)}
           error={errors?.name}
           required
         />
         <InputField
-          label="Usuário"
+          label="Usuário*"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           error={errors?.username}
@@ -147,7 +147,7 @@ export default function UsersForm({
         {!selectedUser && (
           <>
             <InputField
-              label="Senha"
+              label="Senha*"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -155,7 +155,7 @@ export default function UsersForm({
               required
             />
             <InputField
-              label="Confirmar Senha"
+              label="Confirmar Senha*"
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}

@@ -15,7 +15,7 @@ export function SupplieFormFields({
   return (
     <>
       <InputField
-        label="Nome do insumo"
+        label="Nome do insumo*"
         type="text"
         value={formData.name || ""}
         onChange={(e) => handleFormChange("name", e.target.value)}
@@ -23,7 +23,7 @@ export function SupplieFormFields({
         required
       />
       <InputField
-        label="Data"
+        label="Data*"
         type="date"
         value={formData.date || ""}
         onChange={(e) => handleFormChange("date", e.target.value)}
@@ -31,7 +31,7 @@ export function SupplieFormFields({
         required
       />
       <InputField
-        label="Quantidade"
+        label="Quantidade*"
         type="text"
         value={formData.quantity || ""}
         onChange={(e) => handleFormChange("quantity", Number(e.target.value))}
@@ -39,7 +39,7 @@ export function SupplieFormFields({
         required
       />
       <InputCurrency
-        label="Valor"
+        label="Valor*"
         value={formData.unitPrice || ""}
         onChange={(newValue) => handleFormChange("unitPrice", newValue)}
         error={errors?.unitPrice}
