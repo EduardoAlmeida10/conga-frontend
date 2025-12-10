@@ -37,10 +37,5 @@ export function mapDetailedToRelatorio(
       tipo: "receita",
       valor: data.producerProduction,
     },
-    {
-      categoria: "Produção Total",
-      tipo: "receita",
-      valor: data.totalProduction,
-    },
   ];
 }

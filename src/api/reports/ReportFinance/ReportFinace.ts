@@ -18,7 +18,6 @@ export interface FinancialDetailed {
   operational: number;
   localProduction: number;
   producerProduction: number;
-  totalProduction: number;
 }
 
 export interface FinancialDailyEntry {
