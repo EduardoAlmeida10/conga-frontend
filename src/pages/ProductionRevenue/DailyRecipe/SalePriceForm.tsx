@@ -1,6 +1,6 @@
 import type { NewSalePriceDto } from "@/api/sale-price/salePrice";
-import { InputCurrency } from "@/components/InputCurrency";
 import OverlayCard from "@/components/Overlay/OverlayCard";
+import { RightAlignedInput } from "@/components/RightAlignedInput";
 import { useCurrentSalePrice } from "@/hooks/productions/sale_price/useCurrentSalePrice";
 import { useSaveSalePrice } from "@/hooks/productions/sale_price/useSaveSalePrice";
 import React, { useCallback, useEffect, useState } from "react";
@@ -36,7 +36,7 @@ export default function SalePriceForm({ onClose, onSaved }: Props) {
   const validate = useCallback(() => {
     const e: Record<string, string> = {};
 
-    const value = parseFloat(newPrice.replace(",", "."));
+    const value = Number(newPrice) / 100;
 
     if (isNaN(value) || value <= 0) {
       e.newPrice =
@@ -53,7 +53,7 @@ export default function SalePriceForm({ onClose, onSaved }: Props) {
     e.preventDefault();
     if (!validate()) return;
 
-    const priceValue = parseFloat(newPrice.replace(",", "."));
+    const priceValue = Number(newPrice) / 100;
 
     const payload: NewSalePriceDto = {
       value: priceValue,
@@ -97,7 +97,7 @@ export default function SalePriceForm({ onClose, onSaved }: Props) {
           )}
         </div>
 
-        <InputCurrency
+        <RightAlignedInput
           label="Novo Preço (R$/Litro)"
           value={newPrice}
           placeholder="R$ 0,00"
