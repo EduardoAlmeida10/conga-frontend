@@ -119,6 +119,9 @@ export default function FinancialReport() {
             <DataTableColumnsVisibilityDropdown />
           </div>
           <DataTableContent />
+          <footer className="text-sm text-gray-400">
+            Período: {dateFrom && dateTo ? formatPeriod(dateFrom, dateTo) : "Todos"}
+          </footer>
         </DataTable>
       </div>
 
