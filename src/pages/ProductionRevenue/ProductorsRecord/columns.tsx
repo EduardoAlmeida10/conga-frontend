@@ -21,16 +21,6 @@ export const getProducerProductionColumns = (
   handleDelete: (record: ProducerProduction) => void,
 ): ColumnDef<ProducerProduction>[] => [
   {
-    accessorKey: "date",
-    header: "Data",
-    cell: ({ getValue }) => {
-      const dateStr = getValue<string>();
-      const [year, month, day] = dateStr.split("-");
-      return `${day}/${month}/${year}`;
-    },
-    meta: { nameInFilters: "Data" },
-  },
-  {
     accessorKey: "producerName",
     header: "Produtor",
     meta: { nameInFilters: "Produtor" },
@@ -40,6 +30,16 @@ export const getProducerProductionColumns = (
     header: "Vendável (L)",
     cell: ({ getValue }) => `${getValue<number>()} L`,
     meta: { nameInFilters: "Vendável" },
+  },
+  {
+    accessorKey: "date",
+    header: "Data",
+    cell: ({ getValue }) => {
+      const dateStr = getValue<string>();
+      const [year, month, day] = dateStr.split("-");
+      return `${day}/${month}/${year}`;
+    },
+    meta: { nameInFilters: "Data" },
   },
   {
     id: "actions",

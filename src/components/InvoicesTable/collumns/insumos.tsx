@@ -6,9 +6,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { BaseExpense } from "@/hooks/useExpenseData";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Edit2Icon, EllipsisIcon, Trash2Icon } from "lucide-react";
+import type { BaseExpense } from "../../../hooks/expenses/useExpenseData";
 
 export const insumosColumns = (
   onEdit: (expense: BaseExpense) => void,
@@ -20,6 +20,40 @@ export const insumosColumns = (
       <DataTableColumnHeader column={column} title="Nome do Insumo" />
     ),
     meta: { nameInFilters: "Nome do Insumo" },
+  },
+
+  {
+    accessorKey: "quantity",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Quantidade" />
+    ),
+    cell: ({ getValue }) => {
+      const value = parseFloat(getValue<string>() || "0");
+      return value;
+    },
+    meta: { nameInFilters: "Quantidade" },
+  },
+  {
+    accessorKey: "unitPrice",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Preço Unitário (R$)" />
+    ),
+    cell: ({ getValue }) => {
+      const value = parseFloat(getValue<string>() || "0");
+      return `R$ ${value.toFixed(2).replace(".", ",")}`;
+    },
+    meta: { nameInFilters: "Preço Unitário" },
+  },
+  {
+    accessorKey: "totalCost",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Custo Total (R$)" />
+    ),
+    cell: ({ getValue }) => {
+      const value = parseFloat(getValue<string>() || "0");
+      return `R$ ${value.toFixed(2).replace(".", ",")}`;
+    },
+    meta: { nameInFilters: "Custo Total" },
   },
   {
     accessorKey: "date",
@@ -34,31 +68,6 @@ export const insumosColumns = (
       return new Date(year, month - 1, day).toLocaleDateString("pt-BR");
     },
     meta: { nameInFilters: "Data" },
-  },
-  {
-    accessorKey: "quantity",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Quantidade" />
-    ),
-    cell: ({ getValue }) => {
-      const value = parseFloat(getValue<string>() || "0");
-      return `R$ ${value.toFixed(2).replace(".", ",")}`;
-    },
-    meta: { nameInFilters: "Quantidade" },
-  },
-  {
-    accessorKey: "unitPrice",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Preço Unitário (R$)" />
-    ),
-    meta: { nameInFilters: "Preço Unitário" },
-  },
-  {
-    accessorKey: "totalCost",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Custo Total (R$)" />
-    ),
-    meta: { nameInFilters: "Custo Total" },
   },
   {
     id: "actions",
@@ -81,10 +90,16 @@ export const insumosColumns = (
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuItem className="cursor-pointer" onSelect={() => onEdit(expense)}>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={() => onEdit(expense)}
+              >
                 <Edit2Icon className="size-4" /> Edit
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer" onSelect={() => onDelete(expense)}>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={() => onDelete(expense)}
+              >
                 <Trash2Icon className="size-4" /> Delete
               </DropdownMenuItem>
             </DropdownMenuContent>

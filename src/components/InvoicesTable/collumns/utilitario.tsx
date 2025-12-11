@@ -6,9 +6,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { BaseExpense } from "@/hooks/useExpenseData";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Edit2Icon, EllipsisIcon, Trash2Icon } from "lucide-react";
+import type { BaseExpense } from "../../../hooks/expenses/useExpenseData";
 export const utilitarioColumns = (
   onEdit: (expense: BaseExpense) => void,
   onDelete: (expense: BaseExpense) => void,
@@ -19,20 +19,6 @@ export const utilitarioColumns = (
       <DataTableColumnHeader column={column} title="Tipo" />
     ),
     meta: { nameInFilters: "Tipo" },
-  },
-  {
-    accessorKey: "date",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Data" />
-    ),
-    cell: ({ getValue }) => {
-      const date = getValue<string>();
-      if (!date || date === "0000-00-00") return "-";
-
-      const [year, month, day] = date.split("-").map(Number);
-      return new Date(year, month - 1, day).toLocaleDateString("pt-BR");
-    },
-    meta: { nameInFilters: "Data" },
   },
   {
     accessorKey: "value",
@@ -51,6 +37,20 @@ export const utilitarioColumns = (
       <DataTableColumnHeader column={column} title="Observações" />
     ),
     meta: { nameInFilters: "Observações" },
+  },
+  {
+    accessorKey: "date",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Data" />
+    ),
+    cell: ({ getValue }) => {
+      const date = getValue<string>();
+      if (!date || date === "0000-00-00") return "-";
+
+      const [year, month, day] = date.split("-").map(Number);
+      return new Date(year, month - 1, day).toLocaleDateString("pt-BR");
+    },
+    meta: { nameInFilters: "Data" },
   },
   {
     id: "actions",
@@ -73,10 +73,16 @@ export const utilitarioColumns = (
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuItem className="cursor-pointer" onSelect={() => onEdit(expense)}>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={() => onEdit(expense)}
+              >
                 <Edit2Icon className="size-4" /> Edit
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer" onSelect={() => onDelete(expense)}>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={() => onDelete(expense)}
+              >
                 <Trash2Icon className="size-4" /> Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
