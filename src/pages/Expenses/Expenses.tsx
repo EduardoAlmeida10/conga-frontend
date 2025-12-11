@@ -23,7 +23,7 @@ import {
 import { useExpenseModal } from "../../hooks/expenses/useExpenseModal";
 import { useLocation } from "react-router-dom";
 
-const costTypes = ["Pessoal", "Utilitario", "Insumos", "Operacionais"];
+const costTypes = ["Pessoal", "Utilitários", "Insumos", "Operacionais"];
 type ExpenseType = "Pessoal" | "Operacionais" | "Utilitario" | "Insumos";
 
 export default function ExpensesTable() {

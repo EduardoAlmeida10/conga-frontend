@@ -18,7 +18,8 @@ export const getProducerProductionColumns =
     },
     {
       accessorKey: "totalQuantity",
-      header: "Vendável (Litros)",
+      header: "Vendável (L)",
+      cell: ({ getValue }) => `${getValue<number>()} L`,
     },
     {
       accessorKey: "date",
@@ -41,7 +42,8 @@ export const getProducerProductionRequestColumns = (
   },
   {
     accessorKey: "totalQuantity",
-    header: "Vendável (Litros)",
+    header: "Vendável (L)",
+    cell: ({ getValue }) => `${getValue<number>()} L`,
   },
   {
     accessorKey: "date",

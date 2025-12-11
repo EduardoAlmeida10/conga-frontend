@@ -8,8 +8,8 @@ import LocalRecord from "./LocalRecord/LocalRecord";
 import { useLocation } from "react-router-dom";
 
 const ConstTypes = [
-  "Receita diária",
-  "Registro total",
+  "Receita Diária",
+  "Registro Total",
   "Registro Local",
   "Registro Produtores",
 ];
@@ -31,8 +31,8 @@ export default function ProductionRevenue() {
     <div className="p-6 w-full max-w-6xl mx-auto">
       <ConstTypeTabs tabs={ConstTypes} onSelect={handleTypeChange} selected={selectedType} />
       <div>
-        {selectedType === "Receita diária" && <DailyRecipe />}
-        {selectedType === "Registro total" && <TotalRecord />}
+        {selectedType === "Receita Diária" && <DailyRecipe />}
+        {selectedType === "Registro Total" && <TotalRecord />}
         {selectedType === "Registro Local" && <LocalRecord />}
         {selectedType === "Registro Produtores" && <ProductorsRecord />}
       </div>

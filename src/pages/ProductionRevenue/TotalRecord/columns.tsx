@@ -6,11 +6,11 @@ export const dailyProductionColumns: ColumnDef<DailyProduction>[] = [
   {
     accessorKey: "grossQuantity",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Produção Local(L)" />
+      <DataTableColumnHeader column={column} title="Produção Local (L)" />
     ),
     cell: ({ row }) => {
       const value = Number(row.getValue("grossQuantity"));
-      return <span>{value.toFixed(2)}</span>;
+      return <span>{value.toFixed(2)} L</span>;
     },
   },
   {
@@ -20,7 +20,7 @@ export const dailyProductionColumns: ColumnDef<DailyProduction>[] = [
     ),
     cell: ({ row }) => {
       const value = Number(row.getValue("consumedQuantity"));
-      return <span>{value.toFixed(2)}</span>;
+      return <span>{value.toFixed(2)} L</span>;
     },
   },
   {
@@ -30,17 +30,17 @@ export const dailyProductionColumns: ColumnDef<DailyProduction>[] = [
     ),
     cell: ({ row }) => {
       const value = Number(row.getValue("totalQuantity"));
-      return <span>{value.toFixed(2)}</span>;
+      return <span>{value.toFixed(2)} L</span>;
     },
   },
   {
     accessorKey: "totalProducers",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Outros Produtores" />
+      <DataTableColumnHeader column={column} title="Outros Produtores (L)" />
     ),
     cell: ({ row }) => {
       const value = Number(row.getValue("totalProducers"));
-      return <span>{value}</span>;
+      return <span>{value} L</span>;
     },
   },
   {

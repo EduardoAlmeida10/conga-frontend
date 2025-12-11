@@ -84,7 +84,7 @@ export default function FinancialReport() {
 
       <div className="flex justify-between">
         <CardAnalysis
-          title="Receita total"
+          title="Receita Total"
           value={dataOverview?.totalReceives ?? 0}
           color="bg-blue-500"
           is="valor"

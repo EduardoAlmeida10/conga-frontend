@@ -163,7 +163,7 @@ export default function DailyRecipe() {
   return (
     <div className="p-6 w-full">
       <Button onClick={() => setIsFormOpen(true)}>
-        Definir preço do Leite
+        Definir Preço do Leite
       </Button>
       <div className="pt-8 pb-8">
         <OverviewSection

@@ -38,7 +38,7 @@ export const pessoalColumns = (
   {
     accessorKey: "value",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Valor" />
+      <DataTableColumnHeader column={column} title="Valor (R$)" />
     ),
     cell: ({ getValue }) => {
       const value = parseFloat(getValue<string>() || "0");
