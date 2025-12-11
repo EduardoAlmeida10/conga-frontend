@@ -136,7 +136,7 @@ export default function RevenueAnalysis() {
           defaultActiveKey="totalPrice"
           reverseDates={false}
           showCurrency
-          compactNumbers={true}
+          compactNumbers={false}
         />
       </div>
 
