@@ -29,7 +29,7 @@ const defaultFormValues: Record<string, any> = {
   Operacionais: {
     type: OperationalTypes.HIGIENE,
   },
-  Utilitario: {
+  Utilitários: {
     type: UtilityTypes.AGUA,
   },
 };
@@ -73,6 +73,7 @@ export default function ExpenseOverlay({
     const schema = expenseValidators[type];
 
     try {
+      console.log(formData)
       const parsed = schema.parse(formData);
 
       if (isEditMode && expenseToEdit) {
