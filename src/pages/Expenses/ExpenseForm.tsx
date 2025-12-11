@@ -12,7 +12,7 @@ import { UtilityTypes } from "@/api/costs/utility-costApi";
 import { expenseValidators } from "@/lib/validation";
 import { ZodError } from "zod";
 
-type ExpenseType = "Pessoal" | "Operacionais" | "Utilitario" | "Insumos";
+type ExpenseType = "Pessoal" | "Operacionais" | "Utilitários" | "Insumos";
 
 interface ExpenseOverlayProps {
   type: ExpenseType;
@@ -118,7 +118,7 @@ export default function ExpenseOverlay({
             errors={errors}
           />
         );
-      case "Utilitario":
+      case "Utilitários":
         return (
           <UtilityFormFields
             formData={formData}

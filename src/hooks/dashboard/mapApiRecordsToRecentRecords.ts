@@ -56,12 +56,12 @@ export function mapApiRecordsToRecentRecords(api: DashboardRecords): RecentRecor
 
   if (api.lastUtilityCost) {
     let expenseCategory = "";
-    if (api.lastUtilityCost.expense?.category === "UTILITY") expenseCategory = "Utilitario";
+    if (api.lastUtilityCost.expense?.category === "UTILITY") expenseCategory = "Utilitários";
     records.push({
       id: api.lastUtilityCost.id,
       type: expenseCategory,
       label: "Utilitários",
-      details: `${api.lastUtilityCost.type ?? "Utilitário"} – R$ ${Number(api.lastUtilityCost.expense?.value ?? 0).toFixed(2)}`,
+      details: `${api.lastUtilityCost.type ?? "Utilitários"} – R$ ${Number(api.lastUtilityCost.expense?.value ?? 0).toFixed(2)}`,
       route: "/despesas",
       iconBgColor: "text-blue-500",
     });

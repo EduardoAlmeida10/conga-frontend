@@ -6,6 +6,6 @@ import { utilitySchema } from "./utility.schema";
 export const expenseValidators: Record<string, any> = {
   Pessoal: personnelSchema,
   Operacionais: operationalSchema,
-  Utilitario: utilitySchema,
+  Utilitários: utilitySchema,
   Insumos: supplieSchema,
 };

@@ -21,7 +21,7 @@ export interface BaseExpense {
 const deleteFunctionsMap = {
   Pessoal: deletePersonnelCost,
   Operacionais: deleteOperationalCost,
-  Utilitario: deleteUtilityCost,
+  Utilitários: deleteUtilityCost,
   Insumos: deleteSupplieCost,
 };
 
@@ -48,7 +48,7 @@ export function useExpenseData(
 
   const pessoal = usePersonnelCosts(filters, type === "Pessoal");
   const operacionais = useOperationalCosts(filters, type === "Operacionais");
-  const utilitario = useUtilityCosts(filters, type === "Utilitario");
+  const utilitario = useUtilityCosts(filters, type === "Utilitários");
   const insumos = useSupplieCosts(filters, type === "Insumos");
 
   const selectedHook =
@@ -56,7 +56,7 @@ export function useExpenseData(
       ? pessoal
       : type === "Operacionais"
         ? operacionais
-        : type === "Utilitario"
+        : type === "Utilitários"
           ? utilitario
           : type === "Insumos"
             ? insumos

@@ -42,7 +42,7 @@ const apiFunctionsMap = {
     get: findOperationalCostById,
     getAll: findAllOperationalCosts,
   },
-  Utilitario: {
+  Utilitários: {
     create: registerUtilityCost,
     update: updateUtilityCost,
     delete: deleteUtilityCost,

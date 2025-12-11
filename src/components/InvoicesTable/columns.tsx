@@ -5,7 +5,7 @@ import { pessoalColumns } from "./collumns/pessoal";
 import { utilitarioColumns } from "./collumns/utilitario";
 
 export function getExpenseColumns(
-  type: "Pessoal" | "Operacionais" | "Utilitario" | "Insumos",
+  type: "Pessoal" | "Operacionais" | "Utilitários" | "Insumos",
   onEdit: (expense: BaseExpense) => void,
   onDelete: (expense: BaseExpense) => void,
 ) {
@@ -14,7 +14,7 @@ export function getExpenseColumns(
       return pessoalColumns(onEdit, onDelete);
     case "Operacionais":
       return operacionaisColumns(onEdit, onDelete);
-    case "Utilitario":
+    case "Utilitários":
       return utilitarioColumns(onEdit, onDelete);
     case "Insumos":
       return insumosColumns(onEdit, onDelete);
