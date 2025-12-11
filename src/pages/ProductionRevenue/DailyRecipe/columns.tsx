@@ -12,10 +12,14 @@ export const dailyRecipeColumns: ColumnDef<DailyRecipe>[] = [
       const value = row.original.total;
       return (
         <div className="text font-bold">
-          {value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+          {value.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          })}
         </div>
       );
     },
+    meta: { nameInFilters: "Total" },
   },
   {
     accessorKey: "tanque",
@@ -26,6 +30,7 @@ export const dailyRecipeColumns: ColumnDef<DailyRecipe>[] = [
       const value = row.original.tanque;
       return <div className="text">{value.toFixed(0)} L</div>;
     },
+    meta: { nameInFilters: "Tanque" },
   },
   {
     accessorKey: "precoLeite",
@@ -36,10 +41,14 @@ export const dailyRecipeColumns: ColumnDef<DailyRecipe>[] = [
       const value = row.original.precoLeite;
       return (
         <div className="text">
-          {value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+          {value.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          })}
         </div>
       );
     },
+    meta: { nameInFilters: "Preço Leite" },
   },
   {
     accessorKey: "date",
@@ -50,5 +59,6 @@ export const dailyRecipeColumns: ColumnDef<DailyRecipe>[] = [
       const d = row.original.date;
       return d.toLocaleDateString("pt-BR");
     },
+    meta: { nameInFilters: "Data" },
   },
 ];

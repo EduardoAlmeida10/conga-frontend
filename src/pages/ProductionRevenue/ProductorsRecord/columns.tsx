@@ -1,6 +1,5 @@
-import type { ColumnDef } from "@tanstack/react-table";
-import { Edit2Icon, EllipsisIcon, Trash2Icon } from "lucide-react";
 import type { ProducerProduction } from "@/api/productions/productionProducer";
+import type { ProducerProductionRequest } from "@/api/productions/productionProducerRequest";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,8 +7,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { ProducerProductionRequest } from "@/api/productions/productionProducerRequest";
-import { CheckIcon, XIcon } from "lucide-react";
+import type { ColumnDef } from "@tanstack/react-table";
+import {
+  CheckIcon,
+  Edit2Icon,
+  EllipsisIcon,
+  Trash2Icon,
+  XIcon,
+} from "lucide-react";
 
 export const getProducerProductionColumns = (
   handleEdit: (record: ProducerProduction) => void,
@@ -23,15 +28,18 @@ export const getProducerProductionColumns = (
       const [year, month, day] = dateStr.split("-");
       return `${day}/${month}/${year}`;
     },
+    meta: { nameInFilters: "Data" },
   },
   {
     accessorKey: "producerName",
     header: "Produtor",
+    meta: { nameInFilters: "Produtor" },
   },
   {
     accessorKey: "totalQuantity",
     header: "Vendável (L)",
     cell: ({ getValue }) => `${getValue<number>()} L`,
+    meta: { nameInFilters: "Vendável" },
   },
   {
     id: "actions",

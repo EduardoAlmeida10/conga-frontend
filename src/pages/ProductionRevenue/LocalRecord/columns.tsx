@@ -1,12 +1,12 @@
-import { Button } from "@/components/ui/button";
 import { DataTableColumnHeader } from "@/components/DataTable/DataTableColumnHeader";
-import type { LocalRecord } from "@/entities/LocalRecord";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { LocalRecord } from "@/entities/LocalRecord";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Edit2Icon, EllipsisIcon, Trash2Icon } from "lucide-react";
 
@@ -23,6 +23,7 @@ export const getLocalRecordColumns = (
       const value = row.original.grossQuantity;
       return <div className="text">{value.toFixed(0)} L</div>;
     },
+    meta: { nameInFilters: "Produção Local" },
   },
 
   {
@@ -34,6 +35,7 @@ export const getLocalRecordColumns = (
       const value = row.original.consumedQuantity;
       return <div className="text">{value.toFixed(0)} L</div>;
     },
+    meta: { nameInFilters: "Consumo Local" },
   },
 
   {
@@ -48,6 +50,7 @@ export const getLocalRecordColumns = (
       const value = row.original.totalQuantity;
       return <div className="text">{value.toFixed(0)} L</div>;
     },
+    meta: { nameInFilters: "Produção Total Tanque" },
   },
 
   {
@@ -59,6 +62,7 @@ export const getLocalRecordColumns = (
       const d = row.original.date;
       return d.toLocaleDateString("pt-BR");
     },
+    meta: { nameInFilters: "Data" },
   },
   {
     id: "actions",
@@ -102,3 +106,4 @@ export const getLocalRecordColumns = (
     },
   },
 ];
+

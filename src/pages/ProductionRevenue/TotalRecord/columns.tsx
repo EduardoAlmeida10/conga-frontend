@@ -1,6 +1,6 @@
-import type { ColumnDef } from "@tanstack/react-table";
 import type { DailyProduction } from "@/api/productions/dailyProduction";
 import { DataTableColumnHeader } from "@/components/DataTable/DataTableColumnHeader";
+import type { ColumnDef } from "@tanstack/react-table";
 
 export const dailyProductionColumns: ColumnDef<DailyProduction>[] = [
   {
@@ -12,6 +12,7 @@ export const dailyProductionColumns: ColumnDef<DailyProduction>[] = [
       const value = Number(row.getValue("grossQuantity"));
       return <span>{value.toFixed(2)} L</span>;
     },
+    meta: { nameInFilters: "Produção Local" },
   },
   {
     accessorKey: "consumedQuantity",
@@ -22,6 +23,7 @@ export const dailyProductionColumns: ColumnDef<DailyProduction>[] = [
       const value = Number(row.getValue("consumedQuantity"));
       return <span>{value.toFixed(2)} L</span>;
     },
+    meta: { nameInFilters: "Consumido" },
   },
   {
     accessorKey: "totalQuantity",
@@ -32,6 +34,7 @@ export const dailyProductionColumns: ColumnDef<DailyProduction>[] = [
       const value = Number(row.getValue("totalQuantity"));
       return <span>{value.toFixed(2)} L</span>;
     },
+    meta: { nameInFilters: "Produção Total" },
   },
   {
     accessorKey: "totalProducers",
@@ -42,6 +45,7 @@ export const dailyProductionColumns: ColumnDef<DailyProduction>[] = [
       const value = Number(row.getValue("totalProducers"));
       return <span>{value} L</span>;
     },
+    meta: { nameInFilters: "Outros Produtores" },
   },
   {
     accessorKey: "date",
@@ -53,5 +57,6 @@ export const dailyProductionColumns: ColumnDef<DailyProduction>[] = [
       const formatted = new Date(iso).toLocaleDateString("pt-BR");
       return <span>{formatted}</span>;
     },
+    meta: { nameInFilters: "Data" },
   },
 ];

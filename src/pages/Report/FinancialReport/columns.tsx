@@ -9,14 +9,14 @@ export type Relatorio = {
 
 export const relatorioColumns: ColumnDef<Relatorio>[] = [
   {
-    accessorKey: "categoria",
+    accessorKey: "Categoria",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Categoria" />
     ),
     cell: ({ row }) => <div>{row.original.categoria}</div>,
   },
   {
-    accessorKey: "tipo",
+    accessorKey: "Tipo",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Tipo" />
     ),
@@ -26,7 +26,7 @@ export const relatorioColumns: ColumnDef<Relatorio>[] = [
     },
   },
   {
-    accessorKey: "valor",
+    accessorKey: "Valor",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Valor (R$)" />
     ),
