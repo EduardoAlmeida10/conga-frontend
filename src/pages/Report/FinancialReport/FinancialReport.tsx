@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
 import CardAnalysis from "@/components/CardAnalysis";
-import { TrendingUp, TrendingDown, DollarSign } from "lucide-react";
-import { DataTable } from "@/components/DataTable";
-import { DataTableContent } from "@/components/DataTable/DataTableContent";
-import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
-import { DataTableTextFilter } from "@/components/DataTable/DataTableTextFilter";
-import { relatorioColumns } from "./columns";
-import { useFinancialOverview } from "@/hooks/reports/ReportFinance/useFetchFinancialOverview";
-import { useFetchFinancialDetailed } from "@/hooks/reports/ReportFinance/useFetchFinancialDetailed";
-import { useFetchDailyFinancial } from "@/hooks/reports/ReportFinance/useFetchDailyFinancial";
-import { useCompareFinancialPeriods } from "@/hooks/reports/ReportFinance/useCompareFinancialPeriods";
-import { mapDetailedToRelatorio } from "./mappers";
 import { ChartAreaDaily } from "@/components/ChartAreaInteractive";
 import { ChartBarMultiple } from "@/components/ChartBarMultiple";
-import { formatPeriod } from "@/utils/formatters";
+import { DataTable } from "@/components/DataTable";
+import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
+import { DataTableContent } from "@/components/DataTable/DataTableContent";
+import { DataTableTextFilter } from "@/components/DataTable/DataTableTextFilter";
 import { MonthYearPicker } from "@/components/MonthYearPicker";
+import { useCompareFinancialPeriods } from "@/hooks/reports/ReportFinance/useCompareFinancialPeriods";
+import { useFetchDailyFinancial } from "@/hooks/reports/ReportFinance/useFetchDailyFinancial";
+import { useFetchFinancialDetailed } from "@/hooks/reports/ReportFinance/useFetchFinancialDetailed";
+import { useFinancialOverview } from "@/hooks/reports/ReportFinance/useFetchFinancialOverview";
+import { formatPeriod } from "@/utils/formatters";
 import { getCurrentMonthRange } from "@/utils/getCurrentMonth";
+import { DollarSign, TrendingDown, TrendingUp } from "lucide-react";
+import { useEffect, useState } from "react";
+import { relatorioColumns } from "./columns";
+import { mapDetailedToRelatorio } from "./mappers";
 
 export default function FinancialReport() {
   const {dateFrom: initialFrom, dateTo: initialTo} = getCurrentMonthRange()
@@ -66,18 +66,19 @@ export default function FinancialReport() {
           <p>Data Inicial:</p>
           <input
             type="date"
-            className="bg-white h-12 px-3 rounded cursor-pointer"
             value={dateFrom ?? ""}
             onChange={(e) => setDateFrom(e.target.value)}
+            className="bg-white h-12 px-3 rounded cursor-pointer"
           />
         </label>
         <label>
           <p>Data Final:</p>
           <input
             type="date"
-            className="bg-white h-12 px-3 rounded cursor-pointer"
             value={dateTo ?? ""}
+            min={dateFrom ?? undefined}
             onChange={(e) => setDateTo(e.target.value)}
+            className="bg-white h-12 px-3 rounded cursor-pointer"
           />
         </label>
       </header>
