@@ -51,17 +51,19 @@ export default function ProducerProductionRequestForm({
       totalQuantity: Number(totalQuantity),
     };
 
+    try {
     if (request) {
       await update(request.id, dto);
     } else {
       await create(dto);
     }
 
-    const error = request ? updateError : createError;
-    if (!error) {
-      onSaved();
-      onClose();
-    }
+    onSaved();
+    onClose();
+
+  } catch (error) {
+    console.error("Erro ao salvar:", error);
+  }
   };
 
   return (
