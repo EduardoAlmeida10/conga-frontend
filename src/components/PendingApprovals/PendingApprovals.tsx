@@ -44,7 +44,9 @@ const PendingApprovals: React.FC = () => {
                 Nenhuma aprovação pendente.
               </p>
             ) : (
-              requests.map((item) => <PendingItem key={item.id} item={item} />)
+              requests
+                .slice(0, 3)
+                .map((item) => <PendingItem key={item.id} item={item} />)
             )}
           </div>
 
@@ -52,7 +54,7 @@ const PendingApprovals: React.FC = () => {
             <div className="mt-4 pt-4 border-t border-gray-100">
               <button
                 onClick={handleViewAll}
-                className="flex items-center text-blue-600 hover:text-blue-800 transition duration-150 text-base font-semibold mx-auto"
+                className="flex items-center text-blue-600 hover:text-blue-800 transition duration-150 text-base font-semibold mx-auto cursor-pointer"
               >
                 Ver Todos ({totalItems})
                 <AiOutlineArrowRight className="w-5 h-5 ml-1" />

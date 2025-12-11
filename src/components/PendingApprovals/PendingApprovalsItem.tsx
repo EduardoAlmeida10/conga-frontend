@@ -29,7 +29,7 @@ const PendingItem: React.FC<PendingItemProps> = ({ item }) => {
           <p className="text-sm text-gray-500">Data: {formattedDate}</p>
         </div>
 
-        <span className={statusClasses}>{item.status}</span>
+        <span className={statusClasses}>{item.status === "PENDING" ? "PENDENTE" : item.status}</span>
       </div>
     </div>
   );
