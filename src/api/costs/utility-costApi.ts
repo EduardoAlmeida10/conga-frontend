@@ -14,14 +14,14 @@ export interface UtilityCost {
   type: UtilityTypes;
   date: string;
   value: string;
-  observations: string;
+  observations: string | null;
 }
 
 export interface RegisterUtilityCostDto {
   type: UtilityTypes;
   date: string; // formato 'YYYY-MM-DD'
   value: string;
-  observations: string;
+  observations: string | null;
 }
 
 export type UpdateUtilityCostDto = Partial<RegisterUtilityCostDto>;
@@ -32,7 +32,7 @@ export interface UtilityCostFilterDto {
   dateTo?: string; //  'YYYY-MM-DD'
   minValue?: number;
   maxValue?: number;
-  observations?: string;
+  observations?: string | null;
   page?: number;
   limit?: number;
 }

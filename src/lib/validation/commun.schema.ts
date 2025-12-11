@@ -33,10 +33,6 @@ export const unitPriceSchema = z
   .transform(Number)
   .refine((num) => num > 0, "O valor deve ser maior que zero");
 
-export const descriptionSchema = z
-  .string({ error: "A descrição é obrigatória" })
-  .min(5, "A descrição deve ter ao menos 5 caracteres");
+export const descriptionSchema = z.string().optional().nullable();
 
-export const observationSchema = z
-  .string({ error: "A observação é obrigatória" })
-  .min(5, "A observação deve ter ao menos 5 caracteres");
+export const observationSchema = z.string().optional().nullable();

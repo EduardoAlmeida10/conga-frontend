@@ -13,14 +13,14 @@ export interface OperationalCost {
   type: OperationalTypes;
   date: string;
   value: string;
-  description: string;
+  description: string | null;
 }
 
 export interface RegisterOperationalCostDto {
   type: OperationalTypes;
   date: string;
   value: string;
-  description: string;
+  description: string | null;
 }
 
 export type UpdateOperationalCostDto = Partial<RegisterOperationalCostDto>;
@@ -31,7 +31,7 @@ export interface OperationalCostFilterDto {
   dateTo?: string;
   minValue?: number;
   maxValue?: number;
-  description?: string;
+  description?: string | null;
   page?: number;
   limit?: number;
 }

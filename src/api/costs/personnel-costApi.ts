@@ -14,14 +14,14 @@ export interface PersonnelCost {
   type: CostType;
   date: string;
   value: string;
-  description: string;
+  description: string | null;
 }
 
 export interface RegisterPersonnelCostDto {
   type: CostType;
   date: string; // formato 'YYYY-MM-DD'
   value: string;
-  description: string;
+  description: string | null;
 }
 
 export type UpdatePersonnelCostDto = Partial<RegisterPersonnelCostDto>;
@@ -32,7 +32,7 @@ export interface PersonnelCostFilterDto {
   dateTo?: string; //  'YYYY-MM-DD'
   minValue?: number;
   maxValue?: number;
-  description?: string;
+  description?: string | null;
   page?: number;
   limit?: number;
 }
