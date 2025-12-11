@@ -18,7 +18,7 @@ interface DataTableFacetedFilterProps {
 
 export function DataTableFacetedFilter({
   column,
-  placeholder = "Filtros",
+  placeholder = "Filtrar por tipo",
 }: DataTableFacetedFilterProps) {
   const { table } = useDataTable();
   const tableColumn = table.getColumn(column);
