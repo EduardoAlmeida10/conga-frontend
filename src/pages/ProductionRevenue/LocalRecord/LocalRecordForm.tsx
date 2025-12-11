@@ -1,5 +1,4 @@
 import type {
-  RegisterLocalProductionDto,
   UpdateLocalProductionDto,
 } from "@/api/productions/productionLocal";
 import InputField from "@/components/InputField";
@@ -88,7 +87,7 @@ export default function LocalRecordForm({
         window.toast("Erro", "Falha ao atualizar", "error");
       }
     } else {
-      const created = await register(payload as RegisterLocalProductionDto);
+      const created = await register(payload);
       if (created) {
         window.toast("Sucesso", "Registro criado com sucesso!", "success");
         onSaved();

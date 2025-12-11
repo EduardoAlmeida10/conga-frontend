@@ -1,12 +1,10 @@
 import {
   registerLocalProduction,
-  type LocalProductionApiData,
   type RegisterLocalProductionDto,
 } from "@/api/productions/productionLocal";
 import { useCallback, useState } from "react";
 
 export function useRegisterLocalProduction() {
-  const [data, setData] = useState<LocalProductionApiData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -15,19 +13,17 @@ export function useRegisterLocalProduction() {
       setLoading(true);
       setError(null);
 
-      const response = await registerLocalProduction(dto);
-
-      setData(response);
-      return response;
+      await registerLocalProduction(dto);
+      return true;
     } catch (err: any) {
       setError(
-        err?.response?.data?.message || "Erro ao registrar produção local."
+        err?.response?.data?.message || "Erro ao registrar produção local.",
       );
-      return null;
+      return false;
     } finally {
       setLoading(false);
     }
   }, []);
 
-  return { data, loading, error, mutate };
+  return { loading, error, mutate };
 }
