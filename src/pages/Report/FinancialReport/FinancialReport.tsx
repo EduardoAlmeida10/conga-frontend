@@ -10,6 +10,7 @@ import { useCompareFinancialPeriods } from "@/hooks/reports/ReportFinance/useCom
 import { useFetchDailyFinancial } from "@/hooks/reports/ReportFinance/useFetchDailyFinancial";
 import { useFetchFinancialDetailed } from "@/hooks/reports/ReportFinance/useFetchFinancialDetailed";
 import { useFinancialOverview } from "@/hooks/reports/ReportFinance/useFetchFinancialOverview";
+import { createDateRangeSetters } from "@/utils/dateRange";
 import { formatPeriod } from "@/utils/formatters";
 import { getCurrentMonthRange } from "@/utils/getCurrentMonth";
 import { DollarSign, TrendingDown, TrendingUp } from "lucide-react";
@@ -18,9 +19,9 @@ import { relatorioColumns } from "./columns";
 import { mapDetailedToRelatorio } from "./mappers";
 
 export default function FinancialReport() {
-  const {dateFrom: initialFrom, dateTo: initialTo} = getCurrentMonthRange()
-  const [dateFrom, setDateFrom] = useState<string>(initialFrom);
-  const [dateTo, setDateTo] = useState<string>(initialTo);
+  const { dateFrom: initialFrom, dateTo: initialTo } = getCurrentMonthRange();
+  const [dateFrom, setDateFrom] = useState<string | undefined>(initialFrom);
+  const [dateTo, setDateTo] = useState<string | undefined>(initialTo);
   const [periodOne, setPeriodOne] = useState<string>();
   const [periodTwo, setPeriodTwo] = useState<string>();
 
@@ -44,20 +45,24 @@ export default function FinancialReport() {
   const result = dataOverview?.periodResult ?? 0;
 
   useEffect(() => {
-  if (shouldFetchCompare) {
-    refetch();
-  }
-}, [periodOne, periodTwo]);
+    if (shouldFetchCompare) {
+      refetch();
+    }
+  }, [periodOne, periodTwo]);
 
-  
+  const { setDateFromSafe, setDateToSafe } = createDateRangeSetters({
+    getDateFrom: () => dateFrom,
+    getDateTo: () => dateTo,
+    setDateFrom,
+    setDateTo,
+  });
+
   return (
     <div className="flex flex-col gap-10 mt-7">
       <div>
         <p className="text-center text-gray-400">
           Período Selecionado <br />
-          <b>
-            {dateFrom && dateTo ? formatPeriod(dateFrom, dateTo) : "Todos"}
-          </b>
+          <b>{dateFrom && dateTo ? formatPeriod(dateFrom, dateTo) : "Todos"}</b>
         </p>
       </div>
 
@@ -67,7 +72,7 @@ export default function FinancialReport() {
           <input
             type="date"
             value={dateFrom ?? ""}
-            onChange={(e) => setDateFrom(e.target.value)}
+            onChange={(e) => setDateFromSafe(e.target.value)}
             className="bg-white h-12 px-3 rounded cursor-pointer"
           />
         </label>
@@ -77,7 +82,7 @@ export default function FinancialReport() {
             type="date"
             value={dateTo ?? ""}
             min={dateFrom ?? undefined}
-            onChange={(e) => setDateTo(e.target.value)}
+            onChange={(e) => setDateToSafe(e.target.value)}
             className="bg-white h-12 px-3 rounded cursor-pointer"
           />
         </label>
@@ -121,7 +126,8 @@ export default function FinancialReport() {
           </div>
           <DataTableContent />
           <footer className="text-sm text-gray-400">
-            Período: {dateFrom && dateTo ? formatPeriod(dateFrom, dateTo) : "Todos"}
+            Período:{" "}
+            {dateFrom && dateTo ? formatPeriod(dateFrom, dateTo) : "Todos"}
           </footer>
         </DataTable>
       </div>
