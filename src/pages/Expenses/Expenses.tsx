@@ -15,13 +15,14 @@ import { DataTableTextFilter } from "../../components/DataTable/DataTableTextFil
 import OverlayBackdrop from "../../components/Overlay/OverlayBackdrop";
 import ExpenseForm from "../../pages/Expenses/ExpenseForm";
 
+import { CustomCalendar } from "@/components/CustomCalendar";
 import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
+import { useLocation } from "react-router-dom";
 import {
   useExpenseData,
   type BaseExpense,
 } from "../../hooks/expenses/useExpenseData";
 import { useExpenseModal } from "../../hooks/expenses/useExpenseModal";
-import { useLocation } from "react-router-dom";
 
 const costTypes = ["Pessoal", "Utilitários", "Insumos", "Operacionais"];
 type ExpenseType = "Pessoal" | "Operacionais" | "Utilitários" | "Insumos";
@@ -37,6 +38,9 @@ export default function ExpensesTable() {
 
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
 
+  const [dateFrom, setDateFrom] = useState<string | null>(null);
+  const [dateTo, setDateTo] = useState<string | null>(null);
+
   const {
     isOverlayOpen,
     expenseToEdit,
@@ -46,7 +50,13 @@ export default function ExpensesTable() {
   } = useExpenseModal();
 
   const { expenses, totalItems, refetchExpenses, deleteExpense } =
-    useExpenseData(selectedType, pagination.pageIndex, pagination.pageSize);
+    useExpenseData(
+      selectedType,
+      pagination.pageIndex,
+      pagination.pageSize,
+      dateFrom,
+      dateTo,
+    );
 
   const pageCount = Math.ceil(totalItems / pagination.pageSize);
 
@@ -114,7 +124,11 @@ export default function ExpensesTable() {
     <div className="p-6 w-full max-w-6xl mx-auto">
       <div className="mb-16 mt-10">
         <p>Selecione o tipo de despesa:</p>
-        <CostTypeTabs tabs={costTypes} onSelect={handleTypeChange} selected={selectedType}/>
+        <CostTypeTabs
+          tabs={costTypes}
+          onSelect={handleTypeChange}
+          selected={selectedType}
+        />
       </div>
 
       <Button styles="mb-8" onClick={handleOpenCreateModal}>
@@ -152,6 +166,23 @@ export default function ExpensesTable() {
               <DataTableTextFilter placeholder="Buscar despesas" />
             </div>
             <div className="flex gap-8 items-center">
+              <CustomCalendar
+                onDateChange={(date) => {
+                  if (date) {
+                    const from = date.startOf("month").format("YYYY-MM-DD");
+                    const to = date.endOf("month").format("YYYY-MM-DD");
+
+                    setDateFrom(from);
+                    setDateTo(to);
+                  } else {
+                    setDateFrom(null);
+                    setDateTo(null);
+                  }
+
+                  setPagination((p) => ({ ...p, pageIndex: 0 }));
+                }}
+              />
+
               <DataTableFacetedFilter column={facetedFilterColumn} />
               <DataTableColumnsVisibilityDropdown />
             </div>

@@ -37,13 +37,17 @@ export function useExpenseData(
   type: keyof typeof deleteFunctionsMap,
   pageIndex: number,
   pageSize: number,
+  dateFrom?: string | null,
+  dateTo?: string | null,
 ) {
   const filters = useMemo(
     () => ({
       page: pageIndex + 1,
       limit: pageSize,
+      dateFrom: dateFrom || undefined,
+      dateTo: dateTo || undefined,
     }),
-    [pageIndex, pageSize],
+    [pageIndex, pageSize, dateFrom, dateTo],
   );
 
   const pessoal = usePersonnelCosts(filters, type === "Pessoal");
@@ -84,7 +88,6 @@ export function useExpenseData(
           "Despesa foi removida com sucesso!",
           "success",
         );
-        
       } catch (err) {
         console.error("Falha ao deletar despesa:", err);
         alert("Não foi possível deletar a despesa.");
