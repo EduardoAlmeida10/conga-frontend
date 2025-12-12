@@ -25,16 +25,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+// ... Interfaces (PieSectorDataItemMinimal, ChartData, ReusablePieChartProps) permanecem as mesmas ...
 interface PieSectorDataItemMinimal {
   outerRadius?: number;
   cx?: number;
   cy?: number;
-  // Adicione outras propriedades se você precisar delas explicitamente,
-  // como startAngle, endAngle, fill, payload, etc.
-  [key: string]: any; // Para cobrir todas as props restantes
+  [key: string]: any;
 }
 
-// Interface para o dado de entrada, que deve ser um array
 interface ChartData {
   [key: string]: any;
 }
@@ -46,9 +44,8 @@ interface ReusablePieChartProps {
   nameKey: string;
   title: string;
   description: string;
-  valueLabel: string; // Rótulo para o centro do gráfico (ex: Total, Quantidade)
+  valueLabel: string;
 }
-
 // Componente de Gráfico de Pizza Reutilizável
 export function ChartPieInteractive({
   data,
@@ -59,30 +56,37 @@ export function ChartPieInteractive({
   description,
   valueLabel,
 }: ReusablePieChartProps) {
-  const id = `pie-interactive-${title.replace(/\s/g, "")}`; // ID único
+  const id = `pie-interactive-${title.replace(/\s/g, "")}`;
 
-  // O valor inicial será o primeiro item de dados ou uma string vazia
-  const initialActiveItem = data.length > 0 ? data[0][nameKey] : "";
+  // Valor sentinela para o estado "sem filtro" (não pode ser "")
+  const initialActiveItem = "total";
+
+  // REMOVEMOS: [open, setOpen] e handleItemClick
 
   const [activeItem, setActiveItem] = React.useState(initialActiveItem);
+
+  // SIMPLIFICADO: Apenas define o novo valor, o botão 'Limpar' faz o reset
+  const handleValueChange = React.useCallback((newValue: string) => {
+    setActiveItem(newValue);
+  }, []);
 
   const activeIndex = React.useMemo(
     () => data.findIndex((item) => item[nameKey] === activeItem),
     [activeItem, data, nameKey],
   );
 
-  const activeData = data[activeIndex] || { [dataKey]: 0, [nameKey]: "" };
+  const activeData =
+    activeIndex !== -1 ? data[activeIndex] : { [dataKey]: 0, [nameKey]: "" };
   const names = React.useMemo(
     () => data.map((item) => item[nameKey]),
     [data, nameKey],
   );
 
-  // Lógica para calcular o total geral para exibir no centro
   const totalValue = React.useMemo(() => {
     return data.reduce((sum, item) => sum + (Number(item[dataKey]) || 0), 0);
   }, [data, dataKey]);
 
-  // Função customizada para o shape ativo
+  // ... CustomActiveShape permanece o mesmo ...
   const CustomActiveShape = React.useCallback(
     ({ outerRadius = 0, ...props }: PieSectorDataItemMinimal) => (
       <g>
@@ -99,28 +103,33 @@ export function ChartPieInteractive({
 
   return (
     <Card data-chart={id} className="flex flex-col">
-      {/* ChartStyle deve usar a configuração passada via props */}
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
           <CardTitle>{title}</CardTitle>
           <CardDescription>{description}</CardDescription>
         </div>
-        {/* Select para Interatividade: Agora usa os nomes de forma dinâmica */}
         <Select
+          // REMOVEMOS: open e onOpenChange
           value={activeItem}
-          onValueChange={setActiveItem}
-          disabled={names.length === 0} // Desabilita se não houver dados
+          onValueChange={handleValueChange}
+          disabled={names.length === 0}
         >
           <SelectTrigger
             className="ml-auto h-7 w-[170px] rounded-lg pl-2.5"
             aria-label="Select a value"
           >
-            <SelectValue placeholder={`Selecione`} />
+            <SelectValue placeholder={`Selecione`}>
+              {/* Exibe o rótulo correto no trigger */}
+              {activeItem === initialActiveItem
+                ? "Total" // Mudando para "Total" no trigger para ser mais conciso
+                : chartConfig[activeItem as keyof typeof chartConfig]?.label ||
+                  activeItem}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent align="end" className="rounded-xl">
+            {/* ITENS DE DADOS (AGORA NO TOPO) */}
             {names.map((key) => {
-              // Busca a configuração pela chave do nome (ex: "PERSONNEL")
               const config = chartConfig[key as keyof typeof chartConfig];
 
               if (!config) return null;
@@ -130,12 +139,12 @@ export function ChartPieInteractive({
                   key={key}
                   value={key}
                   className="rounded-lg [&_span]:flex"
+                  // REMOVEMOS: onClick
                 >
                   <div className="flex items-center gap-2 text-xs">
                     <span
                       className="flex h-3 w-3 shrink-0 rounded-xs"
                       style={{
-                        // A cor é baseada no nome do item, que deve estar no chartConfig
                         backgroundColor: config?.color,
                       }}
                     />
@@ -144,6 +153,16 @@ export function ChartPieInteractive({
                 </SelectItem>
               );
             })}
+
+            <div className="mx-2 my-1 border-t border-border" />
+
+            <SelectItem
+              key={initialActiveItem}
+              value={initialActiveItem}
+              className="rounded-lg font-semibold [&>span]:flex [&>span]:justify-center"
+            >
+              Limpar Filtro
+            </SelectItem>
           </SelectContent>
         </Select>
       </CardHeader>
@@ -160,8 +179,8 @@ export function ChartPieInteractive({
             />
             <Pie
               data={data}
-              dataKey={dataKey} // Chave do valor
-              nameKey={nameKey} // Chave do nome
+              dataKey={dataKey}
+              nameKey={nameKey}
               innerRadius={60}
               strokeWidth={5}
               activeIndex={activeIndex}
@@ -170,6 +189,9 @@ export function ChartPieInteractive({
               <Label
                 content={({ viewBox }) => {
                   if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                    const displayValue = activeData[dataKey]
+                      ? activeData[dataKey].toLocaleString()
+                      : totalValue.toLocaleString();
                     return (
                       <text
                         x={viewBox.cx}
@@ -177,16 +199,12 @@ export function ChartPieInteractive({
                         textAnchor="middle"
                         dominantBaseline="middle"
                       >
-                        {/* Exibe o valor do item ativo */}
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {/* Use o valor do item ativo no centro, ou o total, dependendo da necessidade */}
-                          {activeData[dataKey]
-                            ? activeData[dataKey].toLocaleString()
-                            : totalValue.toLocaleString()}
+                          {displayValue}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
