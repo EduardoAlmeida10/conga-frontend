@@ -112,7 +112,7 @@ export default function RevenueAnalysis() {
               type="date"
               value={dateFrom ?? ""}
               onChange={(e) => setDateFrom(e.target.value)}
-              className="bg-white h-12 px-3 rounded"
+              className="bg-white h-12 px-3 rounded cursor-pointer"
             />
           </label>
 
@@ -123,7 +123,7 @@ export default function RevenueAnalysis() {
               value={dateTo ?? ""}
               min={dateFrom ?? undefined}
               onChange={(e) => setDateTo(e.target.value)}
-              className="bg-white h-12 px-3 rounded"
+              className="bg-white h-12 px-3 rounded cursor-pointer"
             />
           </label>
         </header>
