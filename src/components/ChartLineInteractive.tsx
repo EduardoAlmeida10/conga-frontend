@@ -217,24 +217,32 @@ export function ChartLineInteractive<
     }
   };
 
-  // Formatar valor no tooltip
   const formatTooltipValue = (value: ValueType) => {
     const numValue = typeof value === "number" ? value : Number(value);
+    if (isNaN(numValue)) return String(value);
 
-    if (isNaN(numValue)) {
-      return String(value);
+    const seriesInfo = activeSeries;
+
+    if (seriesInfo?.unit) {
+      const formatted = Number.isInteger(numValue)
+        ? numValue.toLocaleString("pt-BR")
+        : numValue.toLocaleString("pt-BR", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          });
+
+      return `${formatted} ${seriesInfo.unit}`;
     }
 
-    const formatted = numValue.toLocaleString("pt-BR", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-
-    if (!showCurrency) {
-      return formatted;
+    if (seriesInfo?.valueType === "currency" && showCurrency) {
+      const formatted = numValue.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+      return `${currencySymbol} ${formatted}`;
     }
 
-    return `${currencySymbol} ${formatted}`;
+    return numValue.toLocaleString("pt-BR");
   };
 
   return (
@@ -301,7 +309,7 @@ export function ChartLineInteractive<
                 <ChartTooltipContent
                   className="w-[150px]"
                   labelFormatter={formatTooltipLabel}
-                  formatter={formatTooltipValue}
+                  formatter={(value) => formatTooltipValue(value)}
                 />
               }
             />
