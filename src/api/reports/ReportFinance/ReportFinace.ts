@@ -80,9 +80,7 @@ export async function getFinancialDaily(filters?: FinancialOverviewFilters) {
   return response.data;
 }
 
-export async function compareFinancialPeriods(
-  dto: ComparePeriodsDto,
-) {
+export async function compareFinancialPeriods(dto: ComparePeriodsDto) {
   const response = await api.get<ComparePeriodsResponse>(
     "/financial-report/compare",
     {
@@ -92,6 +90,18 @@ export async function compareFinancialPeriods(
       },
     },
   );
+
+  return response.data;
+}
+
+export async function getFinancialPdf(filters?: FinancialOverviewFilters) {
+  const response = await api.get("/financial-report/pdf", {
+    params: {
+      dateFrom: filters?.dateFrom,
+      dateTo: filters?.dateTo,
+    },
+    responseType: "blob",
+  });
 
   return response.data;
 }
