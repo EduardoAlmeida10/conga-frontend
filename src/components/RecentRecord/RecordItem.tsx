@@ -6,14 +6,14 @@ const RecordItem: React.FC<{ item: RecentRecord }> = ({ item }) => {
   const navigate = useNavigate();
 
   const handleNavigation = () => {
-    if (item.route === "/despesas") {
-      navigate(item.route, {
-        state: { targetExpenseType: item.type },
+    if (item.route === "/despesas" && item.expenseType) {
+      navigate("/despesas", {
+        state: { targetExpenseType: item.expenseType },
       });
       return;
     }
 
-    navigate(item.route, { state: { targetTab: item.label ?? item.type ?? "Registro Produtores" } });
+    navigate(item.route, { state: { targetTab: "Registro Produtores" } });
   };
 
   const [mainText, subText] = item.details.includes("–")
@@ -26,7 +26,7 @@ const RecordItem: React.FC<{ item: RecentRecord }> = ({ item }) => {
         <AiOutlineLineChart className={`w-6 h-6 ${item.iconBgColor}`} />
 
         <div className="text-gray-900 font-medium">
-          {item.label ?? item.type}:
+          {item.label}:
           <span className="ml-1 text-sm font-normal">
             {mainText}
             {subText && (

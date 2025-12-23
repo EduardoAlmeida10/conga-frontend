@@ -3,7 +3,7 @@ import RecordItem from "./RecordItem";
 
 export interface RecentRecord {
   id: string;
-  type?: string;
+  expenseType?: "Pessoal" | "Operacionais" | "Utilitários" | "Insumos";
   label?: string;
   details: string;
   route: string;
