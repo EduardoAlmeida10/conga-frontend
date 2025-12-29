@@ -20,34 +20,37 @@ import {
   getProducerProductionColumns,
   getProducerProductionRequestColumns,
 } from "./columns";
+import { UserAccountForm } from "./UserAcountForm";
 
 export default function CollaboratorDashboard() {
-  const [isOverlayOpen, setOverlayOpen] = useState(false);
+  type OverlayMode = "production" | "account" | null;
+
+  const [overlayMode, setOverlayMode] = useState<OverlayMode>(null);
+
+  const [, setOverlayOpen] = useState(false);
+
+  const [producerProductionPagination, setProducerProductionPagination] =
+    useState({ pageIndex: 0, pageSize: 6 });
 
   const [
-    producerProductionPagination, 
-    setProducerProductionPagination
+    producerProductionRequestsPagination,
+    setProducerProductionRequestsPagination,
   ] = useState({ pageIndex: 0, pageSize: 6 });
-  
-  const [
-    producerProductionRequestsPagination, 
-    setProducerProductionRequestsPagination
-  ] = useState({ pageIndex: 0, pageSize: 6 });
-
 
   const {
     data,
     totalItems: totalItemsProducerProduction,
     loading,
     error,
-    refetch
+    refetch,
   } = useFetchProducerProduction(
     producerProductionPagination.pageIndex,
-    producerProductionPagination.pageSize
+    producerProductionPagination.pageSize,
   );
 
-  const pageCountProducerProduction = 
-  Math.ceil(totalItemsProducerProduction / producerProductionPagination.pageSize);
+  const pageCountProducerProduction = Math.ceil(
+    totalItemsProducerProduction / producerProductionPagination.pageSize,
+  );
 
   const {
     data: requestData,
@@ -56,25 +59,31 @@ export default function CollaboratorDashboard() {
     error: errorRequests,
     refetch: refetchRequests,
   } = useFetchProducerProductionRequests(
-    producerProductionRequestsPagination.pageIndex, 
+    producerProductionRequestsPagination.pageIndex,
     producerProductionRequestsPagination.pageSize,
   );
 
-  const pageCountProducerProductionRequests = 
-  Math.ceil(totalItemsProducerProductionRequests / producerProductionRequestsPagination.pageSize);
+  const pageCountProducerProductionRequests = Math.ceil(
+    totalItemsProducerProductionRequests /
+      producerProductionRequestsPagination.pageSize,
+  );
 
   const [editingRequest, setEditingRequest] =
     useState<ProducerProductionRequest | null>(null);
 
-  const handleOpenCreateModal = () => {
-    setEditingRequest(null); 
-    setOverlayOpen(true);
+  const handleOpenProductionModal = () => {
+    setEditingRequest(null);
+    setOverlayMode("production");
+  };
+
+  const handleOpenAccountModal = () => {
+    setOverlayMode("account");
   };
 
   const handleCloseModal = () => {
-  setEditingRequest(null);
-  setOverlayOpen(false);
-};
+    setEditingRequest(null);
+    setOverlayMode(null);
+  };
 
   const handleSaveSuccess = () => {
     refetch();
@@ -93,8 +102,14 @@ export default function CollaboratorDashboard() {
     await deleteProducerProductionRequest(request.id);
     refetchRequests();
     window.toast("Sucesso", "Registro excluído!", "success");
-    if (requestData.length === 1 && producerProductionRequestsPagination.pageIndex > 0) {
-      setProducerProductionRequestsPagination((prev) => ({ ...prev, pageIndex: prev.pageIndex - 1 }));
+    if (
+      requestData.length === 1 &&
+      producerProductionRequestsPagination.pageIndex > 0
+    ) {
+      setProducerProductionRequestsPagination((prev) => ({
+        ...prev,
+        pageIndex: prev.pageIndex - 1,
+      }));
     }
   };
 
@@ -110,17 +125,29 @@ export default function CollaboratorDashboard() {
 
   return (
     <div className="p-6 w-full max-w-5xl mx-auto">
-      <Button styles="mb-8" onClick={handleOpenCreateModal}>
-        <img src={iconAdd} alt="" />
-        Novo Registro
-      </Button>
+      <div className="flex justify-between items-center mb-8">
+        <Button onClick={handleOpenProductionModal}>
+          <img src={iconAdd} alt="" />
+          Novo Registro
+        </Button>
 
-      <OverlayBackdrop isOpen={isOverlayOpen} onClose={handleCloseModal}>
-        <ProducerProductionRequestForm
-          request={editingRequest ?? undefined}
-          onClose={handleCloseModal}
-          onSaved={handleSaveSuccess}
-        />
+        <Button onClick={handleOpenAccountModal}>
+          Alterar Informações de conta
+        </Button>
+      </div>
+
+      <OverlayBackdrop isOpen={overlayMode !== null} onClose={handleCloseModal}>
+        {overlayMode === "production" && (
+          <ProducerProductionRequestForm
+            request={editingRequest ?? undefined}
+            onClose={handleCloseModal}
+            onSaved={handleSaveSuccess}
+          />
+        )}
+
+        {overlayMode === "account" && (
+          <UserAccountForm onClose={handleCloseModal} />
+        )}
       </OverlayBackdrop>
 
       {loading && <p className="text-gray-600">Carregando registros...</p>}
@@ -128,9 +155,7 @@ export default function CollaboratorDashboard() {
       <div className="flex flex-col gap-10">
         {!loading && !error && data && (
           <div className="flex flex-col p-12 bg-white justify-center items-center gap-5 rounded-2xl">
-            <h2 className="font-bold text-xl w-full mb-4">
-              Produções Aceitas
-            </h2>
+            <h2 className="font-bold text-xl w-full mb-4">Produções Aceitas</h2>
             <DataTable
               data={data.data}
               columns={productionColumns as any}

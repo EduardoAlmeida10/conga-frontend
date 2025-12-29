@@ -30,37 +30,49 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("access_token");
-    if (storedToken) {
-      try {
-        const base64Url = storedToken.split(".")[1];
-        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-        const jsonPayload = decodeURIComponent(
-          atob(base64)
-            .split("")
-            .map(function (c) {
-              return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-            })
-            .join(""),
-        );
 
-        const payload = JSON.parse(jsonPayload) as {
-          sub: string;
-          username: string;
-          name: string;
-          role: string;
-        };
-        setToken(storedToken);
-        setUser({
-          id: payload.sub,
-          username: payload.username,
-          name: payload.name,
-          role: payload.role,
-        });
-      } catch {
-        localStorage.removeItem("access_token");
-      }
+    if (!storedToken) {
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+
+    try {
+      const base64Url = storedToken.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join(""),
+      );
+
+      const payload = JSON.parse(jsonPayload) as {
+        sub: string;
+        username: string;
+        name: string;
+        role: string;
+        exp?: number;
+      };
+
+      // valida expiração do token
+      if (payload.exp && payload.exp * 1000 < Date.now()) {
+        localStorage.removeItem("access_token");
+        setLoading(false);
+        return;
+      }
+
+      setToken(storedToken);
+      setUser({
+        id: payload.sub,
+        username: payload.username,
+        name: payload.name,
+        role: payload.role,
+      });
+    } catch {
+      localStorage.removeItem("access_token");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const logout = () => {
@@ -68,9 +80,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setToken(null);
     localStorage.removeItem("access_token");
   };
+
   if (loading) return null;
+
   return (
-    <AuthContext.Provider value={{ user, token, setUser, setToken, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        setUser,
+        setToken,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -79,7 +101,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context)
+  if (!context) {
     throw new Error("useAuth deve ser usado dentro de AuthProvider");
+  }
   return context;
 };

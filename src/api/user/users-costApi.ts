@@ -17,12 +17,17 @@ export interface User {
 export interface RegisterUserDto {
   name: string;
   username: string;
-  password: string;
-  confirmPassword: string;
+  password?: string;
+  confirmPassword?: string;
   role: UserRole;
 }
 
-export type UpdateUserDto = Partial<RegisterUserDto>;
+export interface UpdateUserDto {
+  name?: string;
+  username?: string;
+  password?: string;
+  confirmPassword?: string;
+}
 
 export interface PaginatedUsers {
   total: number;

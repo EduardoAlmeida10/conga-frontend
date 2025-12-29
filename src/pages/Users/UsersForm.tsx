@@ -3,11 +3,11 @@ import OverlayCard from "../../components/Overlay/OverlayCard";
 import InputField from "../../components/InputField";
 import { UserRole, type User } from "../../api/user/users-costApi";
 import { useUserSubmit } from "../../hooks/users/useUserSubmit";
-import { useUserUpdate } from "../../hooks/users/useUserUpdate";
+// import { useUserUpdate } from "../../hooks/users/useUserUpdate";
 import { ZodError } from "zod";
 import {
   createUserSchema,
-  updateUserSchema,
+  // updateUserSchema,
 } from "@/lib/validation/userSchema";
 
 interface UsersFormProps {
@@ -17,51 +17,51 @@ interface UsersFormProps {
 }
 
 export default function UsersForm({
-  selectedUser,
+  // selectedUser,
   onClose,
   onUserSaved,
 }: UsersFormProps) {
   const { submitUser, loading: creating, error: createError } = useUserSubmit();
-  const { editUser, loading: updating, error: updateError } = useUserUpdate();
+  // const { editUser, loading: updating, error: updateError } = useUserUpdate();
 
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    if (selectedUser) {
-      setName(selectedUser.name);
-      setUsername(selectedUser.username);
-      setPassword("");
-      setConfirmPassword("");
-    } else {
+    // if (selectedUser) {
+    //   setName(selectedUser.name);
+    //   setUsername(selectedUser.username);
+    //   setPassword("");
+    //   setConfirmPassword("");
+    // } else {
       setName("");
       setUsername("");
-      setPassword("");
-      setConfirmPassword("");
-    }
+      // setPassword("");
+      // setConfirmPassword("");
+    // }
     setErrors({});
-  }, [selectedUser]);
+  }, []);
 
   const validate = () => {
     try {
       setErrors({});
 
-      if (selectedUser) {
-        updateUserSchema.parse({
-          name,
-          username,
-        });
-      } else {
+      // if (selectedUser) {
+      //   updateUserSchema.parse({
+      //     name,
+      //     username,
+      //   });
+      // } else {
         createUserSchema.parse({
           name,
           username,
-          password,
-          confirmPassword,
+          // password,
+          // confirmPassword,
         });
-      }
+      // }
 
       return true;
     } catch (err) {
@@ -82,29 +82,29 @@ export default function UsersForm({
     e.preventDefault();
     if (!validate()) return;
 
-    if (selectedUser) {
-      const updated = await editUser(selectedUser.id, {
-        name,
-        username,
-        role: selectedUser.role,
-      });
-      if (updateError && !updated) {
-        setErrors({ form: updateError });
-        window.toast(
-          "Erro",
-          updateError || "Erro ao atualizar usuário.",
-          "error",
-        );
-        return;
-      }
+    // if (selectedUser) {
+    //   const updated = await editUser(selectedUser.id, {
+    //     name,
+    //     username,
+    //     role: selectedUser.role,
+    //   });
+    //   if (updateError && !updated) {
+    //     setErrors({ form: updateError });
+    //     window.toast(
+    //       "Erro",
+    //       updateError || "Erro ao atualizar usuário.",
+    //       "error",
+    //     );
+    //     return;
+    //   }
 
-      window.toast("Sucesso", "Usuário atualizado com sucesso!", "success");
-    } else {
+    //   window.toast("Sucesso", "Usuário atualizado com sucesso!", "success");
+    // } else {
       const created = await submitUser({
         name,
         username,
-        password,
-        confirmPassword,
+        // password,
+        // confirmPassword,
         role: UserRole.COLLABORATOR,
       });
 
@@ -113,17 +113,18 @@ export default function UsersForm({
         window.toast("Erro", createError || "Erro ao criar usuário.", "error");
         return;
       }
-    }
+    // }
 
     onUserSaved();
     onClose();
   };
 
-  const isSubmitting = creating || updating;
+  // const isSubmitting = creating || updating;
+  const isSubmitting = creating;
 
   return (
     <OverlayCard
-      title={selectedUser ? "Editar Usuário" : "Novo Usuário"}
+      title={"Novo Usuário"}
       isSubmitting={isSubmitting}
       onClose={onClose}
       onSubmit={handleSubmit}
@@ -144,7 +145,7 @@ export default function UsersForm({
           required
         />
 
-        {!selectedUser && (
+        {/* {!selectedUser && (
           <>
             <InputField
               label="Senha*"
@@ -163,7 +164,7 @@ export default function UsersForm({
               required
             />
           </>
-        )}
+        )} */}
       </div>
     </OverlayCard>
   );
