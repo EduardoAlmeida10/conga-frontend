@@ -5,9 +5,9 @@ import { useAuthentication } from "../../hooks/auth/useAuth";
 import Button from "../../components/Button";
 import InputField from "../../components/InputField";
 
-import iconLogo from "../../assets/iconLogo.svg"
-import logoConga from "../../assets/logoConga.svg"
-import imgLogin from "../../assets/imgLogin.svg"
+import iconLogo from "../../assets/iconLogo.svg";
+import imgLogin from "../../assets/imgLogin.svg";
+import logoConga from "../../assets/logoConga.svg";
 
 const roleToDashboardPath: { [key: string]: string } = {
   ADMIN: "/dashboard-admin",
@@ -52,7 +52,6 @@ const Login = () => {
     if (Object.keys(errors).length > 0) return;
 
     const role = await login(name, password);
-    console.log("Role retornada:", role);
 
     if (!role) return; 
 

@@ -25,9 +25,6 @@ export function useFetchDailyProducerProduction(
       setError(null);
 
       const response = await getDailyProduction(filters);
-      console.log(response);
-      console.log(response.data);
-      console.log(response.total);
       setData(response.data);
       setTotalItems(response.total ?? 0);
     } catch (err: any) {

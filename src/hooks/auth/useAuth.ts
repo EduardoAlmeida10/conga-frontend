@@ -14,7 +14,6 @@ export const useAuthentication = () => {
 
     try {
       const { access_token } = await loginRequest(username, password);
-      console.log("Token recebido:", access_token);
 
       // Armazena token no contexto e localStorage
       setToken(access_token);
@@ -38,7 +37,6 @@ export const useAuthentication = () => {
         name: string;
         role: string;
       };
-      console.log("Payload decodificado:", payload);
 
       setUser({
         id: payload.sub,

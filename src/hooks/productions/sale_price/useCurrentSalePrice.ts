@@ -1,5 +1,5 @@
 import { getCurrentSalePrice, type SalePrice } from '@/api/sale-price/salePrice';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 type CurrentPriceHookResult = {
   data: SalePrice | null;
@@ -12,14 +12,13 @@ export const useCurrentSalePrice = (): CurrentPriceHookResult => {
   const [data, setData] = useState<SalePrice | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [reloadKey, setReloadKey] = useState(0); 
+  const [reloadKey, setReloadKey] = useState(0);
 
   const fetchData = async () => {
     setIsLoading(true);
     setError(null);
     try {
       const response = await getCurrentSalePrice();
-      console.log("preço do leite: ", response)
       setData(response);
     } catch (err) {
       const errorMessage = (err as Error).message || "Falha ao carregar o preço atual.";
@@ -32,7 +31,7 @@ export const useCurrentSalePrice = (): CurrentPriceHookResult => {
 
   useEffect(() => {
     fetchData();
-  }, [reloadKey]); 
+  }, [reloadKey]);
 
   const refetch = () => {
     setReloadKey(prev => prev + 1);

@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
-import OverlayCard from "../../components/Overlay/OverlayCard";
-import { useExpenseSubmit } from "../../hooks/expenses/useExpenseSubmit";
-import { PersonnelFormFields } from "../../components/ExpensesForms/PersonnelFormFields";
-import { OperationalFormFields } from "../../components/ExpensesForms/OperationalFormFields";
-import { UtilityFormFields } from "../../components/ExpensesForms/UtilityFormFields";
-import { SupplieFormFields } from "../../components/ExpensesForms/SupplieFormFields";
-import type { BaseExpense } from "../../hooks/expenses/useExpenseData";
-import { CostType } from "@/api/costs/personnel-costApi";
 import { OperationalTypes } from "@/api/costs/operational-costApi";
+import { CostType } from "@/api/costs/personnel-costApi";
 import { UtilityTypes } from "@/api/costs/utility-costApi";
 import { expenseValidators } from "@/lib/validation";
+import { useEffect, useState } from "react";
 import { ZodError } from "zod";
+import { OperationalFormFields } from "../../components/ExpensesForms/OperationalFormFields";
+import { PersonnelFormFields } from "../../components/ExpensesForms/PersonnelFormFields";
+import { SupplieFormFields } from "../../components/ExpensesForms/SupplieFormFields";
+import { UtilityFormFields } from "../../components/ExpensesForms/UtilityFormFields";
+import OverlayCard from "../../components/Overlay/OverlayCard";
+import type { BaseExpense } from "../../hooks/expenses/useExpenseData";
+import { useExpenseSubmit } from "../../hooks/expenses/useExpenseSubmit";
 
 type ExpenseType = "Pessoal" | "Operacionais" | "Utilitários" | "Insumos";
 
@@ -73,7 +73,6 @@ export default function ExpenseOverlay({
     const schema = expenseValidators[type];
 
     try {
-      console.log(formData)
       const parsed = schema.parse(formData);
 
       if (isEditMode && expenseToEdit) {
@@ -87,7 +86,6 @@ export default function ExpenseOverlay({
         if (error instanceof ZodError) {
           const formatted: Record<string, string> = {};
           error.issues.forEach((err) => {
-            console.log("ZOD ERROR", error.issues);
             const field = String(err.path[0] ?? "");
             formatted[field] = err.message;
           });
