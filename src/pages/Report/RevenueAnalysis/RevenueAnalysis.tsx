@@ -11,6 +11,7 @@ import {
   filterBySemester,
   type SemesterFilter,
 } from "../../../utils/filterBySemester";
+import { getCurrentSemester } from "../../../utils/getCurrentSemester";
 import { ChartBarStacked } from "./ChartBarStacked";
 import { useExpenseAnalysis } from "./useRevenueAnalysis";
 
@@ -35,10 +36,9 @@ export default function RevenueAnalysis() {
     setDateFrom,
   } = useExpenseAnalysis();
 
-  const [semesterFilter, setSemesterFilter] = useState<SemesterFilter>({
-    year: 2025,
-    semester: 1,
-  });
+  const [semesterFilter, setSemesterFilter] = useState<SemesterFilter>(() =>
+    getCurrentSemester()
+  );
 
   const filteredBarData = useMemo(() => {
     if (!barChartData) return [];
