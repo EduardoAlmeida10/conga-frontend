@@ -58,3 +58,9 @@ export async function findAllReceives(
   const response = await api.get(BASE_URL, { params: filters });
   return response.data;
 }
+
+export async function updateReceivePrice(date: Date, value: number): Promise<void> {
+  const dateKey = date.toISOString().split('T')[0];
+
+  await api.put(`${BASE_URL}/update-price/${dateKey}`, { value });
+}
