@@ -37,16 +37,16 @@ export const getProducerProductionRequestColumns = (
   handleDelete: (request: ProducerProductionRequest) => void,
 ): ColumnDef<ProducerProductionRequest>[] => [
   {
-    accessorKey: "producerName",
+    accessorKey: "Produtor",
     header: "Produtor",
   },
   {
-    accessorKey: "totalQuantity",
+    accessorKey: "Vendável",
     header: "Vendável (L)",
     cell: ({ getValue }) => `${getValue<number>()} L`,
   },
   {
-    accessorKey: "date",
+    accessorKey: "Data",
     header: "Data",
     cell: ({ getValue }) => {
       const dateStr = getValue<string>();
