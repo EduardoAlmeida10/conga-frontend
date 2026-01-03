@@ -132,6 +132,7 @@ export function RightAlignedInput({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             value="" // Sempre vazio, só para capturar entrada
+            onChange={() => {}}
             readOnly={false}
             autoComplete="off"
             style={{
