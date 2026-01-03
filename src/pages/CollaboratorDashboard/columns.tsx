@@ -1,6 +1,4 @@
-import type { ColumnDef } from "@tanstack/react-table";
 import type { ProducerProduction } from "@/api/productions/productionProducer.ts";
-import { Edit2Icon, EllipsisIcon, Trash2Icon } from "lucide-react";
 import type { ProducerProductionRequest } from "@/api/productions/productionProducerRequest";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,20 +7,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { ColumnDef } from "@tanstack/react-table";
+import { Edit2Icon, EllipsisIcon, Trash2Icon } from "lucide-react";
 
 export const getProducerProductionColumns =
   (): ColumnDef<ProducerProduction>[] => [
     {
-      accessorKey: "producerName",
+      accessorKey: "Produtor",
       header: "Produtor",
     },
     {
-      accessorKey: "totalQuantity",
+      accessorKey: "Vendável",
       header: "Vendável (L)",
       cell: ({ getValue }) => `${getValue<number>()} L`,
     },
     {
-      accessorKey: "date",
+      accessorKey: "Data",
       header: "Data",
       cell: ({ getValue }) => {
         const dateStr = getValue<string>();
