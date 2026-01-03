@@ -1,8 +1,18 @@
 import { DataTableColumnHeader } from "@/components/DataTable/DataTableColumnHeader";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import type { DailyRecipe } from "@/entities/DailyRecipe";
 import type { ColumnDef } from "@tanstack/react-table";
+import { Edit2Icon, EllipsisIcon } from "lucide-react";
 
-export const dailyRecipeColumns: ColumnDef<DailyRecipe>[] = [
+export const dailyRecipeColumns = (
+  handleEdit: (record: DailyRecipe) => void,
+): ColumnDef<DailyRecipe>[] => [
   {
     accessorKey: "total",
     header: ({ column }) => (
@@ -60,5 +70,39 @@ export const dailyRecipeColumns: ColumnDef<DailyRecipe>[] = [
       return d.toLocaleDateString("pt-BR");
     },
     meta: { nameInFilters: "Data" },
+  },
+    {
+    id: "actions",
+    size: 80,
+    enableColumnFilter: false,
+    enableGlobalFilter: false,
+    enableHiding: false,
+    enableResizing: false,
+    enableMultiSort: false,
+    enableSorting: false,
+    cell: ({ row }) => {
+      const record = row.original;
+
+      return (
+        <div className="flex justify-end">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm">
+                <EllipsisIcon className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={() => handleEdit(record)}
+              >
+                <Edit2Icon className="size-4" /> Editar
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      );
+    },
   },
 ];
