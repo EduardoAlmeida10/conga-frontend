@@ -7,7 +7,6 @@ import {
   getCurrentSalePrice,
   type SalePrice,
 } from "@/api/sale-price/salePrice";
-import { AiOutlineAreaChart } from "react-icons/ai";
 import Button from "@/components/Button";
 import { DataTable } from "@/components/DataTable";
 import { DataTableColumnsVisibilityDropdown } from "@/components/DataTable/DataTableColumnsVisibilityDropdown";
@@ -16,12 +15,13 @@ import { DataTablePagination } from "@/components/DataTable/DataTablePagination"
 import { DataTableTextFilter } from "@/components/DataTable/DataTableTextFilter";
 import Backdrop from "@/components/Overlay/OverlayBackdrop";
 import OverviewSection from "@/components/Overview/OverviewSection";
-import React, { useEffect, useMemo, useState } from "react";
+import { formatCurrency } from "@/lib/formatters";
+import type { CardItem } from "@/types/OverviewSection.types";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { AiOutlineAreaChart } from "react-icons/ai";
+import { FaDollarSign } from "react-icons/fa";
 import { dailyRecipeColumns } from "./columns";
 import SalePriceForm from "./SalePriceForm";
-import type { CardItem } from "@/types/OverviewSection.types";
-import { formatCurrency } from "@/lib/formatters";
-import { FaDollarSign } from "react-icons/fa";
 
 interface DailyRecipe {
   id: string;
@@ -36,15 +36,22 @@ export default function DailyRecipe() {
   const [salePrice, setSalePrice] = useState<SalePrice | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState<DailyRecipe | null>(null); // Novo estado
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 6 });
   const [totalPages, setTotalPages] = useState(0);
+  
 
   const [averageDaily, setAverageDaily] = useState(0);
   const [monthlyTotal, setMonthlyTotal] = useState(0);
 
   const [reloadKey, setReloadKey] = useState(0);
 
-  const columns = dailyRecipeColumns;
+  const handleEdit = useCallback((record: DailyRecipe) => {
+    setSelectedRecord(record);
+    setIsFormOpen(true);
+  }, []);
+
+  const columns = useMemo(() => dailyRecipeColumns(handleEdit), [handleEdit]);
 
   const fetchData = React.useCallback(async () => {
     setIsLoading(true);
@@ -105,6 +112,11 @@ export default function DailyRecipe() {
   const handleSaved = () => {
     setIsFormOpen(false);
     setReloadKey((prev) => prev + 1);
+  };
+
+  const handleCloseForm = () => {
+    setIsFormOpen(false);
+    setSelectedRecord(null); // Importante para não abrir o próximo como "edição" acidentalmente
   };
 
   const metrics = useMemo(() => {
@@ -207,7 +219,8 @@ export default function DailyRecipe() {
       {isFormOpen && (
         <Backdrop isOpen={isFormOpen}>
           <SalePriceForm
-            onClose={() => setIsFormOpen(false)}
+            record={selectedRecord} // Passa o registro selecionado aqui
+            onClose={handleCloseForm}
             onSaved={handleSaved}
           />
         </Backdrop>
