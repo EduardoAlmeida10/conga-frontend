@@ -150,7 +150,7 @@ export function ChartLineInteractive<
         (value / 1000).toLocaleString("pt-BR", {
           minimumFractionDigits: 1,
           maximumFractionDigits: 1,
-        }) + "k"
+        }) + "mil"
       );
     }
 
