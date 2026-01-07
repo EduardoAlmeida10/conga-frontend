@@ -9,7 +9,7 @@
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-Frontend do **ConGa**, um software desktop desenvolvido para pequenos e médios produtores de leite, com foco na **visualização, controle e análise de dados financeiros e produtivos**.  
+Frontend desenvolvido para o **ConGa**, um software desktop desenvolvido para pequenos e médios produtores de leite, com foco na **visualização, controle e análise de dados financeiros e produtivos**.  
 A aplicação foi construída com **React** para a interface e **Electron** para empacotamento desktop multiplataforma, integrando-se à **ConGa API**.
 
 ## Sobre o Projeto
