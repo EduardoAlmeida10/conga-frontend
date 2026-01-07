@@ -33,6 +33,8 @@ O ConGa Frontend é responsável por:
 
 > ⚠️ Certifique-se de que a **ConGa API** esteja rodando localmente ou em ambiente acessível.
 
+🔗 **Backend:** [ConGa API](https://github.com/Lipez-x/api-conga)
+
 ---
 
 ### Etapas
