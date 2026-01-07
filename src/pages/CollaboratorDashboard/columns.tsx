@@ -13,16 +13,16 @@ import { Edit2Icon, EllipsisIcon, Trash2Icon } from "lucide-react";
 export const getProducerProductionColumns =
   (): ColumnDef<ProducerProduction>[] => [
     {
-      accessorKey: "Produtor",
+      accessorKey: "producerName",
       header: "Produtor",
     },
     {
-      accessorKey: "Vendável",
+      accessorKey: "totalQuantity",
       header: "Vendável (L)",
       cell: ({ getValue }) => `${getValue<number>()} L`,
     },
     {
-      accessorKey: "Data",
+      accessorKey: "date",
       header: "Data",
       cell: ({ getValue }) => {
         const dateStr = getValue<string>();
@@ -37,16 +37,16 @@ export const getProducerProductionRequestColumns = (
   handleDelete: (request: ProducerProductionRequest) => void,
 ): ColumnDef<ProducerProductionRequest>[] => [
   {
-    accessorKey: "Produtor",
+    accessorKey: "producerName",
     header: "Produtor",
   },
   {
-    accessorKey: "Vendável",
+    accessorKey: "totalQuantity",
     header: "Vendável (L)",
     cell: ({ getValue }) => `${getValue<number>()} L`,
   },
   {
-    accessorKey: "Data",
+    accessorKey: "date",
     header: "Data",
     cell: ({ getValue }) => {
       const dateStr = getValue<string>();
