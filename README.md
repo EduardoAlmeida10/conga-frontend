@@ -1,73 +1,78 @@
-# React + TypeScript + Vite
+<h1>
+  ConGa Frontend
+  <img src="./src/assets/iconLogo.svg" alt="Logo do projeto" width="23" />
+</h1>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Electron](https://img.shields.io/badge/electron-%231478C8.svg?style=for-the-badge&logo=electron&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-Currently, two official plugins are available:
+Frontend do **ConGa**, um software desktop desenvolvido para pequenos e médios produtores de leite, com foco na **visualização, controle e análise de dados financeiros e produtivos**.  
+A aplicação foi construída com **React** para a interface e **Electron** para empacotamento desktop multiplataforma, integrando-se à **ConGa API**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Sobre o Projeto
 
-## React Compiler
+O ConGa Frontend é responsável por:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Interface gráfica do sistema
+- Autenticação de usuários
+- Cadastro e visualização de despesas e receitas
+- Acompanhamento da produção de leite
+- Exibição de relatórios financeiros
+- Comunicação com a API backend via HTTP
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## INSTRUÇÕES DE INSTALAÇÃO
 
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
+### Pré-requisitos
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+[![Node version](https://img.shields.io/badge/node-v20.17.0-blue.svg)](https://shields.io/)
+[![Npm version](https://img.shields.io/badge/npm-11.6.2-blue.svg)](https://shields.io/)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+> ⚠️ Certifique-se de que a **ConGa API** esteja rodando localmente ou em ambiente acessível.
+
+---
+
+### Etapas
+
+#### 1. Clone o repositório
+
+```bash
+git clone https://github.com/EduardoAlmeida10/conga-frontend.git
+cd conga-frontend
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+#### 2. Instale as depêndencias
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
-
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```bash
+npm install
 ```
+
+#### 3. Execução
+
+Execute em modo desenvolvimento web
+```bash
+npm run dev
+```
+
+Execute como aplicação desktop electron
+```bash
+npm start
+```
+
+## Contribuidores
+
+<a href="https://github.com/EduardoAlmeida10/conga-frontend/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=EduardoAlmeida10/conga-frontend" />
+</a>
+
+## Toda a equipe ConGa
+
+| 🧑‍💻                                                                                                        | Nome              | GitHub                                                   | LinkedIn                                                                      |
+| --------------------------------------------------------------------------------------------------------- | ----------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| <img src="https://avatars.githubusercontent.com/u/100172647?v=4" width="50" style="border-radius:50%;" /> | Felipe Lima       | [@Lipez-x](https://github.com/Lipez-x)                   | [Felipe Lima](https://www.linkedin.com/in/felipelima-dev/)                    |
+| <img src="https://avatars.githubusercontent.com/u/179061047?v=4" width="50" style="border-radius:50%;" /> | Lizandra Pinheiro | [@lizandrapinheiro](https://github.com/lizandrapinheiro) | [Lizandra Pinheiro](https://www.linkedin.com/in/lizandra-pinheiro-6b72b2255/) |
+| <img src="https://avatars.githubusercontent.com/u/117535252?v=4" width="50" style="border-radius:50%;" /> | Eduardo Almeida   | [@EduardoAlmeida10](https://github.com/EduardoAlmeida10) | [Eduardo Almeida](https://www.linkedin.com/in/eduardo-almeida-bb05072a9/)     |
+| <img src="https://avatars.githubusercontent.com/u/95323145?v=4" width="50" style="border-radius:50%;" />  | Tobias Alves      | [@TobiasTac](https://github.com/TobiasTac)               | [Tobias Alves](https://www.linkedin.com/in/tobiasac/)                         |
