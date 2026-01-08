@@ -1,5 +1,4 @@
 import { app, BrowserWindow } from "electron";
-import path from "path";
 
 let mainWindow: BrowserWindow | null;
 
@@ -8,9 +7,6 @@ function createWindow(): void {
     width: 800,
     height: 600,
     autoHideMenuBar: true,
-    webPreferences: {
-      preload: path.join(process.cwd(), "preload.ts"),
-    },
   });
 
   mainWindow.loadURL("http://localhost:5173");
