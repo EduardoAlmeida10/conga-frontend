@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "start": "electron .",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
-    "test": "vitest"
+    "test": "vitest",
+    "test:ci": "vitest run"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
