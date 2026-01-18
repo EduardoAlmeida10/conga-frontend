@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000"; 
+const API_URL = "/api";
 
 export interface AuthResponse {
   access_token: string;
@@ -25,10 +25,13 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
-export async function loginRequest(username: string, password: string): Promise<AuthResponse> {
+export async function loginRequest(
+  username: string,
+  password: string,
+): Promise<AuthResponse> {
   const response = await axios.post(`${API_URL}/login`, { username, password });
   return response.data;
 }
