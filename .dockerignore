@@ -1,0 +1,27 @@
+# Dependências
+node_modules
+npm-debug.log
+yarn.lock
+pnpm-lock.yaml
+
+# Build local
+dist
+build
+
+# Ambiente
+.env
+.env.*
+.vite
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+
+# IDE / SO
+.vscode
+.idea
+.DS_Store
